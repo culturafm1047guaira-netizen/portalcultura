@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rádio Cultura FM 104.7 — Portal de Notícias | Guaíra, SP</title>
+  <meta name="description" content="Portal de notícias da Rádio Cultura FM 104.7 de Guaíra, SP. Notícias regionais, Brasil, esportes, saúde e educação.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: 'Source Sans 3', sans-serif; background: #f4f1eb; color: #1a1a1a; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+    button { cursor: pointer; font-family: inherit; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .topbar { background: #4169e1; padding: 5px 0; }
+    .topbar .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .topbar-left, .topbar-right { display: flex; gap: 16px; align-items: center; font-size: 11px; color: rgba(255,255,255,0.85); letter-spacing: 0.03em; }
+    .topbar-left a, .topbar-right a { color: rgba(255,255,255,0.85); transition: color 0.2s; }
+    .topbar-left a:hover, .topbar-right a:hover { color: #fff; }
+    .badge-ao-vivo { background: #fff; color: #4169e1; font-weight: 700; font-size: 10px; padding: 3px 9px; border-radius: 3px; letter-spacing: 0.08em; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.55} }
+    .header { background: #0d1b2a; }
+    .brand-bar { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; gap: 20px; flex-wrap: wrap; }
+    .logo-area { display: flex; align-items: center; gap: 24px; }
+    .logo-img { height: 120px; width: auto; flex-shrink: 0; }
+    .logo-text h1 { 
+      font-family: 'Montserrat', sans-serif; 
+      font-size: 40px; 
+      font-weight: 900; 
+      color: #fff; 
+      line-height: 1; 
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+    .logo-text p { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+    .player-area { display: flex; align-items: center; gap: 24px; }
+    .play-btn { width: 84px; height: 84px; border-radius: 50%; background: #4169e1; border: 4px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.1s; flex-shrink: 0; }
+    .play-btn:hover { background: #5a7fee; transform: scale(1.05); }
+    .play-btn svg { fill: #fff; width: 32px; height: 32px; margin-left: 4px; }
+    .player-info { font-size: 20px; color: rgba(255,255,255,0.4); line-height: 1.1; }
+    .player-info strong { display: block; font-family: 'Montserrat', sans-serif; font-size: 28px; color: #fff; font-weight: 900; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.02em; }
+    .player-status { display: flex; align-items: center; gap: 12px; }
+    .player-status span { font-size: 18px; color: rgba(255,255,255,0.5); font-weight: 600; }
+    .search-bar { padding: 0 0 12px; }
+    .search-form { display: flex; gap: 8px; max-width: 480px; }
+    .search-input { flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.13); border-radius: 4px; padding: 8px 14px; color: #fff; font-size: 13px; font-family: inherit; transition: border-color 0.2s, background 0.2s; }
+    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-input:focus { outline: none; border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.1); }
+    .search-btn { background: #4169e1; border: none; border-radius: 4px; padding: 8px 18px; color: #fff; font-size: 13px; font-weight: 600; transition: background 0.2s; }
+    .search-btn:hover { background: #5a7fee; }
+    .main-nav { background: #0a1520; border-top: 1px solid rgba(255,255,255,0.07); padding: 8px 0; }
+    .nav-list { display: flex; list-style: none; overflow-x: auto; scrollbar-width: none; gap: 8px; align-items: center; }
+    .nav-list::-webkit-scrollbar { display: none; }
+    .nav-list li { display: block; }
+    .nav-list a { 
+      display: block; 
+      padding: 6px 14px; 
+      font-size: 11px; 
+      font-weight: 800; 
+      color: var(--c); 
+      letter-spacing: 0.05em; 
+      text-transform: uppercase; 
+      white-space: nowrap; 
+      border-radius: 20px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255,255,255,0.03);
+      border: 2px solid var(--c);
+    }
+    /* Cores vibrantes por item */
+    .nav-list li:nth-child(1)  a { --c: #ff4757; } /* Início */
+    .nav-list li:nth-child(2)  a { --c: #54a0ff; } /* Regional */
+    .nav-list li:nth-child(3)  a { --c: #2ed573; } /* Brasil */
+    .nav-list li:nth-child(4)  a { --c: #a29bfe; } /* Educação */
+    .nav-list li:nth-child(5)  a { --c: #eccc68; } /* Esportes */
+    .nav-list li:nth-child(6)  a { --c: #ff7f50; } /* Justiça */
+    .nav-list li:nth-child(7)  a { --c: #7bed9f; } /* Saúde */
+    .nav-list li:nth-child(8)  a { --c: #70a1ff; } /* Sobre Nós */
+    .nav-list li:nth-child(9)  a { --c: #1dd1a1; } /* Transparência */
+
+    .nav-list a:hover { 
+      background: var(--c); 
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 6px 15px var(--c);
+      color: #0a1520;
+    }
+    .nav-list a.active { 
+      background: var(--c); 
+      color: #0a1520;
+      box-shadow: 0 2px 10px var(--c);
+    }
+    .ticker { background: #4169e1; display: flex; align-items: center; height: 36px; overflow: hidden; }
+    .ticker-label { background: #2b4bad; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 16px; height: 100%; display: flex; align-items: center; white-space: nowrap; flex-shrink: 0; }
+    .ticker-track { flex: 1; overflow: hidden; position: relative; }
+    .ticker-inner { display: flex; gap: 56px; white-space: nowrap; animation: ticker-scroll 40s linear infinite; font-size: 12px; color: rgba(255,255,255,0.92); padding: 0 16px; }
+    .ticker-inner span::before { content: "▶ "; font-size: 8px; opacity: 0.6; }
+    @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .main-layout { display: grid; grid-template-columns: 1fr 280px; gap: 24px; padding: 24px 0 32px; }
+    .hero-card { background: #fff; border-radius: 6px; border: 1px solid #e0ddd4; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 28px; min-height: 260px; }
+    .hero-image { background: linear-gradient(145deg, #0d1b2a 0%, #1a3a5c 60%, #0d1b2a 100%); position: relative; min-height: 240px; display: flex; align-items: center; justify-content: center; }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+    .hero-image-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom right, rgba(13,27,42,0.3), rgba(13,27,42,0.7)); }
+    .hero-image-placeholder { color: rgba(255,255,255,0.12); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; position: relative; z-index: 1; }
+    .hero-badge { position: absolute; top: 16px; left: 16px; z-index: 2; }
+    .hero-content { padding: 28px 26px; display: flex; flex-direction: column; justify-content: center; }
+    .hero-category { font-size: 10px; font-weight: 700; color: #4169e1; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; }
+    .hero-title { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 800; color: #0d1b2a; line-height: 1.2; margin-bottom: 12px; }
+    .hero-desc { font-size: 14px; color: #666; line-height: 1.65; margin-bottom: 18px; }
+    .hero-meta { display: flex; flex-direction: column; gap: 4px; font-size: 10px; color: #aaa; font-style: italic; }
+    .hero-meta .source { color: #c0392b; font-weight: 700; font-style: normal; text-transform: uppercase; }
+    .hero-read-more { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; padding: 9px 18px; background: #0d1b2a; color: #fff; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; transition: background 0.2s; width: fit-content; }
+    .hero-read-more:hover { background: #1a3a5c; }
+    
+    /* Breaking News Banner */
+    .breaking-news { background: #4169e1; color: #fff; padding: 8px 0; font-size: 13px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.15); display: none; }
+    .breaking-news .container { display: flex; align-items: center; gap: 12px; }
+    .breaking-label { background: #fff; color: #4169e1; padding: 2px 8px; border-radius: 3px; font-size: 11px; text-transform: uppercase; }
+    
+    /* Ad Spaces Sidebar */
+    .ad-sidebar-stack { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .ad-sidebar-item { width: 100%; height: 250px; background: #f9f8f4; border: 1px dashed #ddd; display: flex; align-items: center; justify-content: center; color: #bbb; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; }
+    
+    /* Breaking News Banner */
+    /* ===== SECTION HEADINGS — cor única por seção ===== */
+    .section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 3px solid #0d1b2a; }
+    .section-heading h2 { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 800; color: #0d1b2a; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em; }
+    .section-heading .line { flex: 1; height: 1px; background: #e0ddd4; }
+    .section-heading .ver-mais { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; white-space: nowrap; transition: opacity 0.2s; }
+    .section-heading .ver-mais:hover { opacity: 0.7; }
+
+    /* Cores por seção */
+    #ultimas-heading  { border-bottom-color: #c0392b; }
+    #ultimas-heading .ver-mais { color: #c0392b; }
+    #esportes + .cards-grid, #esportes { border-bottom-color: #e67e22; }
+    #esportes h2 { color: #e67e22; }
+    #brasil { border-bottom-color: #27ae60; }
+    #brasil h2 { color: #27ae60; }
+    #regional { border-bottom-color: #2980b9; }
+    #regional h2 { color: #2980b9; }
+
+    /* ===== CARDS ===== */
+    .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+    .cards-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .news-card { background: #fff; border-radius: 5px; border: 1px solid #e0ddd4; overflow: hidden; transition: box-shadow 0.25s, transform 0.25s; }
+    .news-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.09); }
+
+    /* Fundo do card-image por categoria */
+    .card-image { height: 130px; position: relative; overflow: hidden; background: linear-gradient(145deg, #1a3a5c, #0d1b2a); }
+    .card-image.cat-regional  { background: linear-gradient(145deg, #1a6aa0, #0d3b5c); }
+    .card-image.cat-brasil    { background: linear-gradient(145deg, #1a7a4a, #0a4a2a); }
+    .card-image.cat-educacao  { background: linear-gradient(145deg, #6c3483, #3b1a5c); }
+    .card-image.cat-justica   { background: linear-gradient(145deg, #a04000, #5c2400); }
+    .card-image.cat-saude     { background: linear-gradient(145deg, #0e8a70, #055040); }
+    .card-image.cat-esportes  { background: linear-gradient(145deg, #c0392b, #7b241c); }
+    .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+    .news-card:hover .card-image img { transform: scale(1.04); }
+    .card-image-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: rgba(255,255,255,0.12); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .card-body { padding: 14px 16px 16px; }
+    .card-title { font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 700; color: #0d1b2a; line-height: 1.4; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-meta { display: flex; flex-direction: column; gap: 2px; font-size: 10px; color: #bbb; font-style: italic; }
+    .card-meta .source { font-weight: 700; font-style: normal; text-transform: uppercase; }
+
+    /* Source colors por categoria */
+    .card-meta .source.src-regional { color: #2980b9; }
+    .card-meta .source.src-brasil   { color: #27ae60; }
+    .card-meta .source.src-educacao { color: #8e44ad; }
+    .card-meta .source.src-justica  { color: #d35400; }
+    .card-meta .source.src-saude    { color: #16a085; }
+    .card-meta .source.src-esportes { color: #c0392b; }
+
+    /* ===== BADGES ===== */
+    .badge { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; position: absolute; top: 10px; left: 10px; z-index: 2; }
+    .badge-regional { background: #2980b9; color: #fff; }
+    .badge-brasil   { background: #27ae60; color: #fff; }
+    .badge-educacao { background: #8e44ad; color: #fff; }
+    .badge-justica  { background: #d35400; color: #fff; }
+    .badge-saude    { background: #16a085; color: #fff; }
+    .badge-esportes { background: #c0392b; color: #fff; }
+    .sidebar-widget { background: #fff; border: 1px solid #e0ddd4; border-radius: 5px; overflow: hidden; margin-bottom: 18px; }
+    .widget-header { padding: 10px 14px; display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 0.13em; text-transform: uppercase; background: #0d1b2a; }
+    .widget-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.6); flex-shrink: 0; }
+    /* Widget header cores únicas */
+    .wh-clima    { background: linear-gradient(135deg, #1a6aa0, #0d3b5c); }
+    .wh-cotacoes { background: linear-gradient(135deg, #1a7a4a, #0a4a2a); }
+    .wh-lidas    { background: linear-gradient(135deg, #c0392b, #7b241c); }
+    .wh-social   { background: linear-gradient(135deg, #6c3483, #3b1a5c); }
+    .wh-app      { background: linear-gradient(135deg, #0e8a70, #055040); }
+    .wh-parceiros{ background: linear-gradient(135deg, #d35400, #7d2f00); }
+    .widget-body { padding: 14px; }
+    .clima-row { display: flex; align-items: center; gap: 14px; }
+    .clima-icon { font-size: 36px; line-height: 1; }
+    .clima-temp { font-family: 'Montserrat', sans-serif; font-size: 36px; font-weight: 800; color: #0d1b2a; line-height: 1; }
+    .clima-info strong { display: block; font-size: 14px; color: #0d1b2a; }
+    .clima-info span { font-size: 12px; color: #999; }
+    .cot-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0ede6; font-size: 13px; }
+    .cot-row:last-child { border-bottom: none; }
+    .cot-label { color: #555; font-weight: 600; }
+    .cot-right { display: flex; align-items: center; gap: 6px; }
+    .cot-val { font-weight: 700; color: #0d1b2a; }
+    .cot-up { color: #27ae60; font-size: 11px; font-weight: 700; }
+    .cot-dn { color: #c0392b; font-size: 11px; font-weight: 700; }
+    .cot-nt { color: #aaa; font-size: 11px; }
+    .cot-note { font-size: 10px; color: #ccc; margin-top: 8px; line-height: 1.4; }
+    .rank-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #f0ede6; }
+    .rank-item:last-child { border-bottom: none; }
+    .rank-num { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 900; color: #e8e5de; line-height: 1; flex-shrink: 0; min-width: 22px; }
+    .rank-text { font-size: 12px; color: #333; line-height: 1.45; font-weight: 500; padding-top: 2px; }
+    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .social-btn { padding: 10px 8px; border-radius: 4px; border: none; font-size: 12px; font-weight: 600; color: #fff; display: flex; align-items: center; justify-content: center; gap: 6px; transition: opacity 0.2s, transform 0.1s; }
+    .social-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .social-fb { background: #1877f2; }
+    .social-ig { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .social-yt { background: #ff0000; }
+    .social-wa { background: #25d366; }
+    .app-widget { text-align: center; padding: 18px 14px; }
+    .app-widget p { font-size: 13px; color: #555; margin-bottom: 14px; line-height: 1.5; }
+    .app-btn { display: inline-flex; align-items: center; gap: 8px; background: #27ae60; color: #fff; border: none; border-radius: 4px; padding: 10px 22px; font-size: 13px; font-weight: 600; transition: background 0.2s; }
+    .app-btn:hover { background: #2ecc71; }
+    .parceiro-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f0ede6; font-size: 13px; color: #444; font-weight: 500; transition: color 0.2s; }
+    .parceiro-item:last-child { border-bottom: none; }
+    .parceiro-item:hover { color: #c0392b; }
+    .parceiro-dot { width: 6px; height: 6px; border-radius: 50%; background: #c0392b; flex-shrink: 0; }
+    .footer { background: #0d1b2a; padding: 36px 0 0; margin-top: 8px; }
+    .footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 32px; padding-bottom: 28px; }
+    .footer-brand h3 { font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .footer-brand p { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.65; }
+    .frequencies { margin-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+    .frequencies span { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .frequencies strong { color: #c0392b; }
+    .footer-col h4 { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 14px; }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 9px; transition: color 0.2s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.07); padding: 16px 0; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 11px; color: rgba(255,255,255,0.25); }
+    @media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } .sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } .footer-grid { grid-template-columns: 1fr 1fr; } .ad-header { display: none; } }
+    
+    /* Dark Mode */
+    body.dark-mode { background: #080f18; color: #e0e0e0; }
+    body.dark-mode .news-card, body.dark-mode .sidebar-widget, body.dark-mode .hero-card { background: #121d2b; border-color: #1e2d3d; }
+    body.dark-mode .hero-title, body.dark-mode .card-title, body.dark-mode .section-heading h2 { color: #fff; }
+    body.dark-mode .hero-desc, body.dark-mode .rank-text { color: #aaa; }
+    body.dark-mode .section-heading .line { background: #1e2d3d; }
+    body.dark-mode .clima-temp, body.dark-mode .clima-info strong { color: #fff; }
+    body.dark-mode .cot-row { border-bottom-color: #1e2d3d; }
+    body.dark-mode .cot-label, body.dark-mode .cot-val { color: #ddd; }
+    
+    /* Visualizer */
+    .visualizer { display: flex; align-items: flex-end; gap: 4px; height: 24px; }
+    .vis-bar { width: 4px; background: #fff; animation: vis-anim 0.6s infinite alternate; opacity: 0.8; }
+    @keyframes vis-anim { 0% { height: 6px; } 100% { height: 24px; } }
+    .visualizer.paused .vis-bar { animation-play-state: paused; height: 6px; opacity: 0.3; }
+    
+    .play-btn.paused { animation: btn-pulse 2s infinite; }
+    @keyframes btn-pulse { 0% { box-shadow: 0 0 0 0 rgba(65, 105, 225, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(65, 105, 225, 0); } 100% { box-shadow: 0 0 0 0 rgba(65, 105, 225, 0); } }
+    
+    .news-card.no-image { background: linear-gradient(135deg, var(--nc, #0d1b2a), #1a3a5c); border: none; min-height: 200px; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .news-card.no-image .card-body { padding: 24px; }
+    .news-card.no-image .card-title { color: #fff; font-size: 18px; font-weight: 700; }
+    .news-card.no-image .card-meta { color: rgba(255,255,255,0.5); }
+    
+    .dark-toggle { background: none; border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 10px; padding: 4px 8px; border-radius: 4px; }
+    @media (max-width: 640px) { 
+      .logo-area { flex-direction: column; text-align: center; gap: 12px; }
+      .logo-img { height: 80px; }
+      .logo-text h1 { font-size: 28px; }
+      .hero-card { grid-template-columns: 1fr; } 
+      .hero-image { min-height: 180px; } 
+      .cards-grid { grid-template-columns: 1fr; } 
+      .sidebar { grid-template-columns: 1fr; } 
+      .footer-grid { grid-template-columns: 1fr; } 
+      .brand-bar { flex-direction: column; align-items: center; gap: 12px; } 
+      .topbar-left, .topbar-right { flex-wrap: wrap; justify-content: center; } 
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-left">
+        <span>✉ <a href="mailto:radioculturadeguaira@gmail.com">radioculturadeguaira@gmail.com</a></span>
+        <span>✆ <a href="tel:1733311177">(17) 3331-1177</a></span>
+        <span id="datetime">carregando...</span>
+      </div>
+      <div class="topbar-right">
+        <button class="dark-toggle" id="darkToggle">Modo Noturno</button>
+        <span class="badge-ao-vivo">● AO VIVO</span>
+        <a href="https://api.whatsapp.com/send?phone=551733311155" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.instagram.com/culturafm104.7" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- BREAKING NEWS -->
+  <div class="breaking-news" id="breakingNews">
+    <div class="container">
+      <span class="breaking-label">Urgente</span>
+      <span id="breakingText">Incêndio em área rural de Guaíra mobiliza bombeiros neste momento.</span>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container">
+      <div class="brand-bar">
+        <a href="index.html" class="logo-area">
+          <img src="img/logo_oficial.png" alt="Logo Rádio Cultura FM 104.7" class="logo-img">
+          <div class="logo-text">
+            <h1>Rádio Cultura FM 104.7</h1>
+            <p>Portal de Notícias — Guaíra, SP</p>
+          </div>
+        </a>
+        <div class="player-area">
+          <button class="play-btn" id="playBtn" title="Ouvir ao vivo" aria-label="Ouvir ao vivo">
+            <svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></svg>
+          </button>
+          <div class="player-info">
+            <strong>Cultura FM 104.7</strong>
+            <div class="player-status">
+              <span id="playerAction">Clique para ouvir</span>
+              <div class="visualizer paused" id="visualizer">
+                <div class="vis-bar" style="animation-delay:0s"></div>
+                <div class="vis-bar" style="animation-delay:0.1s"></div>
+                <div class="vis-bar" style="animation-delay:0.2s"></div>
+                <div class="vis-bar" style="animation-delay:0.3s"></div>
+                <div class="vis-bar" style="animation-delay:0.4s"></div>
+              </div>
+            </div>
+          </div>
+          <audio id="audioPlayer" preload="none">
+            <source src="https://ice.fabricahost.com.br/radioculturaguaira" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+      <div class="search-bar">
+        <form class="search-form" role="search" onsubmit="return false;">
+          <input class="search-input" type="search" id="search-input" placeholder="Buscar notícias..." aria-label="Buscar notícias">
+          <button class="search-btn" type="submit">Buscar</button>
+        </form>
+      </div>
+    </div>
+    <nav class="main-nav" aria-label="Menu principal">
+      <div class="container">
+        <ul class="nav-list">
+          <li><a href="index.html" class="active">Início</a></li>
+          <li><a href="#regional">Regional</a></li>
+          <li><a href="#brasil">Brasil</a></li>
+          <li><a href="#educacao">Educação</a></li>
+          <li><a href="#esportes">Esportes</a></li>
+          <li><a href="#justica">Justiça</a></li>
+          <li><a href="#saude">Saúde</a></li>
+          <li><a href="sobre.html">Sobre Nós</a></li>
+          <li><a href="transparencia.html">Transparência</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- TICKER -->
+  <div class="ticker" role="marquee" aria-label="Últimas notícias">
+    <div class="ticker-label">Últimas</div>
+    <div class="ticker-track">
+      <div class="ticker-inner" id="tickerInner">
+        <span>Carregando últimas notícias...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="container">
+    <div class="main-layout">
+
+      <!-- COLUNA PRINCIPAL -->
+      <main id="main-content">
+
+        <!-- Hero / Destaque -->
+        <article class="hero-card" id="hero-section">
+          <div class="hero-image">
+            <div class="hero-image-overlay"></div>
+            <div class="hero-image-placeholder">Carregando destaque...</div>
+            <div class="hero-badge"><span class="badge badge-regional">Regional</span></div>
+          </div>
+          <div class="hero-content">
+            <div class="hero-category">Destaque</div>
+            <h2 class="hero-title" id="hero-title">Carregando notícia...</h2>
+            <p class="hero-desc" id="hero-desc"></p>
+            <div class="hero-meta">
+              <span class="source" id="hero-source"></span>
+              <span id="hero-time"></span>
+            </div>
+            <a href="#" class="hero-read-more" id="hero-link">Ler notícia completa →</a>
+          </div>
+        </article>
+
+        <!-- Últimas Notícias -->
+        <div class="section-heading" id="ultimas-heading">
+          <h2>Últimas Notícias</h2>
+          <div class="line"></div>
+          <a href="#" class="ver-mais">Ver todas →</a>
+        </div>
+        <div class="cards-grid" id="news-grid">
+          <!-- carregado via JS -->
+        </div>
+
+        <!-- Esportes -->
+        <div class="section-heading" id="esportes">
+          <h2>⚽ Esportes</h2>
+          <div class="line"></div>
+        </div>
+        <div class="cards-grid cards-grid-3" id="esportes-grid">
+          <!-- carregado via JS -->
+        </div>
+
+        <!-- Brasil -->
+        <div class="section-heading" id="brasil">
+          <h2>🇧🇷 Brasil</h2>
+          <div class="line"></div>
+        </div>
+        <div class="cards-grid cards-grid-3" id="brasil-grid">
+          <!-- carregado via JS -->
+        </div>
+
+        <!-- Regional -->
+        <div class="section-heading" id="regional">
+          <h2>📍 Regional</h2>
+          <div class="line"></div>
+        </div>
+        <div class="cards-grid cards-grid-3" id="regional-grid">
+          <!-- carregado via JS -->
+        </div>
+
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="ad-sidebar-stack">
+          <div class="ad-sidebar-item">Publicidade — 300x250</div>
+          <div class="ad-sidebar-item">Publicidade — 300x250</div>
+          <div class="ad-sidebar-item">Publicidade — 300x250</div>
+        </div>
+
+        <!-- Clima -->
+        <div class="sidebar-widget">
+          <div class="widget-header wh-clima"><div class="widget-dot"></div>🌤 Clima em Guaíra-SP</div>
+          <div class="widget-body" id="weather-widget">
+            <div class="clima-row">
+              <div class="clima-icon">⏳</div>
+              <div class="clima-temp">--°C</div>
+              <div class="clima-info"><strong>Aguarde</strong><span>Guaíra, SP</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cotações Agro -->
+        <div class="sidebar-widget">
+          <div class="widget-header wh-cotacoes"><div class="widget-dot"></div>🌱 Cotações Agro</div>
+          <div class="widget-body" style="padding:10px 14px;">
+            <div id="agro-quotes">
+              <div class="cot-row"><span class="cot-label">Carregando...</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mais Lidas -->
+        <div class="sidebar-widget">
+          <div class="widget-header wh-lidas"><div class="widget-dot"></div>🔥 Mais Lidas</div>
+          <div class="widget-body" style="padding:10px 14px;">
+            <div id="most-read-list">
+              <div class="rank-item"><div class="rank-num">·</div><div class="rank-text">Carregando...</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Siga-nos -->
+        <div class="sidebar-widget">
+          <div class="widget-header wh-social"><div class="widget-dot"></div>🌐 Siga-nos</div>
+          <div class="widget-body">
+            <div class="social-grid">
+              <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" class="social-btn social-fb">Facebook</a>
+              <a href="https://www.instagram.com/culturafm104.7" target="_blank" class="social-btn social-ig">Instagram</a>
+              <a href="https://youtube.com/@culturafmguaira-sp" target="_blank" class="social-btn social-yt">YouTube</a>
+              <a href="https://api.whatsapp.com/send?phone=551733311155" target="_blank" class="social-btn social-wa">WhatsApp</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nosso App -->
+        <div class="sidebar-widget">
+          <div class="widget-header wh-app"><div class="widget-dot"></div>📱 Nosso App</div>
+          <div class="app-widget">
+            <p>Ouça a Rádio Cultura direto no seu celular, a qualquer hora e em qualquer lugar!</p>
+            <a href="https://appradio-omega.vercel.app/" target="_blank" class="app-btn">📲 Baixar App</a>
+          </div>
+        </div>
+
+        <!-- Portais Parceiros -->
+        <div class="sidebar-widget">
+          <div class="widget-header wh-parceiros"><div class="widget-dot"></div>🔗 Portais Parceiros</div>
+          <div class="widget-body" style="padding:10px 14px;">
+            <a href="https://www.acidadeon.com/ribeiraopreto/" target="_blank" class="parceiro-item"><div class="parceiro-dot"></div>ACidade ON Ribeirão</a>
+            <a href="https://jovempan.com.br/" target="_blank" class="parceiro-item"><div class="parceiro-dot"></div>Jovem Pan</a>
+            <a href="https://www.odiarioonline.com.br/" target="_blank" class="parceiro-item"><div class="parceiro-dot"></div>O Diário Online</a>
+            <a href="https://jornaldebarretos.com.br/" target="_blank" class="parceiro-item"><div class="parceiro-dot"></div>Jornal de Barretos</a>
+            <a href="https://agenciabrasil.ebc.com.br/" target="_blank" class="parceiro-item"><div class="parceiro-dot"></div>Agência Brasil</a>
+            <a href="https://g1.globo.com/sp/ribeirao-preto-franca/" target="_blank" class="parceiro-item"><div class="parceiro-dot"></div>G1 Ribeirão Preto</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Rádio Cultura FM 104.7</h3>
+          <p>A Rádio Cultura é mais do que uma simples emissora. É um canal de conexão, informação e entretenimento que transforma a maneira como você ouve o mundo.</p>
+          <div class="frequencies">
+            <span><strong>AM 1470 KHz</strong> — desde 23/05/1957</span>
+            <span><strong>FM 90,1 MHz</strong> — desde 16/06/1992</span>
+            <span><strong>FM 104.7</strong> — Portal de Notícias</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Páginas</h4>
+          <a href="index.html">Início</a>
+          <a href="sobre.html">Sobre Nós</a>
+          <a href="transparencia.html">Transparência</a>
+          <a href="termos.html">Termos de Uso</a>
+          <a href="privacidade.html">Política de Privacidade</a>
+          <a href="https://appradio-omega.vercel.app/" target="_blank" rel="noopener">Nosso App</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contato</h4>
+          <a href="#">Av. 15, nº 225, Guaíra-SP</a>
+          <a href="tel:+551733311177">(17) 3331-1177</a>
+          <a href="tel:+551733311155">(17) 3331-1155</a>
+          <a href="mailto:radioculturadeguaira@gmail.com">radioculturadeguaira@gmail.com</a>
+        </div>
+        <div class="footer-col">
+          <h4>Redes Sociais</h4>
+          <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://www.instagram.com/culturafm104.7" target="_blank" rel="noopener">Instagram — @culturafm104.7</a>
+          <a href="https://youtube.com/@culturafmguaira-sp" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://api.whatsapp.com/send?phone=551733311155" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Rádio Cultura FM 104.7 — Guaíra, SP, Brasil. Todos os direitos reservados.</span>
+        <span>As notícias exibidas neste portal são obtidas automaticamente de fontes públicas (G1, Agência Brasil) e são de responsabilidade dos respectivos veículos.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Relógio
+    function updateDatetime() {
+      const el = document.getElementById('datetime');
+      if (!el) return;
+      const now = new Date();
+      const dias = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+      const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+      const h = String(now.getHours()).padStart(2,'0');
+      const m = String(now.getMinutes()).padStart(2,'0');
+      el.textContent = `${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()} — ${h}:${m}`;
+    }
+    updateDatetime();
+    setInterval(updateDatetime, 30000);
+
+    // Player
+    const playBtn = document.getElementById('playBtn');
+    const audioPlayer = document.getElementById('audioPlayer');
+    let playing = false;
+    if (playBtn && audioPlayer) {
+      playBtn.addEventListener('click', function() {
+        if (!playing) {
+          audioPlayer.play().catch(() => {});
+          playBtn.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff;width:14px;height:14px"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>';
+          playing = true;
+        } else {
+          audioPlayer.pause();
+          playBtn.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff;width:16px;height:16px"><path d="M4 2l10 6-10 6z"/></svg>';
+          playing = false;
+        }
+      });
+    }
+
+    // Nav ativo
+    document.querySelectorAll('.nav-list a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.nav-list a').forEach(function(l){ l.classList.remove('active'); });
+        this.classList.add('active');
+      });
+    });
+
+    // Utilitários
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text || '';
+      return div.innerHTML;
+    }
+    function timeAgo(date) {
+      const diff = Date.now() - date;
+      const min = Math.floor(diff/60000);
+      const h = Math.floor(diff/3600000);
+      const d = Math.floor(diff/86400000);
+      if (min < 1) return 'Agora';
+      if (min < 60) return min + 'min atrás';
+      if (h < 24) return h + 'h atrás';
+      return d + 'd atrás';
+    }
+    function badgeClass(cat) {
+      const map = { 'Regional':'badge-regional','Brasil':'badge-brasil','Educação':'badge-educacao','Justiça':'badge-justica','Saúde':'badge-saude','Esportes':'badge-esportes' };
+      return map[cat] || 'badge-brasil';
+    }
+
+    // Criar card de notícia
+    function catClass(cat) {
+      const map = { 'Regional':'cat-regional','Brasil':'cat-brasil','Educação':'cat-educacao','Justiça':'cat-justica','Saúde':'cat-saude','Esportes':'cat-esportes' };
+      return map[cat] || '';
+    }
+    function srcClass(cat) {
+      const map = { 'Regional':'src-regional','Brasil':'src-brasil','Educação':'src-educacao','Justiça':'src-justica','Saúde':'src-saude','Esportes':'src-esportes' };
+      return map[cat] || '';
+    }
+    function createCard(item) {
+      const ago = timeAgo(item.pubDate);
+      if (!item.image) {
+        return `
+          <article class="news-card no-image" style="--nc: var(--c-${item.category.toLowerCase()}, #0d1b2a)">
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer">
+              <div class="card-body">
+                <h3 class="card-title">"${escapeHtml(item.title)}"</h3>
+                <div class="card-meta">
+                  <span class="source">${escapeHtml(item.source)}</span>
+                  <span>${ago}</span>
+                </div>
+              </div>
+            </a>
+          </article>`;
+      }
+      return `
+        <article class="news-card">
+          <a href="${item.link}" target="_blank" rel="noopener noreferrer">
+            <div class="card-image ${catClass(item.category)}">
+              <img src="${item.image}" alt="${escapeHtml(item.title)}" loading="lazy">
+              <span class="badge ${badgeClass(item.category)}">${escapeHtml(item.category)}</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">${escapeHtml(item.title)}</h3>
+              <div class="card-meta">
+                <span class="source ${srcClass(item.category)}">${escapeHtml(item.source)}</span>
+                <span>${ago}</span>
+              </div>
+            </div>
+          </a>
+        </article>`;
+    }
+
+    // Clima
+    async function loadWeather() {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=-20.3183&longitude=-48.3106&current_weather=true&timezone=America%2FSao_Paulo');
+        const data = await res.json();
+        if (!data.current_weather) return;
+        const { temperature, weathercode } = data.current_weather;
+        let icon = '☀️', desc = 'Ensolarado';
+        if (weathercode >= 1 && weathercode <= 3) { icon = '⛅'; desc = 'Nublado'; }
+        if (weathercode === 45 || weathercode === 48) { icon = '🌫️'; desc = 'Neblina'; }
+        if (weathercode >= 51 && weathercode <= 67) { icon = '🌧️'; desc = 'Chuva'; }
+        if (weathercode >= 95) { icon = '⛈️'; desc = 'Tempestade'; }
+        document.getElementById('weather-widget').innerHTML = `
+          <div class="clima-row">
+            <div class="clima-icon">${icon}</div>
+            <div class="clima-temp">${Math.round(temperature)}°C</div>
+            <div class="clima-info"><strong>${desc}</strong><span>Guaíra, SP</span></div>
+          </div>`;
+      } catch(e) {}
+    }
+
+    // Cotações
+    async function loadQuotes() {
+      try {
+        const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL');
+        const data = await res.json();
+        const usd = parseFloat(data.USDBRL?.bid||0).toFixed(2).replace('.',',');
+        const eur = parseFloat(data.EURBRL?.bid||0).toFixed(2).replace('.',',');
+        const usdUp = parseFloat(data.USDBRL?.pctChange||0) >= 0;
+        const eurUp = parseFloat(data.EURBRL?.pctChange||0) >= 0;
+        document.getElementById('agro-quotes').innerHTML = [
+          { l:'Dólar', v:`R$ ${usd}`, up: usdUp },
+          { l:'Euro', v:`R$ ${eur}`, up: eurUp },
+          { l:'Soja (sc)', v:'R$ 132,50', up: true },
+          { l:'Milho (sc)', v:'R$ 58,20', up: false },
+          { l:'Boi Gordo', v:'R$ 225,00', up: null }
+        ].map(q => `
+          <div class="cot-row">
+            <span class="cot-label">${q.l}</span>
+            <div class="cot-right">
+              <span class="cot-val">${q.v}</span>
+              <span class="${q.up===null?'cot-nt':q.up?'cot-up':'cot-dn'}">${q.up===null?'—':q.up?'▲':'▼'}</span>
+            </div>
+          </div>`).join('') + '<p class="cot-note">CEPEA/B3 · BCB · Referência</p>';
+      } catch(e) {}
+    }
+
+    // Dark Mode Toggle
+    const darkToggle = document.getElementById('darkToggle');
+    if (darkToggle) {
+      darkToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        darkToggle.textContent = document.body.classList.contains('dark-mode') ? 'Modo Claro' : 'Modo Noturno';
+      });
+    }
+
+    // Busca Funcional
+    const searchInput = document.getElementById('search-input');
+    let allNewsData = [];
+
+    async function loadNews() {
+      const API = 'https://api.rss2json.com/v1/api.json?rss_url=';
+      const feeds = [
+        { url:'https://g1.globo.com/rss/g1/sp/ribeirao-preto-franca/', source:'G1 Ribeirão', category:'Regional' },
+        { url:'https://g1.globo.com/rss/g1/', source:'G1', category:'Brasil' },
+        { url:'https://agenciabrasil.ebc.com.br/rss/educacao/feed.xml', source:'Agência Brasil', category:'Educação' },
+        { url:'https://agenciabrasil.ebc.com.br/rss/esportes/feed.xml', source:'Agência Brasil', category:'Esportes' },
+        { url:'https://agenciabrasil.ebc.com.br/rss/justica/feed.xml', source:'Agência Brasil', category:'Justiça' },
+        { url:'https://agenciabrasil.ebc.com.br/rss/saude/feed.xml', source:'Agência Brasil', category:'Saúde' }
+      ];
+      
+      const results = await Promise.allSettled(feeds.map(async f => {
+        const r = await fetch(API + encodeURIComponent(f.url));
+        const d = await r.json();
+        return (d.items||[]).slice(0,6).map(item => {
+          let img = null;
+          const html = item.content || item.description || '';
+          const m = html.match(/<img[^>]+src="([^">]+)"/);
+          if (m) img = m[1];
+          if (!img && item.enclosure?.type?.startsWith('image/')) img = item.enclosure.link;
+          return { title: item.title||'', link: item.link||'#', image: img, excerpt: (item.description||'').replace(/<[^>]*>/g,'').substring(0,160), pubDate: new Date(item.pubDate), source: f.source, category: f.category };
+        });
+      }));
+      
+      allNewsData = [];
+      results.forEach(r => { if (r.status==='fulfilled') allNewsData = allNewsData.concat(r.value); });
+      allNewsData.sort((a,b) => b.pubDate - a.pubDate);
+      
+      renderAll(allNewsData);
+      
+      // Breaking News (Urgente se houver algo muito recente)
+      if (allNewsData.length > 0) {
+        document.getElementById('breakingNews').style.display = 'block';
+        document.getElementById('breakingText').textContent = allNewsData[0].title;
+      }
+    }
+
+    function renderAll(data) {
+      if (data.length === 0) return;
+      
+      // Hero
+      const hero = data[0];
+      document.querySelector('.hero-image').style.background = 'linear-gradient(145deg,#0d1b2a,#1a3a5c)';
+      if (hero.image) document.querySelector('.hero-image').innerHTML = `<img src="${hero.image}" alt="${escapeHtml(hero.title)}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"><div class="hero-image-overlay"></div><div class="hero-badge"><span class="badge ${badgeClass(hero.category)}">${hero.category}</span></div>`;
+      document.querySelector('.hero-category').textContent = hero.category;
+      document.getElementById('hero-title').textContent = hero.title;
+      document.getElementById('hero-desc').textContent = hero.excerpt;
+      document.getElementById('hero-source').textContent = hero.source;
+      document.getElementById('hero-time').textContent = timeAgo(hero.pubDate);
+      document.getElementById('hero-link').href = hero.link;
+
+      // Grids
+      const render = (id, items) => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = items.map(createCard).join('') || '<p style="color:#999;padding:8px">Sem notícias.</p>';
+      };
+      
+      render('news-grid', data.slice(1,7));
+      render('esportes-grid', data.filter(i => i.category === 'Esportes').slice(0,3));
+      render('brasil-grid', data.filter(i => i.category === 'Brasil').slice(0,3));
+      render('regional-grid', data.filter(i => i.category === 'Regional').slice(0,3));
+
+      // Mais lidas
+      const ml = document.getElementById('most-read-list');
+      if (ml) ml.innerHTML = data.slice(0,5).map((item,i)=>`
+        <div class="rank-item">
+          <div class="rank-num">${i+1}</div>
+          <a href="${item.link}" target="_blank" class="rank-text">${escapeHtml(item.title)}</a>
+        </div>`).join('');
+
+      // Ticker
+      const ticker = document.getElementById('tickerInner');
+      if (ticker) {
+        const items = data.slice(0,10).map(i=>`<span>${escapeHtml(i.title)}</span>`).join('');
+        ticker.innerHTML = items + items;
+      }
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = allNewsData.filter(n => n.title.toLowerCase().includes(term) || n.category.toLowerCase().includes(term));
+        renderAll(filtered);
+      });
+    }
+
+    // Visualizer Sync
+    if (playBtn && audioPlayer) {
+      const visualizer = document.getElementById('visualizer');
+      const playerAction = document.getElementById('playerAction');
+      
+      // Iniciar com pulse
+      playBtn.classList.add('paused');
+
+      playBtn.addEventListener('click', () => {
+        if (!audioPlayer.paused) {
+          visualizer.classList.remove('paused');
+          playBtn.classList.remove('paused');
+          playerAction.textContent = 'Ouvindo agora';
+        } else {
+          visualizer.classList.add('paused');
+          playBtn.classList.add('paused');
+          playerAction.textContent = 'Clique para ouvir';
+        }
+      });
+    }
+
+    loadWeather();
+    loadQuotes();
+    loadNews();
+  </script>
+</body>
+</html>
