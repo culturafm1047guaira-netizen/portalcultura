@@ -81,6 +81,24 @@ function initAdCarousel() {
   });
 }
 
+async function loadLatestVideo() {
+  const container = document.getElementById('youtube-embed-container');
+  if (!container) return;
+  try {
+    const res = await fetch('https://api.rss.app/v1/channels/UCX2kODcIw1ZEpRFTCK-Zx5g/items?limit=1');
+    if (!res.ok) throw new Error('Channel not found');
+    const data = await res.json();
+    if (data.items && data.items[0]) {
+      const videoId = data.items[0].url.match(/v=([^&]+)/)?.[1];
+      if (videoId) {
+        container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=0" title="Último vídeo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+      }
+    }
+  } catch (e) {
+    container.innerHTML = '<p style="color:#999;padding:20px;text-align:center;">Vídeo não disponível.</p>';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   updateDateTime();
   setInterval(updateDateTime, 30000);
@@ -89,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSearch();
   initCookieConsent();
   initAdCarousel();
+  loadLatestVideo();
 
   if (typeof loadWeather === 'function') loadWeather();
   if (typeof loadQuotes === 'function') loadQuotes();
