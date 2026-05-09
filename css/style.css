@@ -407,5 +407,56 @@ body.dark-mode .highlight-box { opacity: 0.9; }
   height: 100%;
 }
 
+.youtube-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.youtube-grid .video-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.youtube-grid .video-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.youtube-grid .video-thumb {
+  position: relative;
+  padding-bottom: 56.25%;
+  background: #000;
+}
+.youtube-grid .video-thumb iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.youtube-grid .video-info {
+  padding: 12px;
+}
+.youtube-grid .video-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark-bg);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .youtube-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .youtube-grid { grid-template-columns: 1fr 1fr; }
+}
+
 #youtube-section { border-bottom-color: #ff0000; }
 #youtube-section h2 { color: #ff0000; }

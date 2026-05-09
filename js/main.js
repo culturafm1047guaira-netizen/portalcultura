@@ -109,28 +109,29 @@ function initAdCarousel() {
 }
 
 async function loadLatestVideo() {
-  const container = document.getElementById('youtube-embed-container');
+  const container = document.getElementById('youtube-grid');
   if (!container) return;
   try {
     const apiKey = 'AIzaSyDE5HNICxwnkcnBKu2NJTESD02CfVl7moc';
     const channelId = 'UCWRKwLTLmi5hMyEsWcPL4zw';
-    const res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&order=date&part=snippet&maxResults=1`);
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&order=date&part=snippet&maxResults=3`);
     const data = await res.json();
-    if (data.items && data.items[0]) {
-      const videoId = data.items[0].id.videoId;
-      const title = data.items[0].snippet.title;
-      container.innerHTML = `
-        <iframe 
-          src="https://www.youtube.com/embed/${videoId}?rel=0" 
-          title="${title}" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          allowfullscreen
-          loading="lazy">
-        </iframe>`;
+    if (data.items && data.items.length > 0) {
+      container.innerHTML = data.items.map(item => {
+        const videoId = item.id.videoId;
+        const title = item.snippet.title;
+        return `<div class="video-card">
+          <div class="video-thumb">
+            <iframe src="https://www.youtube.com/embed/${videoId}?rel=0" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="video-info">
+            <p class="video-title">${title}</p>
+          </div>
+        </div>`;
+      }).join('');
     }
   } catch (e) {
-    if (container) container.innerHTML = '<p style="color:#999;padding:20px;text-align:center;">Vídeo não disponível.</p>';
+    if (container) container.innerHTML = '<p style="color:#999;padding:20px;text-align:center;grid-column:1/-1;">Vídeos não disponíveis.</p>';
   }
 }
 
