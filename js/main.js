@@ -48,6 +48,33 @@ function initSearch() {
   });
 }
 
+function initCookieConsent() {
+  if (localStorage.getItem('cookieConsent')) return;
+
+  const banner = document.createElement('div');
+  banner.id = 'cookie-banner';
+  banner.innerHTML = `
+    <div class="cookie-content">
+      <p>Este site utiliza cookies para melhorar sua experiência. Ao continuar navegando, você aceita nossa <a href="sobre/privacidade.html">Política de Privacidade</a>.</p>
+      <div class="cookie-actions">
+        <button id="cookie-accept" class="cookie-btn cookie-accept">Aceitar</button>
+        <button id="cookie-reject" class="cookie-btn cookie-reject">Recusar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(banner);
+
+  document.getElementById('cookie-accept').addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'accepted');
+    banner.remove();
+  });
+
+  document.getElementById('cookie-reject').addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'rejected');
+    banner.remove();
+  });
+}
+
 function shuffleArray(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -85,17 +112,25 @@ async function loadLatestVideo() {
   const container = document.getElementById('youtube-embed-container');
   if (!container) return;
   try {
-    const res = await fetch('https://api.rss.app/v1/channels/UCX2kODcIw1ZEpRFTCK-Zx5g/items?limit=1');
-    if (!res.ok) throw new Error('Channel not found');
+    const apiKey = 'AIzaSyDE5HNICxwnkcnBKu2NJTESD02CfVl7moc';
+    const channelId = 'UCWRKwLTLmi5hMyEsWcPL4zw';
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&order=date&part=snippet&maxResults=1`);
     const data = await res.json();
     if (data.items && data.items[0]) {
-      const videoId = data.items[0].url.match(/v=([^&]+)/)?.[1];
-      if (videoId) {
-        container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=0" title="Último vídeo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
-      }
+      const videoId = data.items[0].id.videoId;
+      const title = data.items[0].snippet.title;
+      container.innerHTML = `
+        <iframe 
+          src="https://www.youtube.com/embed/${videoId}?rel=0" 
+          title="${title}" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen
+          loading="lazy">
+        </iframe>`;
     }
   } catch (e) {
-    container.innerHTML = '<p style="color:#999;padding:20px;text-align:center;">Vídeo não disponível.</p>';
+    if (container) container.innerHTML = '<p style="color:#999;padding:20px;text-align:center;">Vídeo não disponível.</p>';
   }
 }
 
@@ -113,30 +148,3 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof loadQuotes === 'function') loadQuotes();
   if (typeof loadNews === 'function') loadNews();
 });
-
-function initCookieConsent() {
-  if (localStorage.getItem('cookieConsent')) return;
-
-  const banner = document.createElement('div');
-  banner.id = 'cookie-banner';
-  banner.innerHTML = `
-    <div class="cookie-content">
-      <p>Este site utiliza cookies para melhorar sua experiência. Ao continuar navegando, você aceita nossa <a href="sobre/privacidade.html">Política de Privacidade</a>.</p>
-      <div class="cookie-actions">
-        <button id="cookie-accept" class="cookie-btn cookie-accept">Aceitar</button>
-        <button id="cookie-reject" class="cookie-btn cookie-reject">Recusar</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(banner);
-
-  document.getElementById('cookie-accept').addEventListener('click', () => {
-    localStorage.setItem('cookieConsent', 'accepted');
-    banner.remove();
-  });
-
-  document.getElementById('cookie-reject').addEventListener('click', () => {
-    localStorage.setItem('cookieConsent', 'rejected');
-    banner.remove();
-  });
-}
