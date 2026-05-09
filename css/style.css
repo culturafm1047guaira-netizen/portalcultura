@@ -389,3 +389,23 @@ body.dark-mode .highlight-box { opacity: 0.9; }
   #cookie-banner .cookie-content { flex-direction: column; text-align: center; }
   #cookie-banner .cookie-actions { justify-content: center; }
 }
+
+.youtube-embed {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.youtube-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#youtube-section { border-bottom-color: #ff0000; }
+#youtube-section h2 { color: #ff0000; }
