@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre — Rádio Cultura FM 104.7 | Guaíra, SP</title>
+  <meta name="description" content="Conheça a história da Rádio Cultura FM 104.7, emissora de Guaíra, SP. No ar desde 1957, com alcance em mais de 27 municípios e quase 1,5 milhão de habitantes.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#4169e1">
+  <link rel="canonical" href="https://radioculturaguaira.com.br/sobre/">
+  <link rel="icon" type="image/png" href="../img/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sobre — Rádio Cultura FM 104.7 | Guaíra, SP">
+  <meta property="og:description" content="Conheça a história da Rádio Cultura FM 104.7. No ar desde 1957, com alcance em mais de 27 municípios.">
+  <meta property="og:url" content="https://radioculturaguaira.com.br/sobre/">
+  <meta property="og:image" content="https://radioculturaguaira.com.br/img/og-image.png">
+  <meta property="og:site_name" content="Rádio Cultura FM 104.7">
+  <meta property="og:locale" content="pt_BR">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sobre — Rádio Cultura FM 104.7">
+  <meta name="twitter:description" content="Conheça a história da Rádio Cultura FM 104.7. No ar desde 1957.">
+  <meta name="twitter:image" content="https://radioculturaguaira.com.br/img/og-image.png">
+
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+      "@type": "NewsMediaOrganization",
+      "name": "Rádio Cultura FM 104.7",
+      "url": "https://radioculturaguaira.com.br",
+      "description": "Emissora de rádio de Guaíra, SP, no ar desde 1957. Abrangência de 27+ municípios, quase 1,5 milhão de habitantes.",
+      "foundingDate": "1957",
+      "areaServed": {
+        "@type": "Place",
+        "name": "Guaíra, SP e região"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. 15, nº 225",
+        "addressLocality": "Guaíra",
+        "addressRegion": "SP",
+        "addressCountry": "BR"
+      }
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-left">
+        <span>✉ <a href="mailto:radioculturadeguaira@gmail.com">radioculturadeguaira@gmail.com</a></span>
+        <span>✆ <a href="tel:1733311177">(17) 3331-1177</a></span>
+        <span id="datetime">carregando...</span>
+      </div>
+      <div class="topbar-right">
+        <button class="dark-toggle" id="darkToggle" aria-label="Alternar modo escuro">Modo Noturno</button>
+        <span class="badge-ao-vivo">● AO VIVO</span>
+        <a href="https://api.whatsapp.com/send?phone=551733311155" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.instagram.com/culturafm104.7" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container">
+      <div class="brand-bar">
+        <a href="../index.html" class="logo-area">
+          <img src="../img/logo_oficial.png" alt="Logo Rádio Cultura FM 104.7" class="logo-img" width="240" height="120" onerror="this.style.display='none'">
+          <div class="logo-text">
+            <span class="logo-main-title">Rádio Cultura FM 104.7</span>
+            <p>Portal de Notícias — Guaíra, SP</p>
+          </div>
+        </a>
+        <div class="player-area">
+          <button class="play-btn" id="playBtn" title="Ouvir ao vivo" aria-label="Ouvir ao vivo">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>
+          </button>
+          <div class="player-info">
+            <strong>Cultura FM 104.7</strong>
+            <div class="player-status">
+              <span id="playerAction">Clique para ouvir</span>
+              <div class="visualizer paused" id="visualizer" aria-hidden="true">
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+              </div>
+            </div>
+          </div>
+          <audio id="audioPlayer" preload="none">
+            <source src="https://ice.fabricahost.com.br/radioculturaguaira" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+    </div>
+    <nav class="main-nav" aria-label="Menu principal">
+      <div class="container">
+        <ul class="nav-list">
+          <li><a href="../index.html">Início</a></li>
+          <li><a href="../programacao/index.html">Programação</a></li>
+          <li><a href="index.html" class="active">Sobre</a></li>
+          <li><a href="../contato/index.html">Contato</a></li>
+          <li><a href="../termos.html">Termos de Uso</a></li>
+          <li><a href="privacidade.html">Política de Privacidade</a></li>
+          <li><a href="../transparencia.html">Transparência</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container" id="main-content">
+    <main class="page-content">
+      <div class="breadcrumb"><a href="../index.html">Início</a> &rsaquo; <strong>Sobre</strong></div>
+
+      <h1>Sobre</h1>
+
+      <div class="highlight-box">
+        <p>A Rádio Cultura é mais do que uma simples emissora! É um canal de conexão, informação e entretenimento que transforma a maneira como você ouve o mundo. Repleta de opções, a Cultura se destaca com conteúdo de qualidade que toca o coração dos ouvintes.</p>
+      </div>
+
+      <h2>Quem Somos e Nossa Missão</h2>
+      <p>A Rádio Cultura FM acredita no poder do rádio como ferramenta de comunicação, informação e entretenimento. Nosso compromisso é com a comunidade que servimos, levando até nossos ouvintes uma programação diversificada, que respeita e valoriza as tradições regionais e as novas tendências. Com um time de profissionais dedicados e uma programação cuidadosamente planejada, buscamos oferecer conteúdo relevante, que informe e inspire, tornando cada transmissão uma experiência única para nossos ouvintes.</p>
+
+      <h2>Construção de Confiança e Credibilidade</h2>
+      <p>A Rádio Cultura FM 104.7 é muito mais do que uma emissora; é um canal de conexão e engajamento com a comunidade, reconhecido por sua presença forte e respeitável na radiodifusão. Anunciar na Rádio Cultura FM oferece uma oportunidade única para marcas que desejam criar uma conexão mais pessoal e confiável com seu público. Com uma audiência fiel e ativa, nossa emissora constrói credibilidade e entrega resultados mensuráveis para anunciantes e parceiros, sempre comprometida em oferecer conteúdo de alta qualidade e valor para os ouvintes.</p>
+
+      <h2>Nosso Alcance e Relevância</h2>
+      <p>Com uma ampla cobertura regional, a Rádio Cultura FM alcança não apenas o estado de São Paulo, mas também o estado de Minas Gerais. Além do alcance territorial, nossa presença digital amplia ainda mais nosso impacto, com mais de <strong>48 mil seguidores no Facebook</strong>, gerando alcance orgânico de <strong>2.622.483 de usuários</strong> e <strong>4.309.407 de visualizações</strong> (dados de 13/11) em nossas postagens e transmissões ao vivo.</p>
+      <p>Com os transmissores atuais o alcance de nossas rádios, com boas condições climáticas e qualidade do equipamento usado pelo ouvinte, podem alcançar até <strong>100 km de raio</strong>, abrangendo uma grande gama de cidades que, ao final, atinge <strong>1.495.898 habitantes</strong> (dados IBGE/Cidades).</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="number">48K+</span>
+          <span class="label">Seguidores Facebook</span>
+        </div>
+        <div class="stat-card">
+          <span class="number">2.6M</span>
+          <span class="label">Alcance Orgânico</span>
+        </div>
+        <div class="stat-card">
+          <span class="number">4.3M</span>
+          <span class="label">Visualizações</span>
+        </div>
+        <div class="stat-card">
+          <span class="number">100km</span>
+          <span class="label">Raio de Alcance</span>
+        </div>
+      </div>
+
+      <h3>Estado de São Paulo — 1.018.803 habitantes</h3>
+      <p>Altair (3.451 hab.), Barretos (122.485 hab.), Bebedouro (76.373 hab.), Buritizal (4.356 hab.), Cajobi (9.133 hab.), Colina (18.486 hab.), Colômbia (6.629 hab.), Cristais Paulista (9.272 hab.), Franca (352.536 hab.), Guaíra (39.279 hab.), Guará (18.606 hab.), Guaraci (10.350 hab.), Icém (7.819 hab.), Igarapava (26.212 hab.), Ipuã (14.454 hab.), Ituverava (37.571 hab.), Jaborandi (6.221 hab.), Jardinópolis (45.282 hab.), Jeriquara (3.863 hab.), Miguelópolis (19.441 hab.), Morro Agudo (27.933 hab.), Olímpia (55.074 hab.), Pedregulho (15.525 hab.), São Joaquim da Barra (48.558 hab.), Severínia (14.576 hab.), Terra Roxa (7.904 hab.), Viradouro (17.414 hab.).</p>
+
+      <h3>Estado de Minas Gerais — 477.095 habitantes</h3>
+      <p>Água Comprida (2.108 hab.), Campo Florido (8.466 hab.), Conceição das Alagoas (28.381 hab.), Delta (10.494 hab.), Fronteira (14.540 hab.), Frutal (58.588 hab.), Pirajuba (5.537 hab.), Planura (11.145 hab.), Uberaba (337.836 hab.).</p>
+
+      <h2>Presença Digital e Audiência Global</h2>
+      <p>O rádio evoluiu com a tecnologia, e a Rádio Cultura FM está acompanhando esse ritmo. Hoje, estamos presentes não só nas ondas do rádio, mas também na internet, alcançando ouvintes locais, nacionais e internacionais. Nosso público digital inclui pessoas que se conectam diariamente em casa, no trabalho, e pelo celular. O crescimento da audiência online prova que o rádio continua relevante e se adapta às novas formas de consumo de mídia, proporcionando aos anunciantes uma oportunidade única de expandir suas marcas para além das limitações físicas da transmissão tradicional.</p>
+
+      <h2>Por Que Escolher a Rádio Cultura FM?</h2>
+      <p>Combinando um alcance significativo, tanto nas ondas do rádio quanto no ambiente digital, e um compromisso inabalável com a qualidade e a ética, a Rádio Cultura FM 104.7 é uma emissora pronta para levar sua mensagem a um público diverso e engajado. Queremos continuar sendo um veículo de comunicação que conecta pessoas, promove a cultura e fortalece a confiança entre marcas e consumidores.</p>
+
+      <div class="highlight-box">
+        <p>Convidamos você a fazer parte da nossa história e a descobrir como a Rádio Cultura FM 104.7 pode ser um diferencial para a sua marca.</p>
+      </div>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Rádio Cultura FM 104.7</h3>
+          <p>Conexão, informação e entretenimento desde 1957.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Páginas</h4>
+          <a href="../index.html">Início</a>
+          <a href="../programacao/index.html">Programação</a>
+          <a href="index.html">Sobre</a>
+          <a href="../contato/index.html">Contato</a>
+          <a href="../termos.html">Termos de Uso</a>
+          <a href="privacidade.html">Política de Privacidade</a>
+          <a href="../transparencia.html">Transparência</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contato</h4>
+          <a href="#">Av. 15, nº 225, Guaíra-SP</a>
+          <a href="tel:+551733311177">(17) 3331-1177</a>
+          <a href="tel:+551733311155">(17) 3331-1155</a>
+          <a href="mailto:radioculturadeguaira@gmail.com">radioculturadeguaira@gmail.com</a>
+        </div>
+        <div class="footer-col">
+          <h4>Redes Sociais</h4>
+          <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://www.instagram.com/culturafm104.7" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://youtube.com/@culturafmguaira-sp" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://api.whatsapp.com/send?phone=551733311155" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Rádio Cultura FM 104.7 — Guaíra, SP. Todos os direitos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scroll-top" aria-label="Voltar ao topo">⬆</button>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/player.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    const scrollBtn = document.getElementById('scroll-top');
+    window.addEventListener('scroll', () => scrollBtn?.classList.toggle('visible', window.scrollY > 400));
+    scrollBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+</body>
+</html>

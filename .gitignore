@@ -1,18 +1,2 @@
-# Logs e cache
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
-.streamlit/
-.DS_Store
-
-# Ambiente Virtual
-venv/
-env/
-
-# Workspace Gemini
-.gemini/
-.antigravity/
-
-# Outras versões (opcional, mas recomendado focar no conteúdo da v3 para o repo)
-../v1/
-../v2/
+.agent/
+logo_radio_cultura.jpeg
