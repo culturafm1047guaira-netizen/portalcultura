@@ -13,13 +13,32 @@
   
   <link rel="icon" type="image/png" href="img/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="img/favicon.png">
+  <link rel="manifest" href="manifest.json">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api.whatsapp.com">
   <link rel="dns-prefetch" href="https://www.facebook.com">
   <link rel="dns-prefetch" href="https://www.instagram.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="img/logo_oficial.png" as="image">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+
+<style>
+    :root{--primary:#4169e1;--primary-dark:#2b4bad;--dark-bg:#0d1b2a}.topbar{background:var(--primary)}.header{background:var(--dark-bg)}.skip-link{position:absolute;top:-40px;left:0;background:var(--primary);color:#fff;padding:8px 16px;z-index:100;transition:top .3s}.skip-link:focus{top:0}
+    
+    #pwa-install-banner{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#0d1b2a,#1a3a5c);color:#fff;padding:16px;z-index:9998;box-shadow:0 -4px 20px rgba(0,0,0,0.4);padding-bottom:max(16px,env(safe-area-inset-bottom));transform:translateY(100%);animation:slideUp 0.5s ease forwards}
+    @keyframes slideUp{to{transform:translateY(0)}}
+    .pwa-banner-content{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1200px;margin:0 auto;flex-wrap:wrap}
+    .pwa-banner-content span{font-size:14px;font-weight:500}
+    .pwa-banner-actions{display:flex;gap:8px}
+    #pwa-install-btn,#pwa-dismiss-btn{min-width:44px;min-height:44px;padding:10px 16px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;transition:transform 0.2s}
+    #pwa-install-btn{background:var(--primary);color:#fff}
+    #pwa-install-btn:hover{background:var(--primary-light);transform:scale(1.05)}
+    #pwa-dismiss-btn{background:rgba(255,255,255,0.15);color:#fff}
+    #pwa-dismiss-btn:hover{background:rgba(255,255,255,0.25)}
+    @media(max-width:480px){.pwa-banner-content{justify-content:center;text-align:center}}
+  </style>
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Rádio Cultura FM 104.7 — Portal de Notícias | Guaíra, SP">
@@ -110,7 +129,7 @@
     <div class="container">
       <div class="brand-bar">
         <a href="index.html" class="logo-area">
-          <img src="img/logo_oficial.png" alt="Logo Rádio Cultura FM 104.7" class="logo-img" width="240" height="120" onerror="this.style.display='none'">
+          <img src="img/logo_oficial.png" alt="Logo Rádio Cultura FM 104.7" class="logo-img" width="240" height="120" onerror="this.style.display='none'" fetchpriority="high">
           <div class="logo-text">
             <span class="logo-main-title">Rádio Cultura FM 104.7</span>
             <p>Portal de Notícias — Guaíra, SP</p>
@@ -194,7 +213,7 @@
 
         <div class="banner-section">
           <a href="https://www.facebook.com/festadopeaomiguelopolis/" target="_blank" rel="noopener">
-            <img src="img/banner-festa-peao.jpg" alt="Festa do Peão de Miguelópolis" class="banner-img" loading="lazy">
+            <img src="img/banner-festa-peao.jpg" alt="Banner da Festa do Peão de Miguelópolis 2026 com shows sertanejos" class="banner-img" loading="lazy">
           </a>
         </div>
 
@@ -375,8 +394,50 @@
     </div>
   </footer>
 
-  <script src="js/api.js"></script>
-  <script src="js/player.js"></script>
-  <script src="js/main.js"></script>
+  <button class="scroll-top" id="scroll-top" aria-label="Voltar ao topo">⬆</button>
+
+  <script src="js/api.js" defer></script>
+  <script src="js/player.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script>
+    initScrollTop();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW registered'))
+          .catch(err => console.log('SW failed:', err));
+      });
+    }
+
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setTimeout(() => {
+        if (deferredPrompt && !localStorage.getItem('pwa-dismissed')) {
+          const banner = document.createElement('div');
+          banner.id = 'pwa-install-banner';
+          banner.innerHTML = '<div class="pwa-banner-content"><span>📱 Instale nosso app para acesso rápido!</span><div class="pwa-banner-actions"><button id="pwa-install-btn">Instalar</button><button id="pwa-dismiss-btn">✕</button></div></div>';
+          document.body.appendChild(banner);
+          
+          document.getElementById('pwa-install-btn').onclick = () => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(result => {
+              deferredPrompt = null;
+              banner.remove();
+            });
+          };
+          
+          document.getElementById('pwa-dismiss-btn').onclick = () => {
+            localStorage.setItem('pwa-dismissed', 'true');
+            banner.remove();
+          };
+        }
+      }, 5000);
+    });
+  </script>
 </body>
 </html>

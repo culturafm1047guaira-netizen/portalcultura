@@ -1,2 +1,5 @@
 .agent/
 logo_radio_cultura.jpeg
+.env
+.env.local
+.env.*.local

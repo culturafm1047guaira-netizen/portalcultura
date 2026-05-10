@@ -23,10 +23,9 @@ function togglePlayer() {
   if (isPlaying) {
     audioPlayer.pause();
   } else {
-    audioPlayer.play().catch(err => {
-      console.warn('Não foi possível reproduzir o stream:', err);
-      showPlayerError();
-    });
+    audioPlayer.play().catch(() => {
+        showPlayerError();
+      });
   }
 }
 
@@ -55,8 +54,7 @@ function onPlayStateChange(playing) {
   }
 }
 
-function handleStreamError(e) {
-  console.warn('Erro no stream de áudio:', e);
+function handleStreamError() {
   showPlayerError();
 }
 

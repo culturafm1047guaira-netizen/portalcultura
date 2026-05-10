@@ -37,43 +37,26 @@ function timeAgo(date) {
   return d + 'd atrás';
 }
 
+const CATEGORY_MAP = {
+  'Regional': { badge: 'badge-regional', cat: 'cat-regional', src: 'src-regional' },
+  'Brasil': { badge: 'badge-brasil', cat: 'cat-brasil', src: 'src-brasil' },
+  'Educação': { badge: 'badge-educacao', cat: 'cat-educacao', src: 'src-educacao' },
+  'Justiça': { badge: 'badge-justica', cat: 'cat-justica', src: 'src-justica' },
+  'Saúde': { badge: 'badge-saude', cat: 'cat-saude', src: 'src-saude' },
+  'Esportes': { badge: 'badge-esportes', cat: 'cat-esportes', src: 'src-esportes' },
+  'Facebook': { badge: 'badge-facebook', cat: 'cat-facebook', src: 'src-facebook' }
+};
+
 function badgeClass(cat) {
-  const map = {
-    'Regional': 'badge-regional',
-    'Brasil': 'badge-brasil',
-    'Educação': 'badge-educacao',
-    'Justiça': 'badge-justica',
-    'Saúde': 'badge-saude',
-    'Esportes': 'badge-esportes',
-    'Facebook': 'badge-facebook'
-  };
-  return map[cat] || 'badge-brasil';
+  return CATEGORY_MAP[cat]?.badge || 'badge-brasil';
 }
 
 function catClass(cat) {
-  const map = {
-    'Regional': 'cat-regional',
-    'Brasil': 'cat-brasil',
-    'Educação': 'cat-educacao',
-    'Justiça': 'cat-justica',
-    'Saúde': 'cat-saude',
-    'Esportes': 'cat-esportes',
-    'Facebook': 'cat-facebook'
-  };
-  return map[cat] || '';
+  return CATEGORY_MAP[cat]?.cat || '';
 }
 
 function srcClass(cat) {
-  const map = {
-    'Regional': 'src-regional',
-    'Brasil': 'src-brasil',
-    'Educação': 'src-educacao',
-    'Justiça': 'src-justica',
-    'Saúde': 'src-saude',
-    'Esportes': 'src-esportes',
-    'Facebook': 'src-facebook'
-  };
-  return map[cat] || '';
+  return CATEGORY_MAP[cat]?.src || '';
 }
 
 function createCard(item) {
@@ -96,7 +79,7 @@ function createCard(item) {
     <article class="news-card">
       <a href="${item.link}" target="_blank" rel="noopener noreferrer">
         <div class="card-image ${catClass(item.category)}">
-          <img src="${item.image}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.style.display='none'">
+          <img src="${item.image}" alt="${escapeHtml(item.title)}" loading="lazy" fetchpriority="auto" onerror="this.style.display='none'">
           <span class="badge ${badgeClass(item.category)}">${escapeHtml(item.category)}</span>
         </div>
         <div class="card-body">
@@ -127,14 +110,15 @@ async function loadWeather() {
   const widget = document.getElementById('weather-widget');
   if (!widget) return;
   try {
-    const res = await fetch('/api/weather');
+    const res = await fetchWithTimeout('/api/weather', 8000);
     const data = await res.json();
     widget.innerHTML = `
       <div class="clima-row">
         <div class="clima-icon">⛅</div>
         <div class="clima-temp">${data.temp}</div>
         <div class="clima-info"><strong>${data.condition}</strong><span>Guaíra, SP</span></div>
-      </div>`;
+      </div>
+      ${data.humidity ? `<div class="clima-details"><span>💧 ${data.humidity}</span><span>💨 ${data.wind}</span></div>` : ''}`;
   } catch (e) {
     widget.innerHTML = `
       <div class="clima-row">
@@ -195,8 +179,21 @@ async function loadNews() {
       }
     }
   } catch (e) {
-    if (newsGrid) showError('news-grid', 'Erro ao carregar notícias. Tente novamente.');
+    if (newsGrid) showError('news-grid', 'Erro ao carregar notícias. Tente novamente em alguns minutos.');
   }
+}
+
+function retryLoadNews(maxRetries = 3, delay = 2000) {
+  let attempts = 0;
+  function attempt() {
+    attempts++;
+    loadNews().then(() => {
+      if (!newsLoaded && attempts < maxRetries) {
+        setTimeout(attempt, delay);
+      }
+    });
+  }
+  attempt();
 }
 
 function renderAll(data) {
@@ -208,7 +205,7 @@ function renderAll(data) {
     heroImage.style.background = 'linear-gradient(145deg, var(--dark-bg), #1a3a5c)';
     if (hero.image) {
       heroImage.innerHTML = `
-        <img src="${hero.image}" alt="${escapeHtml(hero.title)}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" onerror="this.style.display='none'">
+        <img src="${hero.image}" alt="${escapeHtml(hero.title)}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" fetchpriority="high" onerror="this.style.display='none'">
         <div class="hero-image-overlay"></div>
         <div class="hero-badge"><span class="badge ${badgeClass(hero.category)}">${hero.category}</span></div>`;
     }

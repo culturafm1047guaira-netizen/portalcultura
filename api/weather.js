@@ -1,17 +1,27 @@
 export default async function handler(req, res) {
+  const location = process.env.WEATHER_LOCATION || 'Guaíra,SP';
+  const encodedLocation = encodeURIComponent(location);
+  
   try {
-    const response = await fetch('https://wttr.in/Gua%C3%ADra,SP?format=j1');
+    const response = await fetch(`https://wttr.in/${encodedLocation}?format=j1`);
+    if (!response.ok) {
+      return res.status(200).json({ temp: 'N/D', condition: 'Indisponível' });
+    }
     const data = await response.json();
-    const current = data.current_condition[0];
+    const current = data.current_condition?.[0];
+    
+    if (!current) {
+      return res.status(200).json({ temp: 'N/D', condition: 'Indisponível' });
+    }
     
     res.status(200).json({
-      temp: current.temp_C + '°C',
-      condition: current.lang_pt[0].value,
-      icon: current.weatherIcon[0],
-      humidity: current.humidity + '%',
-      wind: current.windspeedKmph + ' km/h'
+      temp: current.temp_C ? current.temp_C + '°C' : 'N/D',
+      condition: current.lang_pt?.[0]?.value || 'Indisponível',
+      icon: current.weatherIcon?.[0] || '01d',
+      humidity: current.humidity ? current.humidity + '%' : 'N/D',
+      wind: current.windspeedKmph ? current.windspeedKmph + ' km/h' : 'N/D'
     });
   } catch (e) {
-    res.status(200).json({ temp: 'N/D', condition: 'Indisponível' });
+    res.status(200).json({ temp: 'N/D', condition: 'Clima indisponível' });
   }
 }

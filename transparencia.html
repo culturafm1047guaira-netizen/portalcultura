@@ -10,9 +10,17 @@
   <link rel="canonical" href="https://radioculturaguaira.com.br/transparencia.html">
   <link rel="icon" type="image/png" href="img/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="img/favicon.png">
+  <meta name="keywords" content="Rádio Cultura, transparência, ética, responsabilidade, notícias, confiável, credibilidade">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="img/logo_oficial.png" as="image">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+
+  <style>
+    :root{--primary:#4169e1;--primary-dark:#2b4bad;--dark-bg:#0d1b2a}
+    .topbar{background:var(--primary)}.header{background:var(--dark-bg)}.skip-link{position:absolute;top:-40px;left:0;background:var(--primary);color:#fff;padding:8px 16px;z-index:100;transition:top .3s}.skip-link:focus{top:0}
+  </style>
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Transparência — Rádio Cultura FM 104.7">
@@ -207,9 +215,9 @@
 
   <button class="scroll-top" id="scroll-top" aria-label="Voltar ao topo">⬆</button>
 
-  <script src="js/api.js"></script>
-  <script src="js/player.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/player.js" defer></script>
+  <script src="js/main.js" defer></script>
   <script>
     const scrollBtn = document.getElementById('scroll-top');
     window.addEventListener('scroll', () => scrollBtn?.classList.toggle('visible', window.scrollY > 400));

@@ -2,7 +2,7 @@ import Parser from 'rss-parser';
 
 const parser = new Parser({ timeout: 10000 });
 const cache = new Map();
-const CACHE_TIME = 1000 * 60 * 30;
+const CACHE_TIME = 1000 * 60 * (parseInt(process.env.CACHE_DURATION_MINUTES) || 30);
 
 const FEEDS = [
   { url: 'https://g1.globo.com/rss/g1/sp/ribeirao-preto-franca/', source: 'G1 Ribeirão', category: 'Regional' },
@@ -44,26 +44,52 @@ export default async function handler(req, res) {
               link: item.link || '#',
               image: img,
               excerpt: (item.description || '').replace(/<[^>]*>/g, '').substring(0, 160),
-              pubDate: new Date(item.pubDate).toISOString(),
+              pubDate: item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
               source: feed.source,
               category: feed.category
             };
           });
         } catch (e) {
+          console.warn(`Feed failed: ${feed.source} - ${e.message}`);
           return [];
         }
       })
     );
 
     let allNews = [];
+    let failedFeeds = 0;
     results.forEach(r => {
-      if (r.status === 'fulfilled') allNews = allNews.concat(r.value);
+      if (r.status === 'fulfilled') {
+        allNews = allNews.concat(r.value);
+      } else {
+        failedFeeds++;
+      }
     });
+    
+    if (allNews.length === 0) {
+      return res.status(200).json([{
+        title: 'Notícias em destaque',
+        link: 'https://radioculturaguaira.com.br/',
+        image: null,
+        excerpt: 'Aguarde as últimas notícias da Rádio Cultura FM 104.7.',
+        pubDate: new Date().toISOString(),
+        source: 'Rádio Cultura FM',
+        category: 'Regional'
+      }]);
+    }
+    
     allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
     cache.set(cacheKey, { data: allNews, timestamp: Date.now() });
     res.status(200).json(allNews);
   } catch (e) {
-    res.status(500).json({ error: 'Erro ao carregar notícias' });
+    res.status(200).json([{
+      title: 'Erro temporário',
+      link: 'https://radioculturaguaira.com.br/',
+      image: null,
+      excerpt: 'Não foi possível carregar as notícias. Tente novamente.',
+      pubDate: new Date().toISOString(),
+      source: 'Rádio Cultura FM',
+      category: 'Regional'
+    }]);
   }
 }

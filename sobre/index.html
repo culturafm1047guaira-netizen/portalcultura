@@ -10,26 +10,15 @@
   <link rel="canonical" href="https://radioculturaguaira.com.br/sobre/">
   <link rel="icon" type="image/png" href="../img/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../img/favicon.png">
+  <meta name="keywords" content="Rádio Cultura, FM 104.7, Guaíra, história, emissora, regional, alcance, audiência, comunicação, mídia">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="../img/logo_oficial.png" as="image">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
 
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Sobre — Rádio Cultura FM 104.7 | Guaíra, SP">
-  <meta property="og:description" content="Conheça a história da Rádio Cultura FM 104.7. No ar desde 1957, com alcance em mais de 27 municípios.">
-  <meta property="og:url" content="https://radioculturaguaira.com.br/sobre/">
-  <meta property="og:image" content="https://radioculturaguaira.com.br/img/og-image.png">
-  <meta property="og:site_name" content="Rádio Cultura FM 104.7">
-  <meta property="og:locale" content="pt_BR">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Sobre — Rádio Cultura FM 104.7">
-  <meta name="twitter:description" content="Conheça a história da Rádio Cultura FM 104.7. No ar desde 1957.">
-  <meta name="twitter:image" content="https://radioculturaguaira.com.br/img/og-image.png">
-
-  <link rel="stylesheet" href="../css/style.css">
-
-  <script type="application/ld+json">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "AboutPage",
@@ -116,7 +105,7 @@
           <li><a href="index.html" class="active">Sobre</a></li>
           <li><a href="../contato/index.html">Contato</a></li>
           <li><a href="../termos.html">Termos de Uso</a></li>
-          <li><a href="privacidade.html">Política de Privacidade</a></li>
+          <li><a href="../sobre/privacidade.html">Política de Privacidade</a></li>
           <li><a href="../transparencia.html">Transparência</a></li>
         </ul>
       </div>
@@ -194,7 +183,7 @@
           <a href="index.html">Sobre</a>
           <a href="../contato/index.html">Contato</a>
           <a href="../termos.html">Termos de Uso</a>
-          <a href="privacidade.html">Política de Privacidade</a>
+          <a href="../sobre/privacidade.html">Política de Privacidade</a>
           <a href="../transparencia.html">Transparência</a>
         </div>
         <div class="footer-col">
@@ -220,13 +209,8 @@
 
   <button class="scroll-top" id="scroll-top" aria-label="Voltar ao topo">⬆</button>
 
-  <script src="../js/api.js"></script>
-  <script src="../js/player.js"></script>
-  <script src="../js/main.js"></script>
-  <script>
-    const scrollBtn = document.getElementById('scroll-top');
-    window.addEventListener('scroll', () => scrollBtn?.classList.toggle('visible', window.scrollY > 400));
-    scrollBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-  </script>
+  <script src="../js/api.js" defer></script>
+  <script src="../js/player.js" defer></script>
+  <script src="../js/main.js" defer></script>
 </body>
 </html>

@@ -130,6 +130,13 @@ function initAdCarousel() {
   loadPublicities();
 }
 
+function initScrollTop() {
+  const scrollBtn = document.getElementById('scroll-top');
+  if (!scrollBtn) return;
+  window.addEventListener('scroll', () => scrollBtn.classList.toggle('visible', window.scrollY > 400));
+  scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   updateDateTime();
   setInterval(updateDateTime, 30000);
@@ -138,9 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initSearch();
   initCookieConsent();
   initAdCarousel();
+  initScrollTop();
   loadLatestVideo();
 
   if (typeof loadWeather === 'function') loadWeather();
   if (typeof loadQuotes === 'function') loadQuotes();
-  if (typeof loadNews === 'function') loadNews();
+  if (typeof loadNews === 'function') retryLoadNews();
+  if (typeof initPlayer === 'function') initPlayer();
 });
