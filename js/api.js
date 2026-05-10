@@ -130,21 +130,13 @@ async function loadWeather() {
   const widget = document.getElementById('weather-widget');
   if (!widget) return;
   try {
-    const { lat, lon } = API_CONFIG.location;
-    const res = await fetchWithTimeout(`${API_CONFIG.weather}?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=America%2FSao_Paulo`);
+    const res = await fetch('/api/weather');
     const data = await res.json();
-    if (!data.current_weather) throw new Error('Dados inválidos');
-    const { temperature, weathercode } = data.current_weather;
-    let icon = '☀️', desc = 'Ensolarado';
-    if (weathercode >= 1 && weathercode <= 3) { icon = '⛅'; desc = 'Nublado'; }
-    if (weathercode === 45 || weathercode === 48) { icon = '🌫️'; desc = 'Neblina'; }
-    if (weathercode >= 51 && weathercode <= 67) { icon = '🌧️'; desc = 'Chuva'; }
-    if (weathercode >= 95) { icon = '⛈️'; desc = 'Tempestade'; }
     widget.innerHTML = `
       <div class="clima-row">
-        <div class="clima-icon">${icon}</div>
-        <div class="clima-temp">${Math.round(temperature)}°C</div>
-        <div class="clima-info"><strong>${desc}</strong><span>Guaíra, SP</span></div>
+        <div class="clima-icon">⛅</div>
+        <div class="clima-temp">${data.temp}</div>
+        <div class="clima-info"><strong>${data.condition}</strong><span>Guaíra, SP</span></div>
       </div>`;
   } catch (e) {
     widget.innerHTML = `
@@ -199,35 +191,15 @@ const FEEDS = [
   { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook', category: 'Facebook', isFacebook: true }
 ];
 
+const API_BASE = '';
+
 async function loadNews() {
   const newsGrid = document.getElementById('news-grid');
   if (newsGrid) showLoading('news-grid');
   try {
-    const results = await Promise.allSettled(FEEDS.map(async f => {
-      const r = await fetchWithTimeout(API_CONFIG.rss2json + encodeURIComponent(f.url));
-      const d = await r.json();
-      return (d.items || []).slice(0, 6).map(item => {
-        let img = null;
-        const html = item.content || item.description || '';
-        const m = html.match(/<img[^>]+src="([^">]+)"/);
-        if (m) img = m[1];
-        if (!img && item.enclosure?.type?.startsWith('image/')) img = item.enclosure.link;
-        return {
-          title: item.title || '',
-          link: item.link || '#',
-          image: img,
-          excerpt: (item.description || '').replace(/<[^>]*>/g, '').substring(0, 160),
-          pubDate: new Date(item.pubDate),
-          source: f.source,
-          category: f.category
-        };
-      });
-    }));
-
-    allNewsData = [];
-    results.forEach(r => {
-      if (r.status === 'fulfilled') allNewsData = allNewsData.concat(r.value);
-    });
+    const res = await fetch(API_BASE + '/api/news');
+    const data = await res.json();
+    allNewsData = data.map(item => ({ ...item, pubDate: new Date(item.pubDate) }));
     allNewsData.sort((a, b) => b.pubDate - a.pubDate);
     newsLoaded = true;
     renderAll(allNewsData);

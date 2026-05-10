@@ -112,17 +112,14 @@ async function loadLatestVideo() {
   const container = document.getElementById('youtube-grid');
   if (!container) return;
   try {
-    const apiKey = 'AIzaSyDE5HNICxwnkcnBKu2NJTESD02CfVl7moc';
-    const channelId = 'UCWRKwLTLmi5hMyEsWcPL4zw';
-    const res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&order=date&part=snippet&maxResults=3`);
+    const res = await fetch('/api/youtube');
     const data = await res.json();
-    if (data.items && data.items.length > 0) {
-      container.innerHTML = data.items.map(item => {
-        const videoId = item.id.videoId;
-        const title = item.snippet.title;
+    if (data && data.length > 0) {
+      container.innerHTML = data.map(item => {
+        const title = item.title || 'Vídeo';
         return `<div class="video-card">
           <div class="video-thumb">
-            <iframe src="https://www.youtube.com/embed/${videoId}?rel=0" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+            <iframe src="https://www.youtube.com/embed/${item.videoId}?rel=0" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
           </div>
           <div class="video-info">
             <p class="video-title">${title}</p>
@@ -133,6 +130,26 @@ async function loadLatestVideo() {
   } catch (e) {
     if (container) container.innerHTML = '<p style="color:#999;padding:20px;text-align:center;grid-column:1/-1;">Vídeos não disponíveis.</p>';
   }
+}
+
+async function loadPublicities() {
+  try {
+    const res = await fetch('/api/publicities');
+    const images = await res.json();
+    if (images.length > 0) {
+      const ads = document.querySelectorAll('.ad-sidebar-item');
+      if (ads.length > 0) {
+        const shuffled = shuffleArray(images);
+        ads.forEach((slot, idx) => {
+          slot.innerHTML = `<img src="${shuffled[idx % shuffled.length]}" alt="Publicidade" style="width:100%;height:100%;object-fit:cover;border-radius:4px;">`;
+        });
+      }
+    }
+  } catch (e) {}
+}
+
+function initAdCarousel() {
+  loadPublicities();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
