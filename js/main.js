@@ -84,29 +84,7 @@ function shuffleArray(arr) {
   return a;
 }
 
-const AD_IMAGES = [
-  'Publicidades/695137343_1594011305875685_2671613299520675503_n.jpg',
-  'Publicidades/695723767_1594029982540484_5155839151683909051_n.jpg',
-  'Publicidades/691642978_1594049385871877_4008527651999033838_n.jpg',
-  'Publicidades/687869786_1594075342535948_7987352515746485711_n.jpg',
-  'Publicidades/694238460_1594307092512773_4582419456924479013_n.jpg',
-  'Publicidades/689480459_1594339595842856_6129728409166615819_n.jpg',
-  'Publicidades/689015417_1594341185842697_183923677762665033_n.jpg',
-  'Publicidades/689017214_1594348509175298_4456900424267510675_n.jpg',
-  'Publicidades/689684190_1594349409175208_2207779259793205794_n.jpg',
-  'Publicidades/691467767_1594365579173591_3516344270082776644_n.jpg',
-  'Publicidades/690772797_1594386799171469_6423740825005398707_n.jpg'
-];
 
-function initAdCarousel() {
-  const ads = document.querySelectorAll('.ad-sidebar-item');
-  if (ads.length === 0) return;
-  const shuffled = shuffleArray(AD_IMAGES);
-  ads.forEach((slot, idx) => {
-    const src = shuffled[idx % shuffled.length];
-    slot.innerHTML = `<img src="${src}" alt="Publicidade" style="width:100%;height:100%;object-fit:cover;border-radius:4px;">`;
-  });
-}
 
 async function loadLatestVideo() {
   const container = document.getElementById('youtube-grid');

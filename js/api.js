@@ -1,8 +1,5 @@
 const API_CONFIG = {
-  rss2json: 'https://api.rss2json.com/v1/api.json?rss_url=',
-  weather: 'https://api.open-meteo.com/v1/forecast',
-  quotes: 'https://economia.awesomeapi.com.br/last/',
-  location: { lat: -20.3183, lon: -48.3106 }
+  quotes: 'https://economia.awesomeapi.com.br/last/'
 };
 
 let allNewsData = [];
@@ -175,21 +172,6 @@ async function loadQuotes() {
     container.innerHTML = '<div class="cot-row"><span class="cot-label">Cotações indisponíveis</span></div>';
   }
 }
-
-const FEEDS = [
-  { url: 'https://g1.globo.com/rss/g1/sp/ribeirao-preto-franca/', source: 'G1 Ribeirão', category: 'Regional' },
-  { url: 'https://g1.globo.com/rss/g1/', source: 'G1', category: 'Brasil' },
-  { url: 'https://agenciabrasil.ebc.com.br/rss/educacao/feed.xml', source: 'Agência Brasil', category: 'Educação' },
-  { url: 'https://agenciabrasil.ebc.com.br/rss/esportes/feed.xml', source: 'Agência Brasil', category: 'Esportes' },
-  { url: 'https://agenciabrasil.ebc.com.br/rss/justica/feed.xml', source: 'Agência Brasil', category: 'Justiça' },
-  { url: 'https://agenciabrasil.ebc.com.br/rss/saude/feed.xml', source: 'Agência Brasil', category: 'Saúde' },
-  { url: 'https://www.acidadeon.com/ribeiraopreto/feed/', source: 'ACidade ON', category: 'Regional' },
-  { url: 'https://jovempan.com.br/feed/', source: 'Jovem Pan', category: 'Brasil' },
-  { url: 'https://www.jornaldebarretos.com.br/feed', source: 'Jornal de Barretos', category: 'Regional' },
-  { url: 'https://www.odiarioonline.com.br/feed', source: 'O Diário Online', category: 'Regional' },
-  { url: 'https://www.guairanews.com/feed/', source: 'Guaira News', category: 'Regional' },
-  { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook', category: 'Facebook', isFacebook: true }
-];
 
 const API_BASE = '';
 
