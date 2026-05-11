@@ -12,10 +12,5 @@
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" }
-  ],
-  "functions": {
-    "api/*.js": {
-      "runtime": "vercel-node@latest"
-    }
-  }
+  ]
 }
