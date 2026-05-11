@@ -37,10 +37,10 @@ function onPlayStateChange(playing) {
 
   if (playBtn) {
     if (playing) {
-      playBtn.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff;width:14px;height:14px"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>';
+      playBtn.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 2h4v12H3zm6 0h4v12H9z"/></svg>';
       playBtn.classList.remove('paused');
     } else {
-      playBtn.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff;width:16px;height:16px"><path d="M4 2l10 6-10 6z"/></svg>';
+      playBtn.innerHTML = '<svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></svg>';
       playBtn.classList.add('paused');
     }
   }
