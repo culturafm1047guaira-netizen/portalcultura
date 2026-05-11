@@ -1,6 +1,3 @@
-const API_CONFIG = {
-  quotes: 'https://economia.awesomeapi.com.br/last/'
-};
 
 let allNewsData = [];
 let newsLoaded = false;
@@ -24,6 +21,15 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text || '';
   return div.innerHTML;
+}
+
+function sanitizeUrl(url) {
+  if (!url) return '#';
+  try {
+    const parsed = new URL(url);
+    if (['http:', 'https:'].includes(parsed.protocol)) return url;
+    return '#';
+  } catch { return '#'; }
 }
 
 function timeAgo(date) {
@@ -64,9 +70,9 @@ function createCard(item) {
   if (!item.image) {
     return `
       <article class="news-card no-image" style="--nc: var(--cat-${(item.category || 'brasil').toLowerCase()}, var(--dark-bg))">
-        <a href="${item.link}" target="_blank" rel="noopener noreferrer">
+        <a href="${sanitizeUrl(item.link)}" target="_blank" rel="noopener noreferrer">
           <div class="card-body">
-            <h3 class="card-title">"${escapeHtml(item.title)}"</h3>
+            <h3 class="card-title">${escapeHtml(item.title)}</h3>
             <div class="card-meta">
               <span class="source">${escapeHtml(item.source)}</span>
               <span>${ago}</span>
@@ -77,7 +83,7 @@ function createCard(item) {
   }
   return `
     <article class="news-card">
-      <a href="${item.link}" target="_blank" rel="noopener noreferrer">
+      <a href="${sanitizeUrl(item.link)}" target="_blank" rel="noopener noreferrer">
         <div class="card-image ${catClass(item.category)}">
           <img src="${item.image}" alt="${escapeHtml(item.title)}" loading="lazy" fetchpriority="auto" onerror="this.style.display='none'">
           <span class="badge ${badgeClass(item.category)}">${escapeHtml(item.category)}</span>
@@ -132,26 +138,17 @@ async function loadQuotes() {
   const container = document.getElementById('agro-quotes');
   if (!container) return;
   try {
-    const res = await fetchWithTimeout(API_CONFIG.quotes + 'USD-BRL,EUR-BRL');
-    const data = await res.json();
-    const usd = parseFloat(data.USDBRL?.bid || 0).toFixed(2).replace('.', ',');
-    const eur = parseFloat(data.EURBRL?.bid || 0).toFixed(2).replace('.', ',');
-    const usdUp = parseFloat(data.USDBRL?.pctChange || 0) >= 0;
-    const eurUp = parseFloat(data.EURBRL?.pctChange || 0) >= 0;
-    container.innerHTML = [
-      { l: 'Dólar', v: `R$ ${usd}`, up: usdUp },
-      { l: 'Euro', v: `R$ ${eur}`, up: eurUp },
-      { l: 'Soja (sc)', v: 'R$ 132,50', up: true },
-      { l: 'Milho (sc)', v: 'R$ 58,20', up: false },
-      { l: 'Boi Gordo', v: 'R$ 225,00', up: null }
-    ].map(q => `
+    const res = await fetchWithTimeout('/api/quotes', 10000);
+    const quotes = await res.json();
+    if (!quotes || quotes.length === 0) throw new Error('empty');
+    container.innerHTML = quotes.map(q => `
       <div class="cot-row">
-        <span class="cot-label">${q.l}</span>
+        <span class="cot-label">${escapeHtml(q.name)}</span>
         <div class="cot-right">
-          <span class="cot-val">${q.v}</span>
-          <span class="${q.up === null ? 'cot-nt' : q.up ? 'cot-up' : 'cot-dn'}">${q.up === null ? '—' : q.up ? '▲' : '▼'}</span>
+          <span class="cot-val">${escapeHtml(q.formatted)}</span>
+          <span class="${q.up === null ? 'cot-nt' : q.up ? 'cot-up' : 'cot-dn'}">${q.up === null ? '—' : q.up ? '▲' : '▼'}${q.variation !== null ? ` ${Math.abs(q.variation).toFixed(2).replace('.', ',')}%` : ''}</span>
         </div>
-      </div>`).join('') + '<p class="cot-note">CEPEA/B3 · BCB · Referência</p>';
+      </div>`).join('') + '<p class="cot-note">CEPEA/ESALQ · BCB · Atualização automática</p>';
   } catch (e) {
     container.innerHTML = '<div class="cot-row"><span class="cot-label">Cotações indisponíveis</span></div>';
   }

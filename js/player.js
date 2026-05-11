@@ -71,4 +71,3 @@ function showPlayerError() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', initPlayer);

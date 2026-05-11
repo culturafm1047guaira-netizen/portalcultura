@@ -2,12 +2,7 @@ export default async function handler(req, res) {
   const apiKey = process.env.YOUTUBE_API_KEY;
   
   if (!apiKey || apiKey === 'SEU_API_KEY_AQUI') {
-    const fallbackVideos = [
-      { videoId: 'dQw4w9WgXcQ', title: 'Rádio Cultura FM 104.7', thumbnail: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg', publishedAt: new Date().toISOString() },
-      { videoId: 'dQw4w9WgXcQ', title: 'Ouça ao vivo', thumbnail: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg', publishedAt: new Date().toISOString() },
-      { videoId: 'dQw4w9WgXcQ', title: 'Programação completa', thumbnail: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg', publishedAt: new Date().toISOString() }
-    ];
-    return res.status(200).json(fallbackVideos);
+    return res.status(200).json([]);
   }
   const channelId = 'UCWRKwLTLmi5hMyEsWcPL4zw';
   
