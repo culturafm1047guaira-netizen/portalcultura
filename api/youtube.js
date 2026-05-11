@@ -2,9 +2,9 @@ export default async function handler(req, res) {
   const apiKey = process.env.YOUTUBE_API_KEY;
   
     const fallbackVideos = [
-      { videoId: 'zFz62f1H8S0', title: 'Rádio Cultura FM 104.7 - Ao Vivo', thumbnail: 'https://img.youtube.com/vi/zFz62f1H8S0/mqdefault.jpg' },
-      { videoId: 'dQw4w9WgXcQ', title: 'Destaques da Semana', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg' },
-      { videoId: 'jNQXAC9IVRw', title: 'Entrevistas e Reportagens', thumbnail: 'https://img.youtube.com/vi/jNQXAC9IVRw/mqdefault.jpg' }
+      { videoId: 'cFzhaLcq0Xk', title: 'Programa Raízes Sertanejas (10-05-2026)', thumbnail: 'https://img.youtube.com/vi/cFzhaLcq0Xk/mqdefault.jpg' },
+      { videoId: 't9KR7G1ohVU', title: 'Programa Raízes Sertanejas (03-05-2026)', thumbnail: 'https://img.youtube.com/vi/t9KR7G1ohVU/mqdefault.jpg' },
+      { videoId: 'v_p04-KoO0c', title: 'PodCast É Destaque - Ep. 4 - Marcelo Machado', thumbnail: 'https://img.youtube.com/vi/v_p04-KoO0c/mqdefault.jpg' }
     ];
 
     if (!apiKey || apiKey === 'SEU_API_KEY_AQUI') {
