@@ -45,6 +45,11 @@ function onPlayStateChange(playing) {
     }
   }
 
+  const playerArea = document.querySelector('.player-area');
+  if (playerArea) {
+    playerArea.classList.toggle('playing', playing);
+  }
+
   if (visualizer) {
     visualizer.classList.toggle('paused', !playing);
   }

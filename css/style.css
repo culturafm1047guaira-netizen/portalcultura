@@ -62,76 +62,155 @@ a, .nav-list a { min-height: 44px; display: flex; align-items: center; }
 .logo-main-title { font-family: 'Montserrat', sans-serif; font-size: 40px; font-weight: 900; color: #fff; line-height: 1; letter-spacing: -0.03em; text-transform: uppercase; display: block; }
 .logo-text p { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
 
-/* Player Brutalista de Impacto */
+/* Sonic Core Player - Radical Redesign */
 .player-area { 
-  display: flex; 
-  align-items: stretch; 
-  background: #fff; 
-  border: 4px solid var(--dark-bg); 
-  box-shadow: 8px 8px 0px 0px var(--primary); 
-  padding: 0; 
-  transition: transform 0.1s, box-shadow 0.1s;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(13, 27, 42, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 10px;
+  border-radius: 60px;
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 30px rgba(65, 105, 225, 0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: float-pulse 4s ease-in-out infinite;
 }
-.player-area:active { transform: translate(2px, 2px); box-shadow: 4px 4px 0px 0px var(--primary); }
+
+@keyframes float-pulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.player-area.playing {
+  border-color: #00ff88;
+  box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+}
+
+.player-area:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 0 10px 40px rgba(65, 105, 225, 0.6);
+}
 
 .play-btn { 
-  width: 100px; 
-  height: 100px; 
-  border-radius: 0; 
+  width: 70px; 
+  height: 70px; 
+  border-radius: 50%; 
   background: var(--primary); 
-  border: none; 
-  border-right: 4px solid var(--dark-bg);
+  border: 4px solid rgba(255,255,255,0.2);
   display: flex; 
   align-items: center; 
   justify-content: center; 
   flex-shrink: 0;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
 }
-.play-btn:hover { background: var(--primary-dark); }
-.play-btn svg { fill: #fff; width: 44px; height: 44px; margin-left: 6px; }
+
+.play-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px dashed rgba(255,255,255,0.4);
+  border-radius: 50%;
+  animation: rotate-core 10s linear infinite;
+}
+
+@keyframes rotate-core {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.play-btn:hover { background: var(--primary-light); }
+.play-btn svg { fill: #fff; width: 30px; height: 30px; z-index: 2; position: relative; }
 
 .player-info { 
-  padding: 12px 20px; 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
-  background: #fff;
-  flex: 1;
+  padding-right: 20px;
+  overflow: hidden;
+  max-width: 0;
+  transition: max-width 0.5s ease;
+  white-space: nowrap;
 }
+
+.player-area:hover .player-info {
+  max-width: 250px;
+}
+
 .player-info strong { 
   font-family: 'Montserrat', sans-serif; 
-  font-size: 24px; 
-  color: var(--dark-bg); 
-  font-weight: 900; 
-  text-transform: uppercase; 
-  letter-spacing: -0.02em; 
-  line-height: 0.9;
-  margin-bottom: 4px;
-}
-.player-status { display: flex; align-items: center; gap: 10px; }
-.player-status span { 
-  font-size: 11px; 
-  color: var(--dark-bg); 
+  font-size: 16px; 
+  color: #fff; 
   font-weight: 800; 
   text-transform: uppercase; 
+  display: block;
+  text-shadow: 0 0 5px rgba(255,255,255,0.3);
+}
+
+.playing .player-info strong {
+  animation: text-glitch 2s linear infinite;
+}
+
+@keyframes text-glitch {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-1deg); }
+  21% { transform: skew(2deg); }
+  22% { transform: skew(0deg); }
+  100% { transform: skew(0deg); }
+}
+
+.player-status { display: flex; align-items: center; gap: 8px; }
+.player-status span { 
+  font-size: 10px; 
+  color: var(--primary-light); 
+  font-weight: 700; 
+  text-transform: uppercase; 
   letter-spacing: 0.1em;
-  background: #eee;
-  padding: 2px 6px;
 }
 
 .visualizer { 
   display: flex; 
-  align-items: flex-end; 
-  gap: 3px; 
-  height: 24px; 
+  align-items: center; 
+  gap: 2px; 
+  height: 15px; 
 }
 .vis-bar { 
-  width: 6px; 
-  background: var(--dark-bg); 
-  animation: vis-anim 0.4s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95); 
+  width: 3px; 
+  background: var(--primary-light); 
+  animation: vis-anim-sonic 0.5s infinite alternate; 
 }
-@keyframes vis-anim { 0% { height: 4px; } 100% { height: 24px; } }
-.visualizer.paused .vis-bar { animation-play-state: paused; height: 4px; background: #ddd; }
+
+@keyframes vis-anim-sonic {
+  0% { height: 2px; opacity: 0.3; }
+  100% { height: 15px; opacity: 1; }
+}
+
+.visualizer.paused .vis-bar { animation-play-state: paused; height: 2px; opacity: 0.2; }
+
+/* Adicionado Badge "LIVE" no topo do Player */
+.player-live-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff4757;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
+
+@media (max-width: 768px) {
+  .player-area { bottom: 20px; right: 20px; }
+  .player-area .player-info { max-width: 150px; }
+}
 .search-bar { padding: 0 0 12px; }
 .search-form { display: flex; gap: 8px; max-width: 480px; }
 .search-input { flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.13); border-radius: 4px; padding: 8px 14px; color: #fff; font-size: 13px; font-family: inherit; transition: border-color 0.25s, background 0.25s; }

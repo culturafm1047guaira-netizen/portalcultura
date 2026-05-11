@@ -140,31 +140,6 @@
             <path d="M5 7.5H25M5 15H25M5 22.5H25" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <div class="player-area">
-          <button class="play-btn" id="playBtn" title="Ouvir ao vivo" aria-label="Ouvir ao vivo">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>
-          </button>
-          <div class="player-info">
-            <strong>Cultura FM 104.7</strong>
-            <div class="player-status">
-              <span id="playerAction">Clique para ouvir</span>
-              <div class="visualizer paused" id="visualizer" aria-hidden="true">
-                <div class="vis-bar"></div>
-                <div class="vis-bar"></div>
-                <div class="vis-bar"></div>
-                <div class="vis-bar"></div>
-                <div class="vis-bar"></div>
-                <div class="vis-bar"></div>
-                <div class="vis-bar"></div>
-                <div class="vis-bar"></div>
-              </div>
-              </div>
-            </div>
-          </div>
-          <audio id="audioPlayer" preload="none">
-            <source src="https://ice.fabricahost.com.br/radioculturaguaira" type="audio/mpeg">
-          </audio>
-        </div>
       </div>
       <div class="search-bar">
         <form class="search-form" role="search" onsubmit="return false;">
@@ -404,6 +379,32 @@
   </footer>
 
   <button class="scroll-top" id="scroll-top" aria-label="Voltar ao topo">⬆</button>
+
+  <div class="player-area">
+    <div class="player-live-badge">LIVE</div>
+    <button class="play-btn" id="playBtn" title="Ouvir ao vivo" aria-label="Ouvir ao vivo">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>
+    </button>
+    <div class="player-info">
+      <strong>Cultura FM 104.7</strong>
+      <div class="player-status">
+        <span id="playerAction">Clique para ouvir</span>
+        <div class="visualizer paused" id="visualizer" aria-hidden="true">
+          <div class="vis-bar"></div>
+          <div class="vis-bar"></div>
+          <div class="vis-bar"></div>
+          <div class="vis-bar"></div>
+          <div class="vis-bar"></div>
+          <div class="vis-bar"></div>
+          <div class="vis-bar"></div>
+          <div class="vis-bar"></div>
+        </div>
+      </div>
+    </div>
+    <audio id="audioPlayer" preload="none">
+      <source src="https://ice.fabricahost.com.br/radioculturaguaira" type="audio/mpeg">
+    </audio>
+  </div>
 
   <script src="js/api.js" defer></script>
   <script src="js/player.js" defer></script>
