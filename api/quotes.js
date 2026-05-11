@@ -89,7 +89,8 @@ async function fetchCepeaIndicator(name, slug, fallbackVal) {
 async function fetchCommodities() {
   const indicators = [
     { name: 'Soja (sc 60kg)', slug: 'soja', fallback: 132.50 },
-    { name: 'Milho (sc 60kg)', slug: 'milho', fallback: 62.80 }
+    { name: 'Milho (sc 60kg)', slug: 'milho', fallback: 62.80 },
+    { name: 'Boi Gordo (@)', slug: 'boi-gordo', fallback: 232.40 }
   ];
   const results = await Promise.allSettled(indicators.map(ind => fetchCepeaIndicator(ind.name, ind.slug, ind.fallback)));
   return results.map((r, i) => {
