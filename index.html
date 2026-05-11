@@ -135,6 +135,11 @@
             <p>Portal de Notícias — Guaíra, SP</p>
           </div>
         </a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Abrir menu" aria-expanded="false">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5H25M5 15H25M5 22.5H25" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
         <div class="player-area">
           <button class="play-btn" id="playBtn" title="Ouvir ao vivo" aria-label="Ouvir ao vivo">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>
@@ -398,43 +403,8 @@
 
   <script src="js/api.js" defer></script>
   <script src="js/player.js" defer></script>
+  <script src="js/youtube-lite.js" defer></script>
   <script src="js/main.js" defer></script>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('SW registered'))
-          .catch(err => console.log('SW failed:', err));
-      });
-    }
-
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      setTimeout(() => {
-        if (deferredPrompt && !localStorage.getItem('pwa-dismissed')) {
-          const banner = document.createElement('div');
-          banner.id = 'pwa-install-banner';
-          banner.innerHTML = '<div class="pwa-banner-content"><span>📱 Instale nosso app para acesso rápido!</span><div class="pwa-banner-actions"><button id="pwa-install-btn">Instalar</button><button id="pwa-dismiss-btn">✕</button></div></div>';
-          document.body.appendChild(banner);
-          
-          document.getElementById('pwa-install-btn').onclick = () => {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(result => {
-              deferredPrompt = null;
-              banner.remove();
-            });
-          };
-          
-          document.getElementById('pwa-dismiss-btn').onclick = () => {
-            localStorage.setItem('pwa-dismissed', 'true');
-            banner.remove();
-          };
-        }
-      }, 5000);
-    });
-  </script>
+  <script src="js/pwa.js" defer></script>
 </body>
 </html>

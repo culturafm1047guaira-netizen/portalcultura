@@ -10,10 +10,28 @@ function updateDateTime() {
 }
 
 function initNav() {
+  const navList = document.querySelector('.nav-list');
+  const toggleBtn = document.getElementById('mobileNavToggle');
+  
+  if (toggleBtn && navList) {
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navList.classList.toggle('open');
+    });
+
+    // Fecha ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (navList.classList.contains('open') && !navList.contains(e.target) && e.target !== toggleBtn) {
+        navList.classList.remove('open');
+      }
+    });
+  }
+
   document.querySelectorAll('.nav-list a').forEach(function (link) {
     link.addEventListener('click', function () {
       document.querySelectorAll('.nav-list a').forEach(function (l) { l.classList.remove('active'); });
       this.classList.add('active');
+      if (navList) navList.classList.remove('open');
     });
   });
 }
@@ -95,15 +113,19 @@ async function loadLatestVideo() {
     if (data && data.length > 0) {
       container.innerHTML = data.map(item => {
         const title = item.title || 'Vídeo';
-        return `<div class="video-card">
-          <div class="video-thumb">
-            <iframe src="https://www.youtube.com/embed/${item.videoId}?rel=0" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-          </div>
-          <div class="video-info">
-            <p class="video-title">${title}</p>
-          </div>
-        </div>`;
+        return `
+          <div class="video-card">
+            <div class="yt-facade" data-video-id="${item.videoId}">
+              <!-- Renderizado via youtube-lite.js -->
+            </div>
+            <div class="video-info">
+              <p class="video-title">${title}</p>
+            </div>
+          </div>`;
       }).join('');
+      
+      // Inicializa o facade após renderizar
+      if (typeof initYouTubeLite === 'function') initYouTubeLite();
     }
   } catch (e) {
     if (container) container.innerHTML = '<p style="color:#999;padding:20px;text-align:center;grid-column:1/-1;">Vídeos não disponíveis.</p>';
