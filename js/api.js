@@ -69,8 +69,11 @@ function createCard(item) {
   const ago = timeAgo(item.pubDate);
   if (!item.image) {
     return `
-      <article class="news-card no-image" style="--nc: var(--cat-${(item.category || 'brasil').toLowerCase()}, var(--dark-bg))">
+      <article class="news-card no-image">
         <a href="${sanitizeUrl(item.link)}" target="_blank" rel="noopener noreferrer">
+          <div class="card-image-fallback" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); height: 120px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">
+             ${escapeHtml(item.category)}
+          </div>
           <div class="card-body">
             <h3 class="card-title">${escapeHtml(item.title)}</h3>
             <div class="card-meta">
@@ -226,11 +229,11 @@ function renderAll(data) {
     if (el) el.innerHTML = items.map(createCard).join('') || '<p style="color:#999;padding:8px">Sem notícias.</p>';
   };
 
-  render('news-grid', data.slice(1, 7));
-  render('esportes-grid', data.filter(i => i.category === 'Esportes').slice(0, 3));
-  render('brasil-grid', data.filter(i => i.category === 'Brasil').slice(0, 3));
-  render('regional-grid', data.filter(i => i.category === 'Regional').slice(0, 3));
-  render('facebook-grid', data.filter(i => i.category === 'Facebook').slice(0, 3));
+  render('news-grid', data.slice(1, 9)); // 8 itens para completar 2 linhas de 4
+  render('esportes-grid', data.filter(i => i.category === 'Esportes').slice(0, 4)); // 4 itens
+  render('brasil-grid', data.filter(i => i.category === 'Brasil').slice(0, 4)); // 4 itens
+  render('regional-grid', data.filter(i => i.category === 'Regional').slice(0, 4)); // 4 itens
+  render('facebook-grid', data.filter(i => i.category === 'Facebook').slice(0, 4)); // 4 itens
 
   const ml = document.getElementById('most-read-list');
   if (ml) {
