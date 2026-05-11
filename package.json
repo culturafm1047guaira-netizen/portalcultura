@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "start": "vercel dev",
-    "build": "echo 'Static build not required for Vercel'",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=tests/unit",
