@@ -44,7 +44,11 @@ button { cursor: pointer; font-family: inherit; min-height: 44px; min-width: 44p
 a, .nav-list a { min-height: 44px; display: flex; align-items: center; }
 .search-btn { min-height: 44px; }
 .social-btn, .app-btn, .cookie-btn, .contact-btn { min-height: 44px; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.container { 
+  max-width: 1440px; /* Expandido para ocupar mais a tela */
+  margin: 0 auto; 
+  padding: 0 24px; 
+}
 
 .topbar { background: var(--primary); padding: 5px 0; }
 .topbar .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
