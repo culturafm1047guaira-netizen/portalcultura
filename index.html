@@ -135,6 +135,20 @@
             <p>Portal de Notícias — Guaíra, SP</p>
           </div>
         </a>
+        
+        <div class="player-header" id="player-container">
+          <div class="player-live-badge">Ao Vivo</div>
+          <button class="play-btn" id="playBtn" aria-label="Ouvir rádio ao vivo">
+            <svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
+            <svg viewBox="0 0 24 24" id="pauseIcon" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <div class="player-info">
+            <strong>Cultura FM 104.7</strong>
+            <span>Sintonize a emoção</span>
+          </div>
+          <audio id="radioPlayer" src="https://servidor31.brlogic.com:8032/live" preload="none"></audio>
+        </div>
+
         <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Abrir menu" aria-expanded="false">
           <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5 7.5H25M5 15H25M5 22.5H25" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -378,31 +392,7 @@
 
   <button class="scroll-top" id="scroll-top" aria-label="Voltar ao topo">⬆</button>
 
-  <div class="player-area">
-    <div class="player-live-badge">LIVE</div>
-    <button class="play-btn" id="playBtn" title="Ouvir ao vivo" aria-label="Ouvir ao vivo">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>
-    </button>
-    <div class="player-info">
-      <strong>Cultura FM 104.7</strong>
-      <div class="player-status">
-        <span id="playerAction">Clique para ouvir</span>
-        <div class="visualizer paused" id="visualizer" aria-hidden="true">
-          <div class="vis-bar"></div>
-          <div class="vis-bar"></div>
-          <div class="vis-bar"></div>
-          <div class="vis-bar"></div>
-          <div class="vis-bar"></div>
-          <div class="vis-bar"></div>
-          <div class="vis-bar"></div>
-          <div class="vis-bar"></div>
-        </div>
-      </div>
-    </div>
-    <audio id="audioPlayer" preload="none">
-      <source src="https://ice.fabricahost.com.br/radioculturaguaira" type="audio/mpeg">
-    </audio>
-  </div>
+
 
   <script src="js/api.js" defer></script>
   <script src="js/player.js" defer></script>

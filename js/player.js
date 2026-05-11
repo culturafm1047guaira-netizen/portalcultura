@@ -1,78 +1,46 @@
 let isPlaying = false;
-let audioPlayer = null;
+let radioPlayer = null;
 
 function initPlayer() {
-  audioPlayer = document.getElementById('audioPlayer');
+  radioPlayer = document.getElementById('radioPlayer');
   const playBtn = document.getElementById('playBtn');
-  const visualizer = document.getElementById('visualizer');
-  const playerAction = document.getElementById('playerAction');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
 
-  if (!playBtn || !audioPlayer) return;
-
-  playBtn.classList.add('paused');
+  if (!playBtn || !radioPlayer) return;
 
   playBtn.addEventListener('click', togglePlayer);
-  audioPlayer.addEventListener('play', () => onPlayStateChange(true));
-  audioPlayer.addEventListener('pause', () => onPlayStateChange(false));
-  audioPlayer.addEventListener('ended', () => onPlayStateChange(false));
-  audioPlayer.addEventListener('error', handleStreamError);
+  radioPlayer.addEventListener('play', () => onPlayStateChange(true));
+  radioPlayer.addEventListener('pause', () => onPlayStateChange(false));
+  radioPlayer.addEventListener('ended', () => onPlayStateChange(false));
 }
 
 function togglePlayer() {
-  if (!audioPlayer) return;
+  if (!radioPlayer) return;
   if (isPlaying) {
-    audioPlayer.pause();
+    radioPlayer.pause();
   } else {
-    audioPlayer.play().catch(() => {
-        showPlayerError();
-      });
+    radioPlayer.play().catch(err => {
+      console.error("Erro ao reproduzir stream:", err);
+    });
   }
 }
 
 function onPlayStateChange(playing) {
   isPlaying = playing;
-  const playBtn = document.getElementById('playBtn');
-  const visualizer = document.getElementById('visualizer');
-  const playerAction = document.getElementById('playerAction');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const playerContainer = document.getElementById('player-container');
 
-  if (playBtn) {
-    if (playing) {
-      playBtn.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 2h4v12H3zm6 0h4v12H9z"/></svg>';
-      playBtn.classList.remove('paused');
-    } else {
-      playBtn.innerHTML = '<svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></svg>';
-      playBtn.classList.add('paused');
-    }
+  if (playIcon && pauseIcon) {
+    playIcon.style.display = playing ? 'none' : 'block';
+    pauseIcon.style.display = playing ? 'block' : 'none';
   }
 
-  const playerArea = document.querySelector('.player-area');
-  if (playerArea) {
-    playerArea.classList.toggle('playing', playing);
-  }
-
-  if (visualizer) {
-    visualizer.classList.toggle('paused', !playing);
-  }
-
-  if (playerAction) {
-    playerAction.textContent = playing ? 'Ouvindo agora' : 'Clique para ouvir';
+  if (playerContainer) {
+    playerContainer.classList.toggle('playing', playing);
   }
 }
 
-function handleStreamError() {
-  showPlayerError();
-}
-
-function showPlayerError() {
-  const playerAction = document.getElementById('playerAction');
-  if (playerAction) {
-    playerAction.textContent = 'Stream indisponível';
-    playerAction.style.color = '#c0392b';
-  }
-  const playBtn = document.getElementById('playBtn');
-  if (playBtn) {
-    playBtn.style.opacity = '0.5';
-    playBtn.style.pointerEvents = 'none';
-  }
-}
+document.addEventListener('DOMContentLoaded', initPlayer);
 
