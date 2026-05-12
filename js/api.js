@@ -201,8 +201,10 @@ function renderAll(data) {
 
   const renderedLinks = new Set(); // Rastreador global de unicidade
 
-  // 1. Destaque (Hero) - 1ª Notícia única
-  const hero = data[0];
+  // 1. Seleção do Destaque (Hero) - Prioridade Regional
+  let hero = data.find(i => i.category === 'Regional');
+  if (!hero) hero = data[0]; // Fallback para a mais recente se não houver regional
+  
   renderedLinks.add(hero.link);
   
   const heroImage = document.querySelector('.hero-image');
