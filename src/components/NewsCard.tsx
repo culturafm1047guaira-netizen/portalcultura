@@ -30,7 +30,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
       <a href={link} target="_blank" rel="noopener" className="group flex gap-4 py-4 border-editorial">
         {image && (
           <div className="relative w-24 h-24 shrink-0 overflow-hidden bg-gray-100 rounded-sm">
-            <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-500 group-hover:scale-110" />
+            <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110" />
           </div>
         )}
         <div className="flex flex-col flex-1">
@@ -50,7 +50,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
     <a href={link} target="_blank" rel="noopener" className="group flex flex-col h-full pb-6">
       {image && (
         <div className="relative aspect-video w-full overflow-hidden bg-gray-100 mb-3 rounded-sm">
-          <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-500 group-hover:scale-105" />
+          <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105" />
         </div>
       )}
       <div className="flex flex-col flex-1">

@@ -54,9 +54,7 @@ export default function RootLayout({
         <div className="pb-16 lg:pb-0">
           {children}
         </div>
-        <div className="fixed bottom-0 left-0 w-full z-50">
-          <Player />
-        </div>
+        <Player />
       </body>
     </html>
   );

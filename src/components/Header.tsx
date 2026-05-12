@@ -15,12 +15,12 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white border-b border-border sticky top-0 z-40">
+    <header className="bg-white/90 backdrop-blur-md support-[backdrop-filter]:bg-white/80 border-b border-border sticky top-0 z-40 transition-colors duration-300">
       <div className="container py-3">
         <div className="flex items-center justify-between gap-5 flex-wrap lg:flex-nowrap">
           
           <button 
-            className="lg:hidden text-text p-2"
+            className="lg:hidden text-text p-2 hover:text-primary transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
@@ -29,8 +29,8 @@ const Header = () => {
             </svg>
           </button>
 
-          <Link href="/" className="flex items-center shrink-0">
-            <div className="relative h-12 w-24 sm:h-14 sm:w-28 md:h-16 md:w-32">
+          <Link href="/" className="flex items-center shrink-0 group">
+            <div className="relative h-12 w-24 sm:h-14 sm:w-28 md:h-16 md:w-32 transition-transform duration-300 group-hover:scale-105">
               <Image 
                 src="/img/logo_oficial.png" 
                 alt="Rádio Cultura" 
@@ -40,7 +40,7 @@ const Header = () => {
               />
             </div>
             <div className="hidden sm:flex flex-col ml-3 border-l border-gray-200 pl-3">
-              <span className="font-montserrat text-lg md:text-xl font-black text-primary leading-none uppercase tracking-tight">
+              <span className="font-montserrat text-lg md:text-xl font-black text-primary leading-none uppercase tracking-tight group-hover:text-primary-dark transition-colors">
                 Cultura FM
               </span>
               <span className="text-[10px] md:text-xs text-text-muted uppercase font-semibold tracking-wider">
@@ -51,17 +51,19 @@ const Header = () => {
 
           <nav className={`
             lg:flex flex-1 w-full lg:w-auto
-            ${isMenuOpen ? "block absolute top-full left-0 w-full bg-white border-b border-border shadow-lg" : "hidden"}
+            ${isMenuOpen ? "block absolute top-full left-0 w-full bg-white/95 backdrop-blur-md border-b border-border shadow-lg" : "hidden"}
           `}>
-            <ul className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-6 p-4 lg:p-0">
+            <ul className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-8 p-4 lg:p-0">
               {navItems.map((item) => (
                 <li key={item.name}>
                   <Link 
                     href={item.href}
-                    className="block py-2 lg:py-0 text-[13px] font-bold text-text hover:text-primary transition-colors uppercase tracking-wide"
+                    className="group relative block py-2 lg:py-0 text-[13px] font-bold text-text hover:text-primary transition-colors uppercase tracking-wide"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.name}
+                    {/* Linha animada sob o link */}
+                    <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-primary rounded-full transition-all duration-300 ease-out group-hover:w-full group-hover:left-0"></span>
                   </Link>
                 </li>
               ))}
@@ -69,13 +71,13 @@ const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center gap-2">
-            <div className="relative">
+            <div className="relative group">
               <input 
                 type="search" 
                 placeholder="Buscar" 
-                className="w-48 bg-gray-50 border border-gray-200 rounded-full px-4 py-1.5 text-sm text-text focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                className="w-48 bg-gray-50 border border-gray-200 rounded-full px-4 py-1.5 text-sm text-text focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 group-hover:border-gray-300"
               />
-              <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-hover:text-primary transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>

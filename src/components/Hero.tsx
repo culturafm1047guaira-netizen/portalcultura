@@ -24,7 +24,7 @@ const Hero = ({ news }: HeroProps) => {
               alt={news.title}
               fill
               style={{ objectFit: "cover" }}
-              className="transition-transform duration-700 group-hover:scale-105"
+              className="transition-transform duration-[800ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
               priority
             />
           ) : (
