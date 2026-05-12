@@ -1,34 +1,41 @@
 :root {
-  --primary: #4169e1;
-  --primary-dark: #2b4bad;
-  --primary-light: #5a7fee;
-  --dark-bg: #0d1b2a;
-  --darker-bg: #0a1520;
-  --light-bg: #f4f1eb;
-  --card-bg: #fff;
-  --text: #1a1a1a;
-  --text-muted: #666;
-  --border: #e0ddd4;
-  --nav-inicio: #ff4757;
-  --nav-regional: #54a0ff;
-  --nav-brasil: #2ed573;
-  --nav-educacao: #a29bfe;
-  --nav-esportes: #eccc68;
-  --nav-justica: #ff7f50;
-  --nav-saude: #7bed9f;
-  --nav-sobre: #70a1ff;
-  --nav-transparencia: #1dd1a1;
-  --esportes-accent: #e67e22;
-  --brasil-accent: #27ae60;
-  --regional-accent: #2980b9;
-  --cat-brasil: #27ae60;
-  --cat-regional: #2980b9;
-  --cat-educacao: #8e44ad;
-  --cat-justica: #d35400;
-  --cat-saude: #16a085;
-  --cat-esportes: #c0392b;
-  --up: #27ae60;
-  --down: #c0392b;
+  --primary-h: 225;
+  --primary-s: 73%;
+  --primary-l: 57%;
+  --primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+  --primary-dark: hsl(var(--primary-h), var(--primary-s), 42%);
+  --primary-light: hsl(var(--primary-h), var(--primary-s), 65%);
+  
+  --dark-bg: hsl(210, 53%, 11%);
+  --darker-bg: hsl(210, 52%, 8%);
+  --light-bg: hsl(210, 20%, 98%); /* Off-white for reduced eye strain */
+  --card-bg: hsl(0, 0%, 100%);
+  --text: hsl(0, 0%, 10%);
+  --text-muted: hsl(0, 0%, 40%);
+  --border: hsl(210, 10%, 90%);
+
+  /* Navigation Accents */
+  --nav-inicio: hsl(355, 100%, 63%);
+  --nav-regional: hsl(214, 100%, 66%);
+  --nav-brasil: hsl(145, 63%, 51%);
+  --nav-educacao: hsl(244, 97%, 80%);
+  --nav-esportes: hsl(45, 93%, 67%);
+  --nav-justica: hsl(16, 100%, 66%);
+  --nav-saude: hsl(138, 64%, 71%);
+  --nav-sobre: hsl(219, 100%, 72%);
+  --nav-transparencia: hsl(164, 64%, 46%);
+  /* Category Accents */
+  --esportes-accent: hsl(28, 80%, 52%);
+  --brasil-accent: hsl(145, 63%, 42%);
+  --regional-accent: hsl(204, 64%, 44%);
+  --cat-brasil: var(--brasil-accent);
+  --cat-regional: var(--regional-accent);
+  --cat-educacao: hsl(282, 44%, 47%);
+  --cat-justica: hsl(24, 100%, 41%);
+  --cat-saude: hsl(168, 76%, 36%);
+  --cat-esportes: hsl(6, 63%, 46%);
+  --up: hsl(145, 63%, 42%);
+  --down: hsl(6, 63%, 46%);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -82,7 +89,7 @@ a, .nav-list a { min-height: 44px; display: flex; align-items: center; }
 .logo-area { display: flex; align-items: center; gap: 24px; }
 .logo-img { height: 120px; width: auto; flex-shrink: 0; }
 .logo-text { display: flex; flex-direction: column; }
-.logo-main-title { font-family: 'Montserrat', sans-serif; font-size: 40px; font-weight: 900; color: #fff; line-height: 1; letter-spacing: -0.03em; text-transform: uppercase; display: block; }
+.logo-main-title { font-family: 'Montserrat', sans-serif; font-size: clamp(24px, 5vw, 40px); font-weight: 900; color: #fff; line-height: 1; letter-spacing: -0.03em; text-transform: uppercase; display: block; }
 .logo-text p { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
 
 /* Sonic Core Player - Radical Redesign */
@@ -327,7 +334,7 @@ a, .nav-list a { min-height: 44px; display: flex; align-items: center; }
 .hero-badge { position: absolute; top: 16px; left: 16px; z-index: 2; }
 .hero-content { padding: 28px 26px; display: flex; flex-direction: column; justify-content: center; }
 .hero-category { font-size: 10px; font-weight: 700; color: var(--primary); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; }
-.hero-title { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 800; color: var(--dark-bg); line-height: 1.2; margin-bottom: 12px; }
+.hero-title { font-family: 'Montserrat', sans-serif; font-size: clamp(20px, 4vw, 24px); font-weight: 800; color: var(--dark-bg); line-height: 1.2; margin-bottom: 12px; }
 .hero-desc { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 18px; }
 .hero-meta { display: flex; flex-direction: column; gap: 4px; font-size: 10px; color: #aaa; font-style: italic; }
 .hero-meta .source { color: var(--cat-esportes); font-weight: 700; font-style: normal; text-transform: uppercase; }
@@ -700,7 +707,7 @@ body.dark-mode .card-title {
 .social-item.social-yt { background: #ff0000; }
 .social-item.social-wa { background: #25d366; }
 
-body.dark-mode { background: #080f18; color: #e0e0e0; }
+body.dark-mode { background: hsl(210, 52%, 8%); color: hsl(0, 0%, 88%); }
 body.dark-mode .news-card, body.dark-mode .sidebar-widget, body.dark-mode .hero-card { background: #121d2b; border-color: #1e2d3d; }
 body.dark-mode .hero-title, body.dark-mode .card-title, body.dark-mode .section-heading h2 { color: #fff; }
 body.dark-mode .hero-desc, body.dark-mode .rank-text { color: #bbb; }
@@ -792,7 +799,7 @@ body.dark-mode .clima-details { color: #aaa; border-top-color: #1e2d3d; }
 .breadcrumb { font-size: 12px; color: #999; margin-bottom: 20px; }
 .breadcrumb a { color: var(--primary); }
 .breadcrumb a:hover { text-decoration: underline; }
-.page-content h1 { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800; color: var(--dark-bg); margin-bottom: 24px; }
+.page-content h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(24px, 6vw, 32px); font-weight: 800; color: var(--dark-bg); margin-bottom: 24px; }
 .page-content h2 { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; color: var(--dark-bg); margin: 28px 0 14px; }
 .page-content h3 { font-size: 16px; font-weight: 600; color: var(--text); margin: 20px 0 10px; }
 .page-content p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 16px; }
