@@ -1,82 +1,82 @@
-import { readdirSync, readFileSync, existsSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+const { readdirSync, readFileSync, existsSync } = require("fs");
+const { join, dirname } = require("path");
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-describe('API Integration Tests', () => {
-  describe('api/news.js structure', () => {
-    test('api/news.js exists and is readable', () => {
-      const newsApi = join(__dirname, '../../api/news.js');
-      const content = readFileSync(newsApi, 'utf-8');
-      expect(content).toContain('export default');
-      expect(content).toContain('handler');
+describe("API Integration Tests", () => {
+  describe("src/app/api/news structure", () => {
+    test("route.ts exists and exports GET handler", () => {
+      const route = join(__dirname, "../../src/app/api/news/route.ts");
+      const content = readFileSync(route, "utf-8");
+      expect(content).toContain("GET");
+      expect(content).toContain("NextResponse");
     });
 
-    test('has feed configuration', () => {
-      const newsApi = join(__dirname, '../../api/news.js');
-      const content = readFileSync(newsApi, 'utf-8');
-      expect(content).toContain('FEEDS');
-      expect(content).toContain('rss-parser');
+    test("has RSS feed configuration", () => {
+      const route = join(__dirname, "../../src/app/api/news/route.ts");
+      const content = readFileSync(route, "utf-8");
+      expect(content).toContain("FEEDS");
+      expect(content).toContain("rss-parser");
     });
   });
 
-  describe('api/weather.js structure', () => {
-    test('api/weather.js exists and is readable', () => {
-      const weatherApi = join(__dirname, '../../api/weather.js');
-      const content = readFileSync(weatherApi, 'utf-8');
-      expect(content).toContain('export default');
-      expect(content).toContain('handler');
-    });
-
-    test('uses wttr.in API', () => {
-      const weatherApi = join(__dirname, '../../api/weather.js');
-      const content = readFileSync(weatherApi, 'utf-8');
-      expect(content).toContain('wttr.in');
+  describe("src/app/api/weather structure", () => {
+    test("route.ts exists and exports GET handler", () => {
+      const route = join(__dirname, "../../src/app/api/weather/route.ts");
+      const content = readFileSync(route, "utf-8");
+      expect(content).toContain("GET");
+      expect(content).toContain("wttr.in");
     });
   });
 
-  describe('api/publicities.js structure', () => {
-    test('api/publicities.js exists', () => {
-      const pubApi = join(__dirname, '../../api/publicities.js');
-      const content = readFileSync(pubApi, 'utf-8');
-      expect(content).toContain('export default');
-    });
-
-    test('reads from Publicidades directory', () => {
-      const pubApi = join(__dirname, '../../api/publicities.js');
-      const content = readFileSync(pubApi, 'utf-8');
-      expect(content).toContain('Publicidades');
+  describe("src/app/api/publicities structure", () => {
+    test("route.ts exists and exports GET handler", () => {
+      const route = join(__dirname, "../../src/app/api/publicities/route.ts");
+      const content = readFileSync(route, "utf-8");
+      expect(content).toContain("GET");
+      expect(content).toContain("Publicidades");
     });
   });
 
-  describe('api/youtube.js structure', () => {
-    test('api/youtube.js exists', () => {
-      const ytApi = join(__dirname, '../../api/youtube.js');
-      const content = readFileSync(ytApi, 'utf-8');
-      expect(content).toContain('export default');
+  describe("src/app/api/quotes structure", () => {
+    test("route.ts exists and exports GET handler", () => {
+      const route = join(__dirname, "../../src/app/api/quotes/route.ts");
+      const content = readFileSync(route, "utf-8");
+      expect(content).toContain("GET");
+      expect(content).toContain("awesomeapi");
     });
 
-    test('has fallback for missing API key', () => {
-      const ytApi = join(__dirname, '../../api/youtube.js');
-      const content = readFileSync(ytApi, 'utf-8');
-      expect(content).toContain('fallbackVideos');
+    test("has CEPEA indicators for commodities", () => {
+      const route = join(__dirname, "../../src/app/api/quotes/route.ts");
+      const content = readFileSync(route, "utf-8");
+      expect(content).toContain("cepea");
+      expect(content).toContain("boi-gordo");
     });
   });
 
-  describe('File system checks', () => {
-    test('Publicidades directory exists', () => {
-      const pubDir = join(__dirname, '../../Publicidades');
+  describe("src/app/api/youtube structure", () => {
+    test("route.ts exists and exports GET handler", () => {
+      const route = join(__dirname, "../../src/app/api/youtube/route.ts");
+      const content = readFileSync(route, "utf-8");
+      expect(content).toContain("GET");
+      expect(content).toContain("fallbackVideos");
+    });
+  });
+
+  describe("File system checks", () => {
+    test("Publicidades directory exists in public", () => {
+      const pubDir = join(__dirname, "../../public/Publicidades");
       expect(existsSync(pubDir)).toBe(true);
     });
 
-    test('api directory has expected files', () => {
-      const apiDir = join(__dirname, '../../api');
-      const files = readdirSync(apiDir);
-      expect(files).toContain('news.js');
-      expect(files).toContain('weather.js');
-      expect(files).toContain('publicities.js');
-      expect(files).toContain('youtube.js');
+    test("src/app/api directory has expected route handlers", () => {
+      const apiDir = join(__dirname, "../../src/app/api");
+      const dirs = readdirSync(apiDir, { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .map((d) => d.name);
+      expect(dirs).toContain("news");
+      expect(dirs).toContain("weather");
+      expect(dirs).toContain("publicities");
+      expect(dirs).toContain("quotes");
+      expect(dirs).toContain("youtube");
     });
   });
 });

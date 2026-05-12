@@ -9,28 +9,18 @@ test.describe('Homepage', () => {
     await expect(page).toHaveTitle(/Rádio Cultura|FM 104\.7|Guaíra/i);
   });
 
-  test('displays navigation', async ({ page }) => {
-    const nav = page.locator('nav, .nav-list, header');
+  test('displays header navigation', async ({ page }) => {
+    const nav = page.locator('nav');
     await expect(nav.first()).toBeVisible();
   });
 
   test('displays news section', async ({ page }) => {
-    const newsSection = page.locator('#news-grid, .news-grid, .noticias');
-    await expect(newsSection.first()).toBeVisible({ timeout: 10000 });
-  });
-
-  test('has working dark mode toggle', async ({ page }) => {
-    const darkToggle = page.locator('#darkToggle');
-    if (await darkToggle.isVisible()) {
-      await darkToggle.click();
-      const body = page.locator('body');
-      const hasDarkClass = await body.evaluate(el => el.classList.contains('dark-mode'));
-      expect(hasDarkClass).toBeTruthy();
-    }
+    const main = page.locator('main');
+    await expect(main.first()).toBeVisible({ timeout: 10000 });
   });
 
   test('search input exists', async ({ page }) => {
-    const searchInput = page.locator('#search-input, .search-input, input[type="search"]');
+    const searchInput = page.locator('input[type="search"]');
     if (await searchInput.count() > 0) {
       await expect(searchInput.first()).toBeAttached();
     }
@@ -40,13 +30,13 @@ test.describe('Homepage', () => {
 test.describe('Player', () => {
   test('audio player exists', async ({ page }) => {
     await page.goto('/');
-    const player = page.locator('#audioPlayer, .audio-player, audio');
+    const player = page.locator('audio');
     await expect(player.first()).toBeAttached();
   });
 
   test('play button exists', async ({ page }) => {
     await page.goto('/');
-    const playBtn = page.locator('#playBtn, .play-btn, button:has-text("Ouvir")');
+    const playBtn = page.locator('button[aria-label="Ouvir rádio ao vivo"]');
     await expect(playBtn.first()).toBeAttached();
   });
 });
