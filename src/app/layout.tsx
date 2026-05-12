@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat, Source_Sans_3 } from "next/font/google";
+import Player from "@/components/Player";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -50,7 +51,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${montserrat.variable} ${sourceSans.variable} antialiased`}>
       <body>
-        {children}
+        <div className="pb-16 lg:pb-0">
+          {children}
+        </div>
+        <div className="fixed bottom-0 left-0 w-full z-50">
+          <Player />
+        </div>
       </body>
     </html>
   );

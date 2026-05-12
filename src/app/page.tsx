@@ -9,70 +9,96 @@ import NewsCard from "@/components/NewsCard";
 import Sidebar from "@/components/Sidebar";
 import { getNews } from "@/lib/news";
 
-export const revalidate = 600; // Revalidate every 10 minutes
+export const revalidate = 600;
 
 export default async function Home() {
   const allNews = await getNews();
   const heroNews = allNews[0];
-  const gridNews = allNews.slice(1, 13);
+  const sideHeroNews = allNews.slice(1, 4); // 3 notícias ao lado do destaque
+  const mainGridNews = allNews.slice(4, 10); // 6 notícias no grid abaixo
 
   const categories = [
-    { id: "Regional", label: "📍 Regional" },
-    { id: "Brasil", label: "🇧🇷 Brasil" },
-    { id: "Esportes", label: "⚽ Esportes" },
+    { id: "Regional", label: "Regional", color: "var(--color-cat-regional)" },
+    { id: "Brasil", label: "Brasil", color: "var(--color-cat-brasil)" },
+    { id: "Esportes", label: "Esportes", color: "var(--color-cat-esportes)" },
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       <TopBar />
       <BreakingNews />
       <Header />
       <Ticker />
 
       <main className="container py-8 flex-1">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr,320px] gap-8 items-start">
-          <div className="flex flex-col">
-            {heroNews && <Hero news={heroNews} />}
-
-            <div className="flex items-center gap-3 mb-4 pb-2.5 border-b-[3px] border-esportes-accent">
-              <h2 className="font-montserrat text-lg font-extrabold text-dark-bg uppercase tracking-wider">
-                Últimas Notícias
+        
+        {/* Top Section: Hero + Lista Lateral + Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr,300px] gap-8 xl:gap-12 items-start mb-12 border-b border-border pb-12">
+          
+          <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-6 xl:gap-8">
+            {/* Manchete Principal */}
+            <div>
+              {heroNews && <Hero news={heroNews} />}
+            </div>
+            
+            {/* Lista Lateral ao Destaque (Estilo Globo) */}
+            <div className="flex flex-col border-t md:border-t-0 md:border-l border-border md:pl-6 xl:pl-8">
+              <h2 className="font-montserrat font-black text-sm uppercase tracking-widest text-primary mb-2 mt-4 md:mt-0">
+                Mais Lidas
               </h2>
-              <div className="flex-1 h-px bg-border" />
-              <a href="#" className="text-esportes-accent text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap">
+              <div className="flex flex-col">
+                {sideHeroNews.map((news, i) => (
+                  <NewsCard key={i} {...news} compact={true} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar Global */}
+          <Sidebar />
+
+        </div>
+
+        {/* Últimas Notícias (Grid) */}
+        <div className="mb-12">
+          <div className="flex items-center gap-4 mb-6">
+            <h2 className="font-montserrat text-2xl font-black text-dark-bg uppercase tracking-tight">
+              Últimas Notícias
+            </h2>
+            <div className="flex-1 border-b border-border" />
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+            {mainGridNews.map((news, i) => (
+              <NewsCard key={i} {...news} />
+            ))}
+          </div>
+        </div>
+
+        {/* Categorias Temáticas */}
+        {categories.map((cat) => (
+          <div key={cat.id} className="mb-12">
+            <div className="flex items-center gap-4 mb-6">
+              <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: cat.color }}>
+                {cat.label}
+              </h2>
+              <div className="flex-1 border-b border-border" />
+              <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: cat.color }}>
                 Ver todas →
               </a>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-10">
-              {gridNews.map((news, i) => (
-                <NewsCard key={i} {...news} />
-              ))}
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {allNews
+                .filter(n => n.category === cat.id)
+                .slice(0, 4)
+                .map((news, i) => (
+                  <NewsCard key={i} {...news} />
+                ))
+              }
             </div>
-
-            {categories.map((cat) => (
-              <React.Fragment key={cat.id}>
-                <div className="flex items-center gap-3 mb-4 pb-2.5 border-b-[3px] border-primary">
-                  <h2 className="font-montserrat text-lg font-extrabold text-dark-bg uppercase tracking-wider">
-                    {cat.label}
-                  </h2>
-                  <div className="flex-1 h-px bg-border" />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-10">
-                  {allNews
-                    .filter(n => n.category === cat.id)
-                    .slice(0, 3)
-                    .map((news, i) => (
-                      <NewsCard key={i} {...news} />
-                    ))
-                  }
-                </div>
-              </React.Fragment>
-            ))}
           </div>
-
-          <Sidebar />
-        </div>
+        ))}
       </main>
 
       <Footer />

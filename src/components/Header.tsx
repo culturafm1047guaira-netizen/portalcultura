@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Player from "./Player";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,82 +12,76 @@ const Header = () => {
     { name: "Programação", href: "/programacao" },
     { name: "Sobre", href: "/sobre" },
     { name: "Contato", href: "/contato" },
-    { name: "Termos de Uso", href: "/termos" },
-    { name: "Privacidade", href: "/sobre/privacidade" },
-    { name: "Transparência", href: "/transparencia" },
   ];
 
   return (
-    <header className="bg-dark-bg">
-      <div className="container">
-        <div className="flex items-center justify-between py-4 gap-5 flex-wrap">
-          <Link href="/" className="flex items-center gap-6">
-            <div className="relative h-[120px] w-[240px]">
+    <header className="bg-white border-b border-border sticky top-0 z-40">
+      <div className="container py-3">
+        <div className="flex items-center justify-between gap-5 flex-wrap lg:flex-nowrap">
+          
+          <button 
+            className="lg:hidden text-text p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Menu"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+
+          <Link href="/" className="flex items-center shrink-0">
+            <div className="relative h-12 w-24 sm:h-14 sm:w-28 md:h-16 md:w-32">
               <Image 
                 src="/img/logo_oficial.png" 
-                alt="Logo Rádio Cultura FM 104.7" 
+                alt="Rádio Cultura" 
                 fill
                 style={{ objectFit: "contain" }}
                 priority
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-montserrat text-[clamp(24px,5vw,40px)] font-black text-white leading-none tracking-[-0.03em] uppercase">
-                Rádio Cultura FM 104.7
+            <div className="hidden sm:flex flex-col ml-3 border-l border-gray-200 pl-3">
+              <span className="font-montserrat text-lg md:text-xl font-black text-primary leading-none uppercase tracking-tight">
+                Cultura FM
               </span>
-              <p className="text-[13px] text-white/40 tracking-[0.12em] uppercase mt-1">
-                Portal de Notícias — Guaíra, SP
-              </p>
+              <span className="text-[10px] md:text-xs text-text-muted uppercase font-semibold tracking-wider">
+                Guaíra, SP
+              </span>
             </div>
           </Link>
 
-          <Player />
+          <nav className={`
+            lg:flex flex-1 w-full lg:w-auto
+            ${isMenuOpen ? "block absolute top-full left-0 w-full bg-white border-b border-border shadow-lg" : "hidden"}
+          `}>
+            <ul className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-6 p-4 lg:p-0">
+              {navItems.map((item) => (
+                <li key={item.name}>
+                  <Link 
+                    href={item.href}
+                    className="block py-2 lg:py-0 text-[13px] font-bold text-text hover:text-primary transition-colors uppercase tracking-wide"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-          <button 
-            className="md:hidden text-white p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Abrir menu"
-          >
-            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 7.5H25M5 15H25M5 22.5H25" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-
-        <div className="py-0">
-          <div className="flex gap-2 max-w-lg mb-3">
-            <input 
-              type="search" 
-              placeholder="Buscar notícias..." 
-              className="flex-1 bg-white/10 border border-white/20 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-white/40 transition-all"
-            />
-            <button className="bg-primary hover:bg-primary-light text-white font-bold px-4 py-2 rounded text-sm transition-all transform hover:-translate-y-px">
-              Buscar
-            </button>
+          <div className="hidden md:flex items-center gap-2">
+            <div className="relative">
+              <input 
+                type="search" 
+                placeholder="Buscar" 
+                className="w-48 bg-gray-50 border border-gray-200 rounded-full px-4 py-1.5 text-sm text-text focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+              />
+              <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
-
-      <nav className="bg-darker-bg border-t border-white/5 py-3 overflow-hidden">
-        <div className="container">
-          <ul className={`
-            flex gap-3 items-center overflow-x-auto scrollbar-none
-            md:static md:flex-row md:h-auto md:p-0 md:bg-transparent md:shadow-none
-            ${isMenuOpen ? "fixed inset-0 h-screen w-[280px] bg-darker-bg flex-col p-20 z-[1000] right-0 left-auto shadow-[-10px_0_30px_rgba(0,0,0,0.5)]" : "hidden md:flex"}
-          `}>
-            {navItems.map((item) => (
-              <li key={item.name} className="w-full md:w-auto">
-                <Link 
-                  href={item.href}
-                  className="block px-4 py-2 text-[11px] font-bold text-white/70 tracking-[0.08em] uppercase whitespace-nowrap rounded bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white hover:border-primary transition-all md:text-center"
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
     </header>
   );
 };

@@ -9,56 +9,61 @@ interface NewsCardProps {
   source: string;
   category: string;
   pubDate: string;
+  compact?: boolean; // Permite layout de lista lateral
 }
 
-const NewsCard = ({ title, excerpt, image, link, source, category, pubDate }: NewsCardProps) => {
-  const formattedDate = new Date(pubDate).toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "long",
+const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, compact = false }: NewsCardProps) => {
+  const formattedDate = new Date(pubDate).toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
   });
 
-  return (
-    <a 
-      href={link} 
-      target="_blank" 
-      rel="noopener"
-      className="group bg-card-bg border border-border rounded-xl overflow-hidden flex flex-col h-full transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-primary-light"
-    >
-      <div className="relative aspect-video w-full overflow-hidden bg-[#f0ede6] shrink-0">
-        {image ? (
-          <Image 
-            src={image} 
-            alt={title}
-            fill
-            style={{ objectFit: "cover" }}
-            className="transition-transform duration-500 group-hover:scale-110"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-black/10 font-bold uppercase text-[10px] tracking-widest p-4 text-center">
-            {title}
+  // Decide cor da categoria
+  let catColor = "var(--color-primary)";
+  const lowerCat = category.toLowerCase();
+  if (lowerCat.includes("brasil")) catColor = "var(--color-cat-brasil)";
+  if (lowerCat.includes("esporte")) catColor = "var(--color-cat-esportes)";
+  if (lowerCat.includes("regi")) catColor = "var(--color-cat-regional)";
+
+  if (compact) {
+    return (
+      <a href={link} target="_blank" rel="noopener" className="group flex gap-4 py-4 border-editorial">
+        {image && (
+          <div className="relative w-24 h-24 shrink-0 overflow-hidden bg-gray-100 rounded-sm">
+            <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-500 group-hover:scale-110" />
           </div>
         )}
-        <div className="absolute top-3 left-3 bg-primary text-white text-[10px] font-extrabold px-2.5 py-1 rounded uppercase tracking-wider z-10 shadow-lg">
-          {category}
+        <div className="flex flex-col flex-1">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest mb-1" style={{ color: catColor }}>
+            {category}
+          </span>
+          <h3 className="font-montserrat text-[14px] font-bold leading-snug text-text group-hover:text-primary transition-colors line-clamp-3">
+            {title}
+          </h3>
+          <span className="text-[10px] text-gray-400 mt-auto pt-2 font-medium">Há {formattedDate} • {source}</span>
         </div>
-      </div>
+      </a>
+    );
+  }
 
-      <div className="p-4 flex flex-col flex-1 gap-1.5">
-        <h3 className="font-montserrat text-[15px] font-extrabold leading-snug text-text group-hover:text-primary transition-colors line-clamp-3">
+  return (
+    <a href={link} target="_blank" rel="noopener" className="group flex flex-col h-full pb-6">
+      {image && (
+        <div className="relative aspect-video w-full overflow-hidden bg-gray-100 mb-3 rounded-sm">
+          <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-500 group-hover:scale-105" />
+        </div>
+      )}
+      <div className="flex flex-col flex-1">
+        <span className="text-[10px] font-extrabold uppercase tracking-widest mb-1.5" style={{ color: catColor }}>
+          {category}
+        </span>
+        <h3 className="font-montserrat text-lg font-bold leading-tight text-text group-hover:text-primary transition-colors line-clamp-3">
           {title}
         </h3>
-        <p className="text-[13px] text-text-muted line-clamp-2 leading-relaxed">
+        <p className="text-[13px] text-text-muted line-clamp-2 leading-relaxed mt-2">
           {excerpt}
         </p>
-        
-        <div className="mt-auto pt-3 flex flex-col gap-0.5">
-          <span className="text-[10px] font-extrabold text-primary uppercase tracking-wider">
-            {source}
-          </span>
-          <time className="text-[11px] text-gray-500 italic">
-            {formattedDate}
-          </time>
-        </div>
+        <span className="text-[11px] text-gray-400 mt-auto pt-3 font-medium uppercase tracking-wider">{source}</span>
       </div>
     </a>
   );

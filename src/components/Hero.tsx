@@ -15,53 +15,51 @@ interface HeroProps {
 
 const Hero = ({ news }: HeroProps) => {
   return (
-    <article className="bg-card-bg border border-border rounded-lg overflow-hidden grid grid-cols-1 lg:grid-cols-[1.2fr,1fr] mb-6 min-h-[380px] group">
-      <div className="relative min-h-[240px] bg-dark-bg overflow-hidden flex items-center justify-center">
-        {news.image ? (
-          <Image 
-            src={news.image} 
-            alt={news.title}
-            fill
-            style={{ objectFit: "cover" }}
-            className="transition-transform duration-700 group-hover:scale-105"
-            priority
-          />
-        ) : (
-          <div className="text-white/10 text-[11px] uppercase tracking-widest text-center px-4">
-            {news.title}
+    <article className="group mb-8">
+      <a href={news.link} target="_blank" rel="noopener" className="block">
+        <div className="relative aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden bg-gray-100 mb-4 rounded-sm">
+          {news.image ? (
+            <Image 
+              src={news.image} 
+              alt={news.title}
+              fill
+              style={{ objectFit: "cover" }}
+              className="transition-transform duration-700 group-hover:scale-105"
+              priority
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-gray-300 font-bold uppercase tracking-widest text-xl">
+              {news.source}
+            </div>
+          )}
+        </div>
+        
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ color: 'var(--color-primary)' }}>
+              {news.category}
+            </span>
+            <span className="text-gray-300 text-xs">•</span>
+            <span className="text-[11px] text-gray-500 font-semibold uppercase">{news.source}</span>
           </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-br from-dark-bg/30 to-dark-bg/70" />
-        <div className="absolute top-4 left-4 z-10">
-          <span className="bg-primary text-white text-[9px] font-black px-2 py-1 rounded uppercase tracking-wider shadow-lg">
-            {news.category}
-          </span>
+          
+          <h1 className="font-montserrat text-[clamp(24px,5vw,40px)] font-black text-text leading-[1.1] group-hover:text-primary transition-colors tracking-tight">
+            {news.title}
+          </h1>
+          
+          {news.excerpt && (
+            <p className="text-[15px] md:text-base text-text-muted leading-relaxed mt-1 line-clamp-2 md:line-clamp-3">
+              {news.excerpt}
+            </p>
+          )}
+          
+          <time className="text-[11px] text-gray-400 mt-2">
+            {new Date(news.pubDate).toLocaleString("pt-BR", { 
+              day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            })}
+          </time>
         </div>
-      </div>
-      
-      <div className="p-7 lg:p-9 flex flex-col justify-center gap-4">
-        <div className="text-[10px] font-bold text-primary tracking-[0.14em] uppercase">
-          Destaque
-        </div>
-        <h1 className="font-montserrat text-[clamp(20px,4vw,28px)] font-extrabold text-dark-bg leading-tight">
-          {news.title}
-        </h1>
-        <p className="text-[14px] text-text-muted leading-relaxed line-clamp-3">
-          {news.excerpt}
-        </p>
-        <div className="flex flex-col gap-1 text-[10px] text-gray-400 italic">
-          <span className="text-red-700 font-bold uppercase not-italic">{news.source}</span>
-          <time>{new Date(news.pubDate).toLocaleDateString("pt-BR", { day: '2-digit', month: 'long', year: 'numeric' })}</time>
-        </div>
-        <a 
-          href={news.link} 
-          target="_blank" 
-          rel="noopener"
-          className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-dark-bg text-white rounded font-bold text-[12px] tracking-wider transition-all hover:bg-[#1a3a5c] hover:translate-x-1"
-        >
-          Ler notícia completa →
-        </a>
-      </div>
+      </a>
     </article>
   );
 };

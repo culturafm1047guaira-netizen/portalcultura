@@ -1,30 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: hsl(225, 73%, 57%);
-  --color-primary-dark: hsl(225, 73%, 42%);
-  --color-primary-light: hsl(225, 73%, 65%);
-  --color-dark-bg: hsl(210, 53%, 11%);
-  --color-darker-bg: hsl(210, 52%, 8%);
-  --color-light-bg: hsl(210, 20%, 98%);
-  --color-card-bg: hsl(0, 0%, 100%);
-  --color-text: hsl(0, 0%, 10%);
-  --color-text-muted: hsl(0, 0%, 40%);
-  --color-border: hsl(210, 10%, 90%);
-
-  --color-nav-inicio: hsl(355, 100%, 63%);
-  --color-nav-regional: hsl(214, 100%, 66%);
-  --color-nav-brasil: hsl(145, 63%, 51%);
-  --color-nav-educacao: hsl(244, 97%, 80%);
-  --color-nav-esportes: hsl(45, 93%, 67%);
-  --color-nav-justica: hsl(16, 100%, 66%);
-  --color-nav-saude: hsl(138, 64%, 71%);
-  --color-nav-sobre: hsl(219, 100%, 72%);
-  --color-nav-transparencia: hsl(164, 64%, 46%);
+  --color-primary: #c00000;          /* A cor principal estilo Globo/G1 (Vermelho forte) */
+  --color-primary-dark: #8b0000;
+  --color-primary-light: #e60000;
   
-  --color-esportes-accent: hsl(28, 80%, 52%);
-  --color-brasil-accent: hsl(145, 63%, 42%);
-  --color-regional-accent: hsl(204, 64%, 44%);
+  --color-dark-bg: #111111;         /* Quase preto para cabeçalhos ou destaques escuros */
+  --color-darker-bg: #000000;
+  
+  --color-light-bg: #ffffff;        /* Fundo branco total */
+  --color-card-bg: #ffffff;         /* Sem fundos em caixas */
+  
+  --color-text: #222222;            /* Texto super escuro (legibilidade alta) */
+  --color-text-muted: #555555;      /* Texto de apoio */
+  --color-border: #e2e8f0;          /* Borda fina e sutil */
+
+  /* Cores específicas para as tags das categorias editoriais */
+  --color-cat-regional: #0066cc;    /* Azul forte */
+  --color-cat-brasil: #008000;      /* Verde escuro */
+  --color-cat-esportes: #00a000;    /* Verde vivo estilo GE */
+  --color-cat-educacao: #e67300;    /* Laranja */
+  --color-cat-saude: #cc0066;       /* Magenta */
+  --color-cat-justica: #6600cc;     /* Roxo */
 }
 
 @layer base {
@@ -40,15 +37,35 @@
     font-family: var(--font-source-sans);
     min-height: 100vh;
     -webkit-text-size-adjust: 100%;
+    line-height: 1.5;
+  }
+
+  /* Dark mode mais suave (fundo escuro real, não cinza azulado) */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-light-bg: #111111;
+      --color-text: #f0f0f0;
+      --color-card-bg: #111111;
+      --color-border: #333333;
+      --color-text-muted: #aaaaaa;
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-montserrat);
+    color: var(--color-dark-bg);
   }
 
   @media (prefers-color-scheme: dark) {
-    :root {
-      --color-light-bg: hsl(210, 52%, 8%);
-      --color-text: hsl(0, 0%, 88%);
-      --color-card-bg: hsl(210, 53%, 11%);
-      --color-border: hsl(210, 10%, 20%);
-      --color-text-muted: hsl(0, 0%, 60%);
+    h1, h2, h3, h4, h5, h6 {
+      color: #ffffff;
     }
+  }
+}
+
+/* Utilitário para as linhas finas padrão Globo.com */
+@layer utilities {
+  .border-editorial {
+    border-bottom: 1px solid var(--color-border);
   }
 }
