@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: hsl(225, 73%, 57%);
+  --color-primary-dark: hsl(225, 73%, 42%);
+  --color-primary-light: hsl(225, 73%, 65%);
+  --color-dark-bg: hsl(210, 53%, 11%);
+  --color-darker-bg: hsl(210, 52%, 8%);
+  --color-light-bg: hsl(210, 20%, 98%);
+  --color-card-bg: hsl(0, 0%, 100%);
+  --color-text: hsl(0, 0%, 10%);
+  --color-text-muted: hsl(0, 0%, 40%);
+  --color-border: hsl(210, 10%, 90%);
+
+  --color-nav-inicio: hsl(355, 100%, 63%);
+  --color-nav-regional: hsl(214, 100%, 66%);
+  --color-nav-brasil: hsl(145, 63%, 51%);
+  --color-nav-educacao: hsl(244, 97%, 80%);
+  --color-nav-esportes: hsl(45, 93%, 67%);
+  --color-nav-justica: hsl(16, 100%, 66%);
+  --color-nav-saude: hsl(138, 64%, 71%);
+  --color-nav-sobre: hsl(219, 100%, 72%);
+  --color-nav-transparencia: hsl(164, 64%, 46%);
+  
+  --color-esportes-accent: hsl(28, 80%, 52%);
+  --color-brasil-accent: hsl(145, 63%, 42%);
+  --color-regional-accent: hsl(204, 64%, 44%);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: var(--color-light-bg);
+    color: var(--color-text);
+    font-family: var(--font-source-sans);
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-light-bg: hsl(210, 52%, 8%);
+      --color-text: hsl(0, 0%, 88%);
+      --color-card-bg: hsl(210, 53%, 11%);
+      --color-border: hsl(210, 10%, 20%);
+      --color-text-muted: hsl(0, 0%, 60%);
+    }
+  }
+}
