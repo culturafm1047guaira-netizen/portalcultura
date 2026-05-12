@@ -199,7 +199,12 @@ function retryLoadNews(maxRetries = 3, delay = 2000) {
 function renderAll(data) {
   if (data.length === 0) return;
 
+  const renderedLinks = new Set(); // Rastreador global de unicidade
+
+  // 1. Destaque (Hero) - 1ª Notícia única
   const hero = data[0];
+  renderedLinks.add(hero.link);
+  
   const heroImage = document.querySelector('.hero-image');
   if (heroImage) {
     heroImage.style.background = 'linear-gradient(145deg, var(--dark-bg), #1a3a5c)';
@@ -224,17 +229,35 @@ function renderAll(data) {
   const heroLink = document.getElementById('hero-link');
   if (heroLink) heroLink.href = hero.link;
 
-  const render = (id, items) => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = items.map(createCard).join('') || '<p style="color:#999;padding:8px">Sem notícias.</p>';
+  // Função auxiliar para pegar notícias únicas para um bloco
+  const getUniqueNews = (count, filterFn = null) => {
+    let filtered = filterFn ? data.filter(filterFn) : data;
+    const unique = [];
+    for (const item of filtered) {
+      if (!renderedLinks.has(item.link)) {
+        unique.push(item);
+        renderedLinks.add(item.link);
+        if (unique.length === count) break;
+      }
+    }
+    return unique;
   };
 
-  render('news-grid', data.slice(1, 9)); // 8 itens para completar 2 linhas de 4
-  render('esportes-grid', data.filter(i => i.category === 'Esportes').slice(0, 4)); // 4 itens
-  render('brasil-grid', data.filter(i => i.category === 'Brasil').slice(0, 4)); // 4 itens
-  render('regional-grid', data.filter(i => i.category === 'Regional').slice(0, 4)); // 4 itens
-  render('facebook-grid', data.filter(i => i.category === 'Facebook').slice(0, 4)); // 4 itens
+  const render = (id, items) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = items.map(createCard).join('') || '<p style="color:#999;padding:8px">Sem mais notícias disponíveis.</p>';
+  };
 
+  // 2. Últimas Notícias (Grid Geral) - Próximas 8 únicas
+  render('news-grid', getUniqueNews(8));
+
+  // 3. Categorias Específicas - Apenas o que ainda não apareceu
+  render('esportes-grid', getUniqueNews(4, i => i.category === 'Esportes'));
+  render('brasil-grid', getUniqueNews(4, i => i.category === 'Brasil'));
+  render('regional-grid', getUniqueNews(4, i => i.category === 'Regional'));
+  render('facebook-grid', getUniqueNews(4, i => i.category === 'Facebook'));
+
+  // 4. Mais Lidas (Sidebar) - Top 3 (Pode repetir do topo pois é um ranking separado)
   const ml = document.getElementById('most-read-list');
   if (ml) {
     ml.innerHTML = data.slice(0, 3).map((item, i) => `
@@ -244,10 +267,12 @@ function renderAll(data) {
       </div>`).join('');
   }
 
+  // 5. Ticker (Rodapé/Topo) - Próximas 10 únicas
   const ticker = document.getElementById('tickerInner');
   if (ticker) {
-    const items = data.slice(0, 10).map(i => `<span>${escapeHtml(i.title)}</span>`).join('');
-    ticker.innerHTML = items + items;
+    const tickerItems = data.filter(i => !renderedLinks.has(i.link)).slice(0, 10);
+    const tickerHtml = tickerItems.map(i => `<span>${escapeHtml(i.title)}</span>`).join('');
+    ticker.innerHTML = tickerHtml + tickerHtml;
   }
 }
 
