@@ -121,19 +121,33 @@ async function loadWeather() {
   try {
     const res = await fetchWithTimeout('/api/weather', 8000);
     const data = await res.json();
+    
+    const condition = data.condition || 'Indisponível';
+    const isNight = new Date().getHours() >= 18 || new Date().getHours() < 6;
+    
     widget.innerHTML = `
-      <div class="clima-row">
-        <div class="clima-icon">⛅</div>
-        <div class="clima-temp">${data.temp}</div>
-        <div class="clima-info"><strong>${data.condition}</strong><span>Guaíra, SP</span></div>
-      </div>
-      ${data.humidity ? `<div class="clima-details"><span>💧 ${data.humidity}</span><span>💨 ${data.wind}</span></div>` : ''}`;
-  } catch (e) {
-    widget.innerHTML = `
-      <div class="clima-row">
-        <div class="clima-icon">❌</div>
-        <div class="clima-info"><strong>Clima indisponível</strong><span>Guaíra, SP</span></div>
+      <div class="weather-premium ${isNight ? 'weather-night' : 'weather-day'}">
+        <div class="wp-header">
+          <span class="wp-loc"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Guaíra</span>
+          <span class="wp-cond">${condition}</span>
+        </div>
+        <div class="wp-main">
+          <div class="wp-temp">${data.temp}<span class="wp-deg">°</span></div>
+        </div>
+        <div class="wp-details">
+          <div class="wp-row">
+            <span>↑ ${data.max}°</span>
+            <span>↓ ${data.min}°</span>
+          </div>
+          <div class="wp-feels">Sensação térmica de ${data.feelsLike}°</div>
+        </div>
+        <div class="wp-footer">
+          <span>💧 ${data.humidity}</span>
+          <span>💨 ${data.wind}</span>
+        </div>
       </div>`;
+  } catch (e) {
+    widget.innerHTML = `<div class="error-state">Clima indisponível</div>`;
   }
 }
 
