@@ -22,7 +22,7 @@ function initYouTubeLite() {
       iframe.setAttribute('frameborder', '0');
       iframe.setAttribute('allowfullscreen', '');
       iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+      iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3`);
       iframe.style.width = '100%';
       iframe.style.height = '100%';
       iframe.style.position = 'absolute';

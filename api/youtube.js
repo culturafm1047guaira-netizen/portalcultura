@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     const fallbackVideos = [
       { videoId: 'cFzhaLcq0Xk', title: 'Programa Raízes Sertanejas (10-05-2026)', thumbnail: 'https://img.youtube.com/vi/cFzhaLcq0Xk/mqdefault.jpg' },
       { videoId: 't9KR7G1ohVU', title: 'Programa Raízes Sertanejas (03-05-2026)', thumbnail: 'https://img.youtube.com/vi/t9KR7G1ohVU/mqdefault.jpg' },
-      { videoId: 'v_p04-KoO0c', title: 'PodCast É Destaque - Ep. 4 - Marcelo Machado', thumbnail: 'https://img.youtube.com/vi/v_p04-KoO0c/mqdefault.jpg' }
+      { videoId: 'MVyyC4qLA5g', title: 'Programa Raízes Sertanejas (29-03-2026)', thumbnail: 'https://img.youtube.com/vi/MVyyC4qLA5g/mqdefault.jpg' }
     ];
 
     if (!apiKey || apiKey === 'SEU_API_KEY_AQUI') {
