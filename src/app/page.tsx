@@ -16,13 +16,6 @@ export default async function Home() {
 
   // Hero = primeira notícia Regional (rádio regional)
   const heroNews = allNews.find(n => n.category === "Regional") || allNews[0];
-  const sideHeroNews = allNews
-    .filter(n => n !== heroNews)
-    .slice(0, 3);
-
-  const mainGridNews = allNews
-    .filter(n => n !== heroNews && !sideHeroNews.includes(n))
-    .slice(0, 6);
 
   const categories = [
     { id: "Regional", label: "Regional", color: "var(--color-cat-regional)" },
@@ -38,49 +31,17 @@ export default async function Home() {
       <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
 
       <main className="container py-8 flex-1">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr,300px] gap-8 xl:gap-12 items-start">
+        {/* Top Section: Hero taking full width */}
+        <div className="mb-12">
+          {heroNews && <Hero news={heroNews} />}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr,320px] gap-8 xl:gap-12 items-start">
           
-          {/* Coluna Principal */}
-          <div>
-            {/* Top Section: Hero + Lista Lateral */}
-            <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-6 xl:gap-8 mb-12 border-b border-border pb-12">
-              {/* Manchete Principal */}
-              <div>
-                {heroNews && <Hero news={heroNews} />}
-              </div>
-              
-              {/* Lista Lateral ao Destaque (Estilo Globo) */}
-              <div className="flex flex-col border-t md:border-t-0 md:border-l border-border md:pl-6 xl:pl-8">
-                <h2 className="font-montserrat font-black text-sm uppercase tracking-widest text-primary mb-2 mt-4 md:mt-0">
-                  Mais Lidas
-                </h2>
-                <div className="flex flex-col">
-                  {sideHeroNews.map((news, i) => (
-                    <NewsCard key={i} {...news} compact={true} />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Últimas Notícias (Grid) */}
-            <div className="mb-12">
-              <div className="flex items-center gap-4 mb-6">
-                <h2 className="font-montserrat text-2xl font-black text-dark-bg uppercase tracking-tight">
-                  Últimas Notícias
-                </h2>
-                <div className="flex-1 border-b border-border" />
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
-                {mainGridNews.map((news, i) => (
-                  <NewsCard key={i} {...news} />
-                ))}
-              </div>
-            </div>
-
-            {/* Categorias Temáticas */}
+          {/* Coluna Principal: Categorias em 3 colunas */}
+          <div className="flex flex-col gap-12">
             {categories.map((cat) => (
-              <div key={cat.id} className="mb-12">
+              <div key={cat.id}>
                 <div className="flex items-center gap-4 mb-6">
                   <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: cat.color }}>
                     {cat.label}
@@ -91,10 +52,10 @@ export default async function Home() {
                   </a>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {allNews
-                    .filter(n => n.category === cat.id)
-                    .slice(0, 4)
+                    .filter(n => n.category === cat.id && n !== heroNews)
+                    .slice(0, 6)
                     .map((news, i) => (
                       <NewsCard key={i} {...news} />
                     ))
@@ -102,9 +63,29 @@ export default async function Home() {
                 </div>
               </div>
             ))}
+
+            {/* Outras Notícias / Últimas */}
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <h2 className="font-montserrat text-2xl font-black text-dark-bg uppercase tracking-tight">
+                  Mais Notícias
+                </h2>
+                <div className="flex-1 border-b border-border" />
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
+                {allNews
+                  .filter(n => n !== heroNews && !categories.some(c => n.category === c.id))
+                  .slice(0, 9)
+                  .map((news, i) => (
+                    <NewsCard key={i} {...news} />
+                  ))
+                }
+              </div>
+            </div>
           </div>
 
-          {/* Sidebar fixa à direita com Clima + Cotações */}
+          {/* Sidebar fixa à direita */}
           <div className="sticky top-24">
             <Sidebar />
           </div>
