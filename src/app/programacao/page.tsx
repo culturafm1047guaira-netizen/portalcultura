@@ -10,17 +10,6 @@ export const metadata = {
 };
 
 export default function ProgramacaoPage() {
-  const schedule = [
-    { time: "05:00 - 08:00", program: "Ronda Policial", host: "Jornalismo Rádio Cultura", desc: "As primeiras notícias do dia com foco em segurança pública e ocorrências da região." },
-    { time: "08:00 - 10:00", program: "Jornal da Cultura", host: "Equipe de Jornalismo", desc: "O principal noticiário da manhã, com entrevistas, debates e os destaques da política e economia local." },
-    { time: "10:00 - 12:00", program: "Manhã 104", host: "Locutores Variados", desc: "Música, entretenimento e interatividade para alegrar a sua manhã." },
-    { time: "12:00 - 13:00", program: "Esporte em Foco", host: "Equipe de Esportes", desc: "Resumo esportivo do dia, com foco nos times da região e campeonatos nacionais." },
-    { time: "13:00 - 16:00", program: "Tarde Sertaneja", host: "Apresentação Especial", desc: "Os maiores sucessos da música sertaneja, de clássicos aos lançamentos." },
-    { time: "16:00 - 18:00", program: "Expresso 104", host: "Equipe Cultura", desc: "Notícias de última hora, trânsito e muita música para o seu fim de tarde." },
-    { time: "18:00 - 19:00", program: "A Voz do Brasil", host: "Governo Federal", desc: "Noticiário oficial dos poderes Executivo, Legislativo e Judiciário." },
-    { time: "19:00 - 22:00", program: "Noite de Sucessos", host: "Locutores Variados", desc: "As músicas mais pedidas pelos ouvintes e interação ao vivo." },
-  ];
-
   return (
     <div className="flex flex-col min-h-screen">
       <TopBar />
@@ -35,19 +24,96 @@ export default function ProgramacaoPage() {
           Grade de Programação
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {schedule.map((item, i) => (
-            <div key={i} className="bg-card-bg border border-border p-6 rounded-lg hover:shadow-md transition-shadow">
-              <div className="text-primary font-black text-xl mb-2">{item.time}</div>
-              <h3 className="font-montserrat text-lg font-bold text-dark-bg mb-1">{item.program}</h3>
-              <div className="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-3">Apresentação: {item.host}</div>
-              <p className="text-[13px] text-text-muted leading-relaxed">{item.desc}</p>
+        <div className="space-y-12 mb-12">
+          {/* Segunda a Sexta */}
+          <section>
+            <h2 className="font-montserrat text-2xl font-black text-primary uppercase tracking-tight mb-6 border-b border-border pb-2">
+              Segunda a Sexta
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ScheduleItem 
+                time="05h às 08h" 
+                title="🎵 Sertanejo Bom Demais" 
+                desc="Programa matutino com musical sertanejo selecionado com clássicos nacionais voltado para o público adulto."
+              />
+              <ScheduleItem 
+                time="08h às 11h" 
+                title="🎶 Manhã 104" 
+                desc="Programa musical moderno e diversificado com locução dinâmica dando ritmo às manhãs dos ouvintes."
+              />
+              <ScheduleItem 
+                time="11h às 12h" 
+                title="📰 Jornal Cultura" 
+                desc="Portal para o conhecimento e a informação de qualidade. Levando as principais notícias do dia, análises profundas e entrevistas dos acontecimentos local, regional, nacional e internacional. Transmitido ao vivo também pelo Facebook."
+              />
+              <ScheduleItem 
+                time="12h às 13h" 
+                title="🎻 Passatempo" 
+                desc="Tradicional programa de flashback trazendo os grandes sucessos dos anos 80, 90 e 2000, tanto da música nacional como internacional."
+              />
+              <ScheduleItem 
+                time="16h às 19h" 
+                title="🤠 Só Modão" 
+                desc="Programa voltado para o musical clássico com o melhor da música sertaneja."
+              />
             </div>
-          ))}
+          </section>
+
+          {/* Sábado */}
+          <section>
+            <h2 className="font-montserrat text-2xl font-black text-primary uppercase tracking-tight mb-6 border-b border-border pb-2">
+              Sábado
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ScheduleItem 
+                time="05h às 08h" 
+                title="🎵 Sertanejo Bom Demais" 
+                desc="Programa matutino com musical sertanejo selecionado com clássicos nacionais voltado para o público adulto."
+              />
+              <ScheduleItem 
+                time="08h às 11h" 
+                title="🎶 As 30 Mais da Semana" 
+                desc="Playlist com as 30 músicas mais pedidas pelos ouvintes durante a semana."
+              />
+              <ScheduleItem 
+                time="14h às 17h" 
+                title="🎸 Viola Sublime Viola" 
+                desc="Programa voltado ao musical sertanejo raíz trazendo os grandes clássicos do cancioneiro nacional."
+              />
+            </div>
+          </section>
+
+          {/* Domingo */}
+          <section>
+            <h2 className="font-montserrat text-2xl font-black text-primary uppercase tracking-tight mb-6 border-b border-border pb-2">
+              Domingo
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ScheduleItem 
+                time="08h às 12h" 
+                title="🌿 Raízes Sertanejas" 
+                desc="Explore as músicas que definem a alma do campo e a essência do povo brasileiro. Seleção cuidadosa de clássicos atemporais e novos sucessos."
+              />
+            </div>
+          </section>
+        </div>
+
+        <div className="bg-primary/5 p-6 rounded-lg border border-primary/20 text-center text-sm text-text-muted">
+          <p>Ouça a Rádio Cultura FM 104.7 ao vivo! Nossa programação pode sofrer alterações sem aviso prévio.</p>
         </div>
       </main>
 
       <Footer />
+    </div>
+  );
+}
+
+function ScheduleItem({ time, title, desc }: { time: string, title: string, desc: string }) {
+  return (
+    <div className="bg-white border border-border p-6 rounded-lg hover:shadow-md transition-shadow">
+      <div className="text-primary font-black text-lg mb-2">{time}</div>
+      <h3 className="font-montserrat text-lg font-bold text-dark-bg mb-2">{title}</h3>
+      <p className="text-[13px] text-text-muted leading-relaxed">{desc}</p>
     </div>
   );
 }
