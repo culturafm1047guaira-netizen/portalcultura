@@ -31,64 +31,69 @@ export default async function Home() {
       <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
 
       <main className="container py-8 flex-1">
-        {/* Top Section: Hero taking full width */}
-        <div className="mb-12">
+        {/* Top Section: Hero taking full width of the grid container */}
+        <div className="w-full mb-12 border-b border-border pb-12">
           {heroNews && <Hero news={heroNews} />}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr,320px] gap-8 xl:gap-12 items-start">
+        {/* Layout: News (Left) + Sidebar (Right) */}
+        <div className="flex flex-col md:flex-row gap-8 xl:gap-12 items-start">
           
           {/* Coluna Principal: Categorias em 3 colunas */}
-          <div className="flex flex-col gap-12">
-            {categories.map((cat) => (
-              <div key={cat.id}>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col gap-16">
+              {categories.map((cat) => (
+                <div key={cat.id}>
+                  <div className="flex items-center gap-4 mb-6">
+                    <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: cat.color }}>
+                      {cat.label}
+                    </h2>
+                    <div className="flex-1 border-b border-border" />
+                    <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: cat.color }}>
+                      Ver todas →
+                    </a>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                    {allNews
+                      .filter(n => n.category === cat.id && n !== heroNews)
+                      .slice(0, 6)
+                      .map((news, i) => (
+                        <NewsCard key={i} {...news} />
+                      ))
+                    }
+                  </div>
+                </div>
+              ))}
+
+              {/* Mais Notícias */}
+              <div>
                 <div className="flex items-center gap-4 mb-6">
-                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: cat.color }}>
-                    {cat.label}
+                  <h2 className="font-montserrat text-2xl font-black text-dark-bg uppercase tracking-tight">
+                    Mais Notícias
                   </h2>
                   <div className="flex-1 border-b border-border" />
-                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: cat.color }}>
-                    Ver todas →
-                  </a>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
                   {allNews
-                    .filter(n => n.category === cat.id && n !== heroNews)
-                    .slice(0, 6)
+                    .filter(n => n !== heroNews && !categories.some(c => n.category === c.id))
+                    .slice(0, 9)
                     .map((news, i) => (
                       <NewsCard key={i} {...news} />
                     ))
                   }
                 </div>
               </div>
-            ))}
-
-            {/* Outras Notícias / Últimas */}
-            <div>
-              <div className="flex items-center gap-4 mb-6">
-                <h2 className="font-montserrat text-2xl font-black text-dark-bg uppercase tracking-tight">
-                  Mais Notícias
-                </h2>
-                <div className="flex-1 border-b border-border" />
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
-                {allNews
-                  .filter(n => n !== heroNews && !categories.some(c => n.category === c.id))
-                  .slice(0, 9)
-                  .map((news, i) => (
-                    <NewsCard key={i} {...news} />
-                  ))
-                }
-              </div>
             </div>
           </div>
 
-          {/* Sidebar fixa à direita */}
-          <div className="sticky top-24">
-            <Sidebar />
-          </div>
+          {/* Sidebar fixa à direita: 320px no desktop */}
+          <aside className="w-full md:w-[320px] shrink-0">
+            <div className="sticky top-24 flex flex-col gap-8">
+              <Sidebar />
+            </div>
+          </aside>
 
         </div>
       </main>
