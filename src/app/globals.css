@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #c00000;          /* A cor principal estilo Globo/G1 (Vermelho forte) */
-  --color-primary-dark: #8b0000;
-  --color-primary-light: #e60000;
+  --color-primary: #003366;          /* Azul Naval Premium */
+  --color-primary-dark: #002244;
+  --color-primary-light: #004488;
+  --color-primary-soft: #e6f0ff;
   
   --color-dark-bg: #111111;         /* Quase preto para cabeçalhos ou destaques escuros */
   --color-darker-bg: #000000;

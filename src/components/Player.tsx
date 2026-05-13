@@ -53,7 +53,7 @@ const Player = () => {
               <div className="flex items-center gap-2 mb-0.5">
                 <span className={`
                   text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse
-                  bg-dark-bg text-white md:bg-red-100 md:text-primary
+                  bg-dark-bg text-white md:bg-primary-soft md:text-primary
                 `}>
                   Ao Vivo
                 </span>
