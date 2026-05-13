@@ -25,14 +25,23 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
   if (lowerCat.includes("esporte")) catColor = "var(--color-cat-esportes)";
   if (lowerCat.includes("regi")) catColor = "var(--color-cat-regional)";
 
+  const imgPlaceholder = (
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-gray-400 font-bold uppercase text-[10px] tracking-widest text-center px-2">
+      <svg className="w-6 h-6 mb-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+      </svg>
+      <span>{source}</span>
+    </div>
+  );
+
   if (compact) {
     return (
       <a href={link} target="_blank" rel="noopener" className="group flex gap-4 py-4 border-editorial">
-        {image && (
-          <div className="relative w-24 h-24 shrink-0 overflow-hidden bg-gray-100 rounded-sm">
+        <div className="relative w-24 h-24 shrink-0 overflow-hidden bg-gray-100 rounded-sm">
+          {image ? (
             <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110" />
-          </div>
-        )}
+          ) : imgPlaceholder}
+        </div>
         <div className="flex flex-col flex-1">
           <span className="text-[10px] font-extrabold uppercase tracking-widest mb-1" style={{ color: catColor }}>
             {category}
@@ -48,11 +57,11 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
 
   return (
     <a href={link} target="_blank" rel="noopener" className="group flex flex-col h-full pb-6">
-      {image && (
-        <div className="relative aspect-video w-full overflow-hidden bg-gray-100 mb-3 rounded-sm">
+      <div className="relative aspect-video w-full overflow-hidden bg-gray-100 mb-3 rounded-sm">
+        {image ? (
           <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105" />
-        </div>
-      )}
+        ) : imgPlaceholder}
+      </div>
       <div className="flex flex-col flex-1">
         <span className="text-[10px] font-extrabold uppercase tracking-widest mb-1.5" style={{ color: catColor }}>
           {category}
