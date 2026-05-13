@@ -63,6 +63,24 @@
   }
 }
 
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 1280px; /* limit the width on ultrawide monitors */
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+}
+
 /* Utilitário para as linhas finas padrão Globo.com */
 @layer utilities {
   .border-editorial {
