@@ -35,7 +35,7 @@ export default async function Home() {
       <TopBar />
       <BreakingNews />
       <Header />
-      <Ticker />
+      <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
 
       <main className="container py-8 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr,300px] gap-8 xl:gap-12 items-start">

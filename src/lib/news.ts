@@ -17,37 +17,40 @@ const parser = new Parser<Record<string, unknown>, FeedItem>({
     item: [
       ["media:content", "mediaContent"],
       ["media:thumbnail", "mediaThumbnail"],
+      ["content:encoded", "contentEncoded"],
     ],
   },
 });
 
-function extractImage(item: FeedItem): string | null {
-  const html = item.content || item.description || "";
+function extractImage(item: any): string | null {
+  const html = item.contentEncoded || item.content || item.description || "";
 
   // 1. <img src=""> (aspas duplas ou simples)
-  const imgDq = html.match(/<img[^>]+src="([^">]+)"/);
-  if (imgDq) return imgDq[1];
-  const imgSq = html.match(/<img[^>]+src='([^'>]+)'/);
-  if (imgSq) return imgSq[1];
+  const imgDq = html.match(/<img[^>]+src="([^">?]+)/);
+  if (imgDq && !imgDq[1].includes('feedburner')) return imgDq[1];
+  
+  const imgSq = html.match(/<img[^>]+src='([^'>?]+)/);
+  if (imgSq && !imgSq[1].includes('feedburner')) return imgSq[1];
 
-  // 2. <media:content url=""> ou <media:thumbnailOrig url=""> dentro do HTML (ACidade ON, etc.)
-  const mediaUrl = html.match(/<media:content[^>]+url="([^">]+)"/);
-  if (mediaUrl) return mediaUrl[1];
-  const thumbUrl = html.match(/<media:thumbnail[^>]+url="([^">]+)"/);
-  if (thumbUrl) return thumbUrl[1];
+  // 2. media:content como campo RSS (G1 e outros)
+  if (item.mediaContent) {
+    if (Array.isArray(item.mediaContent)) {
+      const img = item.mediaContent.find((m: any) => m.$?.type?.includes('image') || m.$?.url);
+      if (img?.$?.url) return img.$.url;
+    } else if (item.mediaContent?.$?.url) {
+      return item.mediaContent.$.url;
+    }
+  }
 
-  // 3. media:content como campo RSS (G1 e outros)
-  if (item.mediaContent?.$?.url) return item.mediaContent.$.url;
-
-  // 4. media:thumbnail como campo RSS
+  // 3. media:thumbnail como campo RSS
   if (item.mediaThumbnail?.$?.url) return item.mediaThumbnail.$.url;
 
-  // 5. enclosure
+  // 4. enclosure
   if (item.enclosure?.link) return item.enclosure.link;
 
-  // 6. Tenta extrair do <figure> ou <picture>
-  const figureImg = html.match(/<figure[^>]*>[\s\S]*?<img[^>]+src="([^">]+)"/);
-  if (figureImg) return figureImg[1];
+  // 5. Tenta extrair de padrões específicos dentro do HTML
+  const mediaUrl = html.match(/url="([^">]+)"/);
+  if (mediaUrl && mediaUrl[1].match(/\.(jpg|jpeg|png|webp|gif)/i)) return mediaUrl[1];
 
   return null;
 }
