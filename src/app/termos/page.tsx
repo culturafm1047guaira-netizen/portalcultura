@@ -2,6 +2,7 @@ import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TopBar from "@/components/TopBar";
+import Link from "next/link";
 
 export const metadata = {
   title: "Termos de Uso — Rádio Cultura FM 104.7",
@@ -15,7 +16,7 @@ export default function TermosPage() {
 
       <main className="container py-8 flex-1">
         <div className="text-[12px] text-gray-400 mb-6">
-          <a href="/" className="text-primary hover:underline">Início</a> &rsaquo; <strong>Termos de Uso</strong>
+          <Link href="/" className="text-primary hover:underline">Início</Link> &rsaquo; <strong>Termos de Uso</strong>
         </div>
 
         <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-lg border border-border shadow-sm">
@@ -47,7 +48,7 @@ export default function TermosPage() {
 
             <section>
               <h2 className="text-xl font-bold text-dark-bg mb-3 mt-8">4. Isenção de Responsabilidade</h2>
-              <p>O portal é fornecido "como está" e "conforme disponível". Não garantimos que o serviço será ininterrupto, livre de erros ou totalmente seguro. As opiniões expressas em colunas e comentários não refletem necessariamente a opinião da Rádio Cultura FM.</p>
+              <p>O portal é fornecido &quot;como está&quot; e &quot;conforme disponível&quot;. Não garantimos que o serviço será ininterrupto, livre de erros ou totalmente seguro. As opiniões expressas em colunas e comentários não refletem necessariamente a opinião da Rádio Cultura FM.</p>
             </section>
           </div>
         </div>

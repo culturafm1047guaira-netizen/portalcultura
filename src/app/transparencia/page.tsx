@@ -2,6 +2,7 @@ import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TopBar from "@/components/TopBar";
+import Link from "next/link";
 
 export const metadata = {
   title: "Transparência — Rádio Cultura FM 104.7",
@@ -15,7 +16,7 @@ export default function TransparenciaPage() {
 
       <main className="container py-8 flex-1">
         <div className="text-[12px] text-gray-400 mb-6">
-          <a href="/" className="text-primary hover:underline">Início</a> &rsaquo; <strong>Transparência Editorial</strong>
+          <Link href="/" className="text-primary hover:underline">Início</Link> &rsaquo; <strong>Transparência Editorial</strong>
         </div>
 
         <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-lg border border-border shadow-sm">

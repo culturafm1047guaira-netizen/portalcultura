@@ -22,6 +22,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://radioculturaguaira.com.br/"),
   title: "Rádio Cultura FM 104.7 — Portal de Notícias | Guaíra, SP",
   description: "Rádio Cultura FM 104.7 — Portal de Notícias de Guaíra, SP. Últimas notícias de Regional, Brasil, Esportes, Saúde, Educação e Justiça. Ouça ao vivo!",
   keywords: ["Rádio Cultura", "FM 104.7", "Guaíra", "notícias", "regional", "Brasil"],
