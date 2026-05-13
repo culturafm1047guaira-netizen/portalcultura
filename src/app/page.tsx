@@ -26,7 +26,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <TopBar />
-      <BreakingNews />
+      <BreakingNews newsTitle={allNews[0]?.title} />
       <Header />
       <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
 

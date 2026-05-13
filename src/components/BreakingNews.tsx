@@ -2,10 +2,14 @@
 
 import React, { useState } from "react";
 
-const BreakingNews = () => {
+interface BreakingNewsProps {
+  newsTitle?: string;
+}
+
+const BreakingNews = ({ newsTitle }: BreakingNewsProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  if (!isVisible) return null;
+  if (!isVisible || !newsTitle) return null;
 
   return (
     <div className="bg-primary text-white py-2.5 text-[13px] font-semibold shadow-inner" role="alert" aria-live="polite">
@@ -14,7 +18,7 @@ const BreakingNews = () => {
           Urgente
         </span>
         <span className="flex-1 truncate">
-          Incêndio em área rural de Guaíra mobiliza bombeiros neste momento. Acompanhe a cobertura completa.
+          {newsTitle}
         </span>
         <button 
           onClick={() => setIsVisible(false)}
