@@ -69,12 +69,34 @@ const FEEDS = [
   { url: 'https://www.guairanews.com/feed/', source: 'Guaira News', category: 'Regional' },
 ];
 
+async function fetchOpenGraphImage(url: string): Promise<string | null> {
+  if (!url || url === "#") return null;
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2000); // 2s timeout
+    const response = await fetch(url, { signal: controller.signal });
+    const html = await response.text();
+    clearTimeout(timeout);
+    
+    const ogImage = html.match(/<meta[^>]+property="og:image"[^>]+content="([^">]+)"/i) ||
+                    html.match(/<meta[^>]+content="([^">]+)"[^>]+property="og:image"/i);
+    
+    if (ogImage && ogImage[1]) {
+      // Decode entities if any
+      return ogImage[1].replace(/&amp;/g, '&');
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function getNews() {
   const results = await Promise.allSettled(
     FEEDS.map(async (feed) => {
       try {
         const data = await parser.parseURL(feed.url);
-        return (data.items || []).slice(0, 6).map(item => {
+        return (data.items || []).slice(0, 10).map(item => {
           return {
             title: item.title || "",
             link: item.link || "#",
@@ -98,5 +120,19 @@ export async function getNews() {
     }
   });
   
-  return allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+  const sortedNews = allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+
+  // Enrich top news that are missing images (limit to top 15 to avoid slow loading)
+  const enrichedNews = await Promise.all(
+    sortedNews.slice(0, 15).map(async (news) => {
+      if (!news.image) {
+        const ogImg = await fetchOpenGraphImage(news.link);
+        if (ogImg) news.image = ogImg;
+      }
+      return news;
+    })
+  );
+
+  // Return enriched top news + rest of news
+  return [...enrichedNews, ...sortedNews.slice(15)];
 }
