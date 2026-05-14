@@ -42,14 +42,6 @@ const Header = () => {
                 priority
               />
             </div>
-            <div className="hidden sm:flex flex-col ml-3 border-l border-gray-200 pl-3">
-            <span className="font-montserrat text-2xl md:text-3xl font-black text-primary leading-none uppercase tracking-tight group-hover:text-primary-dark transition-colors">
-              Cultura FM
-            </span>
-            <span className="text-xs md:text-sm text-text-muted uppercase font-semibold tracking-wider">
-              Guaíra, SP
-            </span>
-            </div>
           </Link>
 
           <nav className={`
