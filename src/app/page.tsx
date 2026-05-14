@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TopBar from "@/components/TopBar";
@@ -35,6 +36,19 @@ export default async function Home() {
         {/* Top Section: Hero taking full width of the grid container */}
         <div className="w-full mb-12 border-b border-border pb-12">
           {heroNews && <Hero news={heroNews} />}
+        </div>
+
+        {/* Banner Publicitário */}
+        <div className="w-full mb-12">
+          <div className="relative w-full aspect-[21/9] sm:aspect-[4/1] overflow-hidden rounded-sm bg-gray-100 border border-border">
+            <Image 
+              src="/img/banner-festa-peao.jpg" 
+              alt="Publicidade" 
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
         </div>
 
         {/* Layout: News (Left) + Sidebar (Right) */}
