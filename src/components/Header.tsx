@@ -33,7 +33,7 @@ const Header = () => {
           </button>
 
           <Link href="/" className="flex items-center shrink-0 group">
-            <div className="relative h-12 w-24 sm:h-14 sm:w-28 md:h-16 md:w-32 transition-transform duration-300 group-hover:scale-105">
+            <div className="relative h-24 w-48 sm:h-28 sm:w-56 md:h-32 md:w-64 transition-transform duration-300 group-hover:scale-105">
               <Image 
                 src="/img/logo_oficial.png" 
                 alt="Rádio Cultura" 
@@ -43,12 +43,12 @@ const Header = () => {
               />
             </div>
             <div className="hidden sm:flex flex-col ml-3 border-l border-gray-200 pl-3">
-              <span className="font-montserrat text-lg md:text-xl font-black text-primary leading-none uppercase tracking-tight group-hover:text-primary-dark transition-colors">
-                Cultura FM
-              </span>
-              <span className="text-[10px] md:text-xs text-text-muted uppercase font-semibold tracking-wider">
-                Guaíra, SP
-              </span>
+            <span className="font-montserrat text-2xl md:text-3xl font-black text-primary leading-none uppercase tracking-tight group-hover:text-primary-dark transition-colors">
+              Cultura FM
+            </span>
+            <span className="text-xs md:text-sm text-text-muted uppercase font-semibold tracking-wider">
+              Guaíra, SP
+            </span>
             </div>
           </Link>
 
