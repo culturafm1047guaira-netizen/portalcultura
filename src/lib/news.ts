@@ -67,6 +67,7 @@ const FEEDS = [
   { url: 'https://www.jornaldebarretos.com.br/feed', source: 'Jornal de Barretos', category: 'Regional' },
   { url: 'https://www.odiarioonline.com.br/feed', source: 'O Diário Online', category: 'Regional' },
   { url: 'https://www.guairanews.com/feed/', source: 'Guaira News', category: 'Regional' },
+  { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook', category: 'Facebook' },
 ];
 
 async function fetchOpenGraphImage(url: string): Promise<string | null> {
