@@ -26,35 +26,35 @@ function extractImage(item: any): string | null {
   const html = item.contentEncoded || item.content || item.description || "";
 
   // 1. <img src=""> (aspas duplas ou simples)
-  const imgDq = html.match(/<img[^>]+src="([^">?]+)/);
-  if (imgDq && !imgDq[1].includes('feedburner')) return imgDq[1];
+  const imgDq = html.match(/<img[^>]+src="([^">]+)"/);
+  if (imgDq && !imgDq[1].includes('feedburner')) return imgDq[1].replace(/&amp;/g, '&');
   
-  const imgSq = html.match(/<img[^>]+src='([^'>?]+)/);
-  if (imgSq && !imgSq[1].includes('feedburner')) return imgSq[1];
+  const imgSq = html.match(/<img[^>]+src='([^'>]+)'/);
+  if (imgSq && !imgSq[1].includes('feedburner')) return imgSq[1].replace(/&amp;/g, '&');
 
   // 2. media:content como campo RSS (G1 e outros)
   if (item.mediaContent) {
     if (Array.isArray(item.mediaContent)) {
       const img = item.mediaContent.find((m: any) => m.$?.type?.includes('image') || m.$?.url);
-      if (img?.$?.url) return img.$.url;
+      if (img?.$?.url) return img.$.url.replace(/&amp;/g, '&');
     } else if (item.mediaContent?.$?.url) {
-      return item.mediaContent.$.url;
+      return item.mediaContent.$.url.replace(/&amp;/g, '&');
     }
   }
 
   // 3. media:thumbnail como campo RSS
-  if (item.mediaThumbnail?.$?.url) return item.mediaThumbnail.$.url;
+  if (item.mediaThumbnail?.$?.url) return item.mediaThumbnail.$.url.replace(/&amp;/g, '&');
 
   // 4. enclosure
-  if (item.enclosure?.link) return item.enclosure.link;
+  if (item.enclosure?.link) return item.enclosure.link.replace(/&amp;/g, '&');
 
   // 5. Tenta extrair de padrões específicos do rss.app / facebook
   const rssAppImg = html.match(/<img[^>]+src="([^">]+rss\.app[^">]+)"/);
-  if (rssAppImg) return rssAppImg[1];
+  if (rssAppImg) return rssAppImg[1].replace(/&amp;/g, '&');
 
   // 6. Tenta extrair qualquer imagem que não seja de rastreamento
   const anyImg = html.match(/<img[^>]+src="([^">]+\.(jpg|jpeg|png|webp|gif)[^">]*)"/i);
-  if (anyImg && !anyImg[1].includes('analytics') && !anyImg[1].includes('tracking')) return anyImg[1];
+  if (anyImg && !anyImg[1].includes('analytics') && !anyImg[1].includes('tracking')) return anyImg[1].replace(/&amp;/g, '&');
 
   return null;
 }
