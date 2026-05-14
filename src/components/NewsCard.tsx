@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 
 interface NewsCardProps {
@@ -9,10 +10,12 @@ interface NewsCardProps {
   source: string;
   category: string;
   pubDate: string;
-  compact?: boolean; // Permite layout de lista lateral
+  compact?: boolean;
 }
 
 const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, compact = false }: NewsCardProps) => {
+  const [imgError, setImgError] = useState(false);
+  
   const formattedDate = new Date(pubDate).toLocaleTimeString("pt-BR", {
     hour: "2-digit",
     minute: "2-digit",
@@ -24,6 +27,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
   if (lowerCat.includes("brasil")) catColor = "var(--color-cat-brasil)";
   if (lowerCat.includes("esporte")) catColor = "var(--color-cat-esportes)";
   if (lowerCat.includes("regi")) catColor = "var(--color-cat-regional)";
+  if (lowerCat.includes("facebook")) catColor = "#1877F2";
 
   const imgPlaceholder = (
     <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-gray-400 font-bold uppercase text-[10px] tracking-widest text-center px-2">
@@ -38,8 +42,15 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
     return (
       <a href={link} target="_blank" rel="noopener" className="group flex gap-4 py-4 border-editorial">
         <div className="relative w-24 h-24 shrink-0 overflow-hidden bg-gray-100 rounded-sm">
-          {image ? (
-            <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110" />
+          {image && !imgError ? (
+            <Image 
+              src={image} 
+              alt={title} 
+              fill 
+              style={{ objectFit: "cover" }} 
+              className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110" 
+              onError={() => setImgError(true)}
+            />
           ) : imgPlaceholder}
         </div>
         <div className="flex flex-col flex-1">
@@ -58,8 +69,15 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
   return (
     <a href={link} target="_blank" rel="noopener" className="group flex flex-col h-full pb-6">
       <div className="relative aspect-video w-full overflow-hidden bg-gray-100 mb-3 rounded-sm">
-        {image ? (
-          <Image src={image} alt={title} fill style={{ objectFit: "cover" }} className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105" />
+        {image && !imgError ? (
+          <Image 
+            src={image} 
+            alt={title} 
+            fill 
+            style={{ objectFit: "cover" }} 
+            className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105" 
+            onError={() => setImgError(true)}
+          />
         ) : imgPlaceholder}
       </div>
       <div className="flex flex-col flex-1">

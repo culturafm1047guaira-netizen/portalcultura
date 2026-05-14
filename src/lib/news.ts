@@ -48,9 +48,13 @@ function extractImage(item: any): string | null {
   // 4. enclosure
   if (item.enclosure?.link) return item.enclosure.link;
 
-  // 5. Tenta extrair de padrões específicos dentro do HTML
-  const mediaUrl = html.match(/url="([^">]+)"/);
-  if (mediaUrl && mediaUrl[1].match(/\.(jpg|jpeg|png|webp|gif)/i)) return mediaUrl[1];
+  // 5. Tenta extrair de padrões específicos do rss.app / facebook
+  const rssAppImg = html.match(/<img[^>]+src="([^">]+rss\.app[^">]+)"/);
+  if (rssAppImg) return rssAppImg[1];
+
+  // 6. Tenta extrair qualquer imagem que não seja de rastreamento
+  const anyImg = html.match(/<img[^>]+src="([^">]+\.(jpg|jpeg|png|webp|gif)[^">]*)"/i);
+  if (anyImg && !anyImg[1].includes('analytics') && !anyImg[1].includes('tracking')) return anyImg[1];
 
   return null;
 }

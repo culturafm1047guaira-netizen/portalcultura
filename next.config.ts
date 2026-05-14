@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "www.jornaldebarretos.com.br" },
       { protocol: "https", hostname: "www.odiarioonline.com.br" },
       { protocol: "https", hostname: "www.guairanews.com" },
+      { protocol: "https", hostname: "rss.app" },
+      { protocol: "https", hostname: "*.rss.app" },
+      { protocol: "https", hostname: "*.fbcdn.net" },
     ],
   },
 };
