@@ -83,7 +83,7 @@ const Player = () => {
 
       <audio 
         ref={audioRef} 
-        src="https://servidor31.brlogic.com:8032/live" 
+        src="https://ice.fabricahost.com.br/radioculturaguaira" 
         preload="none"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
