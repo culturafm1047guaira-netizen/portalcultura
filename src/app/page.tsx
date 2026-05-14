@@ -40,12 +40,13 @@ export default async function Home() {
 
         {/* Banner Publicitário */}
         <div className="w-full mb-12">
-          <div className="relative w-full aspect-[21/9] sm:aspect-[4/1] overflow-hidden rounded-sm bg-gray-100 border border-border">
+          <div className="relative w-full overflow-hidden rounded-sm border border-border bg-white">
             <Image 
               src="/img/banner-festa-peao.jpg" 
               alt="Publicidade" 
-              fill
-              className="object-cover"
+              width={1200}
+              height={300}
+              className="w-full h-auto object-contain"
               priority
             />
           </div>
