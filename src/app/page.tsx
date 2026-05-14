@@ -58,7 +58,7 @@ export default async function Home() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
                     {allNews
                       .filter(n => n.category === cat.id && n !== heroNews)
-                      .slice(0, cat.id === "Facebook" ? 3 : 6)
+                      .slice(0, 3)
                       .map((news, i) => (
                         <NewsCard key={i} {...news} />
                       ))
@@ -79,7 +79,7 @@ export default async function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
                   {allNews
                     .filter(n => n !== heroNews && !categories.some(c => n.category === c.id))
-                    .slice(0, 9)
+                    .slice(0, 3)
                     .map((news, i) => (
                       <NewsCard key={i} {...news} />
                     ))
