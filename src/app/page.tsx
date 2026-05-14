@@ -53,7 +53,7 @@ export default async function Home() {
           </div>
         </div>
 
-        <VideoGallery />
+
 
         {/* Layout: News (Left) + Sidebar (Right) */}
         <div className="flex flex-col md:flex-row gap-8 xl:gap-12 items-start">
@@ -114,6 +114,10 @@ export default async function Home() {
             </div>
           </aside>
 
+        </div>
+
+        <div className="mt-16 pt-12 border-t border-border">
+          <VideoGallery />
         </div>
       </main>
 
