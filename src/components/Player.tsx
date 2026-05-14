@@ -68,12 +68,15 @@ const Player = () => {
           </div>
 
           {isPlaying && (
-            <div className="hidden sm:flex items-center gap-1 h-5 opacity-80 md:opacity-100">
-              {[1, 2, 3, 4, 5].map(i => (
+            <div className="flex items-center gap-1.5 h-6">
+              {[1, 2, 3, 4, 5, 6].map(i => (
                 <div 
                   key={i}
-                  className="w-1 rounded-full animate-[vis-anim_0.5s_infinite_alternate] bg-white md:bg-primary"
-                  style={{ animationDelay: `${i * 0.1}s` }}
+                  className="w-1.5 rounded-full animate-[vis-anim_0.6s_infinite_alternate] bg-white md:bg-primary shadow-[0_0_8px_rgba(255,255,255,0.5)] md:shadow-none"
+                  style={{ 
+                    animationDelay: `${i * 0.12}s`,
+                    height: `${Math.random() * 10 + 10}px` 
+                  }}
                 />
               ))}
             </div>

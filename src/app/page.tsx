@@ -8,6 +8,7 @@ import BreakingNews from "@/components/BreakingNews";
 import Hero from "@/components/Hero";
 import NewsCard from "@/components/NewsCard";
 import Sidebar from "@/components/Sidebar";
+import VideoGallery from "@/components/VideoGallery";
 import { getNews } from "@/lib/news";
 
 export const revalidate = 600;
@@ -51,6 +52,8 @@ export default async function Home() {
             />
           </div>
         </div>
+
+        <VideoGallery />
 
         {/* Layout: News (Left) + Sidebar (Right) */}
         <div className="flex flex-col md:flex-row gap-8 xl:gap-12 items-start">
