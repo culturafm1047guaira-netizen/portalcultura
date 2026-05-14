@@ -78,7 +78,7 @@ async function fetchOpenGraphImage(url: string): Promise<string | null> {
   if (!url || url === "#") return null;
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2000); // 2s timeout
+    const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
     const response = await fetch(url, { signal: controller.signal });
     const html = await response.text();
     clearTimeout(timeout);
