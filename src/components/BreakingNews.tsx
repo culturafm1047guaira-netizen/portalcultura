@@ -14,7 +14,7 @@ const BreakingNews = ({ newsTitle }: BreakingNewsProps) => {
   return (
     <div className="bg-primary text-white py-2.5 text-[13px] font-semibold shadow-inner" role="alert" aria-live="polite">
       <div className="container flex items-center gap-4">
-        <span className="bg-white text-primary px-2.5 py-0.5 rounded font-black text-[10px] uppercase tracking-wider shrink-0">
+        <span className="bg-white text-primary px-2.5 py-0.5 rounded font-black text-[10px] uppercase tracking-wider shrink-0 animate-flash-red">
           Urgente
         </span>
         <span className="flex-1 truncate">
