@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "rss.app" },
       { protocol: "https", hostname: "*.rss.app" },
       { protocol: "https", hostname: "*.fbcdn.net" },
+      { protocol: "https", hostname: "s3.us-east-1.wasabisys.com" },
     ],
   },
 };
