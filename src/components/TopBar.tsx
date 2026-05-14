@@ -25,7 +25,7 @@ const TopBar = () => {
   return (
     <div className="bg-darker-bg py-2 border-b border-white/5 text-[12px]">
       <div className="container flex justify-between items-center">
-        <div className="flex gap-5 items-center text-white/60">
+        <div className="flex gap-5 items-center text-white">
           <span className="flex items-center gap-1.5">
             ✉ <a href="mailto:radioculturadeguaira@gmail.com" className="hover:text-white transition-colors">radioculturadeguaira@gmail.com</a>
           </span>
@@ -34,11 +34,11 @@ const TopBar = () => {
           </span>
           <span className="hidden md:inline">{dateTime}</span>
         </div>
-        <div className="flex gap-5 items-center text-white/60">
+        <div className="flex gap-5 items-center text-white">
           <button className="bg-none border border-white/20 px-2 py-1 rounded text-[10px] hover:bg-white/10 transition-colors">
             Modo Noturno
           </button>
-          <span className="text-primary font-bold animate-pulse">● AO VIVO</span>
+          <span className="text-white font-bold animate-pulse">● AO VIVO</span>
           <div className="hidden sm:flex gap-4">
             <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" rel="noopener" className="hover:text-white transition-colors">Facebook</a>
             <a href="https://www.instagram.com/culturafm104.7" target="_blank" rel="noopener" className="hover:text-white transition-colors">Instagram</a>

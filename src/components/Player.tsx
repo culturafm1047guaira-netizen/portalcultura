@@ -61,7 +61,7 @@ const Player = () => {
                   Cultura FM
                 </strong>
               </div>
-              <span className="text-[11px] font-medium opacity-80 md:text-gray-500">
+              <span className="text-[11px] font-medium md:text-gray-500">
                 {isPlaying ? "Sintonizado em Guaíra, SP" : "Clique no play para ouvir"}
               </span>
             </div>

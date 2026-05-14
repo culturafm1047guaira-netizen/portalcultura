@@ -17,10 +17,10 @@ const Ticker = ({ newsTitles = [] }: TickerProps) => {
         Últimas
       </div>
       <div className="flex-1 overflow-hidden relative">
-        <div className="flex gap-14 whitespace-nowrap animate-[ticker-scroll_60s_linear_infinite] text-[12px] text-white/90 px-4 hover:[animation-play-state:paused]">
+        <div className="flex gap-14 whitespace-nowrap animate-[ticker-scroll_60s_linear_infinite] text-[12px] text-white px-4 hover:[animation-play-state:paused]">
           {displayTitles.concat(displayTitles).map((title, i) => (
             <span key={i} className="flex items-center gap-2">
-              <span className="text-white/40">•</span> {title}
+              <span className="text-white">•</span> {title}
             </span>
           ))}
         </div>
