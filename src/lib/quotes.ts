@@ -1,49 +1,102 @@
-async function fetchFinancials() {
-  try {
-    const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,XAU-BRL,BRENT-USD', { 
-      next: { revalidate: 1800 } // 30 min
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    
-    const usd = parseFloat(data.USDBRL?.bid || 0);
-    const eur = parseFloat(data.EURBRL?.bid || 0);
-    const xau = parseFloat(data.XAUBRL?.bid || 0);
-    const brentUsd = parseFloat(data.BRENTUSD?.bid || 0);
-    const brentBrl = brentUsd * usd;
+function formatChange(pctChange: string | undefined): string {
+  if (!pctChange) return '0,00%'
+  const num = parseFloat(pctChange)
+  const prefix = num > 0 ? '+' : ''
+  const formatted = num === 0 ? '0,00' : pctChange.replace('.', ',')
+  return `${prefix}${formatted}%`
+}
 
-    return [
-      {
-        label: 'Dólar Americano',
-        val: `R$ ${usd.toFixed(2).replace('.', ',')}`,
-        trend: parseFloat(data.USDBRL?.pctChange || 0) >= 0 ? 'up' : 'down',
-        change: `${parseFloat(data.USDBRL?.pctChange || 0) > 0 ? '+' : ''}${data.USDBRL?.pctChange}%`
-      },
-      {
-        label: 'Euro',
-        val: `R$ ${eur.toFixed(2).replace('.', ',')}`,
-        trend: parseFloat(data.EURBRL?.pctChange || 0) >= 0 ? 'up' : 'down',
-        change: `${parseFloat(data.EURBRL?.pctChange || 0) > 0 ? '+' : ''}${data.EURBRL?.pctChange}%`
-      },
-      {
-        label: 'Ouro (g)',
-        val: `R$ ${xau.toFixed(2).replace('.', ',')}`,
-        trend: parseFloat(data.XAUBRL?.pctChange || 0) >= 0 ? 'up' : 'down',
-        change: `${parseFloat(data.XAUBRL?.pctChange || 0) > 0 ? '+' : ''}${data.XAUBRL?.pctChange}%`
-      },
-      {
-        label: 'Petróleo Brent',
-        val: `R$ ${brentBrl.toFixed(2).replace('.', ',')}`,
-        trend: parseFloat(data.BRENTUSD?.pctChange || 0) >= 0 ? 'up' : 'down',
-        change: `${parseFloat(data.BRENTUSD?.pctChange || 0) > 0 ? '+' : ''}${data.BRENTUSD?.pctChange}%`
-      }
-    ];
-  } catch (e) {
-    return [];
+function formatTrend(pctChange: string | undefined): 'up' | 'down' {
+  return parseFloat(pctChange || '0') >= 0 ? 'up' : 'down'
+}
+
+function formatBRL(value: number): string {
+  return `R$ ${value.toFixed(2).replace('.', ',')}`
+}
+
+async function fetchBcbRate(currencyCode: string): Promise<number | null> {
+  try {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const dateStr = `${month}-${day}-${year}`;
+
+    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaDia(moeda=@moeda,dataCotacao=@dataCotacao)?@moeda='${currencyCode}'&@dataCotacao='${dateStr}'&$format=json&$top=1`;
+
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.value?.length > 0) {
+      return parseFloat(data.value[0].cotacaoCompra);
+    }
+    return null;
+  } catch {
+    return null;
   }
 }
 
-async function fetchCepeaIndicator(name: string, slug: string) {
+async function fetchFinancials() {
+  let usd = 0, eur = 0, xau = 0, brentUsd = 0;
+  let usdPct: string | undefined, eurPct: string | undefined, xauPct: string | undefined, brentPct: string | undefined;
+
+  try {
+    const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,XAU-BRL,XBR-USD', { 
+      next: { revalidate: 1800 }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      usd = parseFloat(data.USDBRL?.bid || '0');
+      eur = parseFloat(data.EURBRL?.bid || '0');
+      xau = parseFloat(data.XAUBRL?.bid || '0');
+      brentUsd = parseFloat(data.XBRUSD?.bid || '0');
+      usdPct = data.USDBRL?.pctChange;
+      eurPct = data.EURBRL?.pctChange;
+      xauPct = data.XAUBRL?.pctChange;
+      brentPct = data.XBRUSD?.pctChange;
+    }
+  } catch {}
+
+  if (!usd || !eur) {
+    const [bcbUsd, bcbEur] = await Promise.all([
+      !usd ? fetchBcbRate('USD') : Promise.resolve(null),
+      !eur ? fetchBcbRate('EUR') : Promise.resolve(null)
+    ]);
+    if (bcbUsd) { usd = bcbUsd; usdPct = undefined; }
+    if (bcbEur) { eur = bcbEur; eurPct = undefined; }
+  }
+
+  const brentBrl = brentUsd * usd;
+
+  return [
+    {
+      label: 'Dólar Americano',
+      val: formatBRL(usd),
+      trend: formatTrend(usdPct),
+      change: formatChange(usdPct)
+    },
+    {
+      label: 'Euro',
+      val: formatBRL(eur),
+      trend: formatTrend(eurPct),
+      change: formatChange(eurPct)
+    },
+    {
+      label: 'Ouro (g)',
+      val: formatBRL(xau),
+      trend: formatTrend(xauPct),
+      change: formatChange(xauPct)
+    },
+    {
+      label: 'Petróleo Brent',
+      val: formatBRL(brentBrl),
+      trend: formatTrend(brentPct),
+      change: formatChange(brentPct)
+    }
+  ];
+}
+
+async function fetchCepeaIndicator(name: string, slug: string): Promise<{ label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string } | null> {
   try {
     const res = await fetch(`https://www.cepea.esalq.usp.br/br/indicador/${slug}.aspx`, {
       headers: { 'User-Agent': 'Mozilla/5.0' },
@@ -74,7 +127,7 @@ export async function getQuotesData() {
     fetchCepeaIndicator('Milho (sc)', 'milho')
   ]);
 
-  const quotes = [...financials];
+  const quotes: { label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string }[] = [...financials];
   if (soja) quotes.push(soja);
   if (milho) quotes.push(milho);
 
