@@ -36,7 +36,11 @@ async function fetchBcbRate(currencyCode: string): Promise<number | null> {
   }
 }
 
-async function fetchFinancials() {
+interface QuoteItem {
+  label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string
+}
+
+async function fetchFinancials(): Promise<QuoteItem[]> {
   let usd = 0, eur = 0, xau = 0, brentUsd = 0;
   let usdPct: string | undefined, eurPct: string | undefined, xauPct: string | undefined, brentPct: string | undefined;
 
@@ -65,6 +69,8 @@ async function fetchFinancials() {
     if (bcbUsd) { usd = bcbUsd; usdPct = undefined; }
     if (bcbEur) { eur = bcbEur; eurPct = undefined; }
   }
+
+  if (!usd && !eur && !xau && !brentUsd) return [];
 
   const brentBrl = brentUsd * usd;
 
@@ -96,7 +102,7 @@ async function fetchFinancials() {
   ];
 }
 
-async function fetchCepeaIndicator(name: string, slug: string): Promise<{ label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string } | null> {
+async function fetchCepeaIndicator(name: string, slug: string): Promise<QuoteItem | null> {
   try {
     const res = await fetch(`https://www.cepea.esalq.usp.br/br/indicador/${slug}.aspx`, {
       headers: { 'User-Agent': 'Mozilla/5.0' },
@@ -127,12 +133,11 @@ export async function getQuotesData() {
     fetchCepeaIndicator('Milho (sc)', 'milho')
   ]);
 
-  const quotes: { label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string }[] = [...financials];
+  const quotes: QuoteItem[] = [...financials];
   if (soja) quotes.push(soja);
   if (milho) quotes.push(milho);
 
-  // If empty, return placeholders but try to avoid
-  if (quotes.length === 0) {
+  if (quotes.length === 0 || quotes.every(q => q.val === 'R$ 0,00')) {
     return [
         { label: "Dólar Americano", val: "R$ 5,15", trend: "up", change: "+0.12%" },
         { label: "Euro", val: "R$ 5,48", trend: "down", change: "-0.08%" },
