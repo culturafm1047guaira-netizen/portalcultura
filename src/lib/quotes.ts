@@ -23,9 +23,14 @@ function fmtTrend(val: number | undefined | null): 'up' | 'down' | 'stable' {
 
 async function fetchAwesomeFinancials(): Promise<{ usd: number; eur: number; xau: number; usdPct: number | null; eurPct: number | null; xauPct: number | null } | null> {
   try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
     const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,XAU-BRL', {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
       next: { revalidate: 1800 }
     })
+    clearTimeout(timeout)
     if (!res.ok) return null
     const data = await res.json()
     return {
@@ -39,26 +44,17 @@ async function fetchAwesomeFinancials(): Promise<{ usd: number; eur: number; xau
   } catch { return null }
 }
 
-async function fetchBCBFinancials(): Promise<{ usd: number; eur: number } | null> {
+async function fetchFallbackFinancials(): Promise<{ usd: number; eur: number } | null> {
   try {
-    const now = new Date()
-    const day = String(now.getDate()).padStart(2, '0')
-    const month = String(now.getMonth() + 1).padStart(2, '0')
-    const year = now.getFullYear()
-    let usd = 0, eur = 0
-    for (const code of ['USD', 'EUR']) {
-      const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaDia(moeda=@moeda,dataCotacao=@dataCotacao)?@moeda='${code}'&@dataCotacao='${month}-${day}-${year}'&$format=json&$top=1`
-      const r = await fetch(url, { next: { revalidate: 3600 } })
-      if (r.ok) {
-        const j = await r.json()
-        if (j.value?.length > 0) {
-          const v = parseFloat(j.value[0].cotacaoCompra)
-          if (code === 'USD') usd = v
-          if (code === 'EUR') eur = v
-        }
+    const res = await fetch('https://open.er-api.com/v6/latest/USD', { next: { revalidate: 3600 } })
+    if (res.ok) {
+      const data = await res.json()
+      if (data?.rates?.BRL) {
+        const usd = data.rates.BRL
+        const eur = data.rates.BRL / data.rates.EUR
+        return { usd, eur }
       }
     }
-    if (usd > 0 || eur > 0) return { usd, eur }
     return null
   } catch { return null }
 }
@@ -96,10 +92,10 @@ async function fetchFinancials(): Promise<QuoteItem[]> {
   }
 
   if (usd === 0 || eur === 0) {
-    const bcb = await fetchBCBFinancials()
-    if (bcb) {
-      if (usd === 0) usd = bcb.usd
-      if (eur === 0) eur = bcb.eur
+    const fallback = await fetchFallbackFinancials()
+    if (fallback) {
+      if (usd === 0) usd = fallback.usd
+      if (eur === 0) eur = fallback.eur
     }
   }
 
