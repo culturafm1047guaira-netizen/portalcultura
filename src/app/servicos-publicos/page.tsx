@@ -30,7 +30,7 @@ const categories: ServiceCategory[] = [
       { name: "CND Estadual SP", href: "https://www10.fazenda.sp.gov.br/CertidaoNegativaDeb/Pages/EmissaoCertidaoNegativa.aspx", desc: "Certidão Negativa de Débitos do Estado de São Paulo." },
       { name: "CND Trabalhista", href: "https://cndt-certidao.tst.jus.br/inicio.faces", desc: "Certidão Negativa de Débitos Trabalhistas (TST)." },
       { name: "Certidão Regularidade FGTS", href: "https://consulta-crf.caixa.gov.br/consultacrf/pages/consultaEmpregador.jsf", desc: "Certidão de Regularidade do FGTS (Caixa)." },
-      { name: "Antecedentes Criminais", href: "https://delegaciadigital.policia-civil.sp.gov.br/pagina-inicial", desc: "Atestado de Antecedentes Criminais (Polícia Civil SP)." },
+      { name: "Antecedentes Criminais", href: "https://www2.ssp.sp.gov.br/aacweb/carrega-iframe", desc: "Atestado de Antecedentes Criminais (Polícia Civil SP)." },
     ],
   },
   {
@@ -39,7 +39,7 @@ const categories: ServiceCategory[] = [
     items: [
       { name: "Consulta CNPJ", href: "https://solucoes.receita.fazenda.gov.br/servicos/cnpjreva/cnpjreva_solicitacao.asp", desc: "Consultar dados cadastrais de CNPJ na Receita Federal." },
       { name: "Busca CEP Correios", href: "https://www.buscacep.correios.com.br/", desc: "Buscar endereço por CEP no site dos Correios." },
-      { name: "B.O. Online SP", href: "https://www2.ssp.sp.gov.br/aacweb/carrega-iframe", desc: "Registrar Boletim de Ocorrência online (SSP SP)." },
+      { name: "B.O. Online SP", href: "https://delegaciadigital.policia-civil.sp.gov.br/pagina-inicial", desc: "Registrar Boletim de Ocorrência online (SSP SP)." },
     ],
   },
   {
@@ -108,13 +108,27 @@ export default function ServicosPublicosPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {cat.items.map((item) => (
+                {cat.items.map((item, idx) => {
+                  const colors = [
+                    "bg-blue-50 border-blue-200 hover:border-blue-400",
+                    "bg-green-50 border-green-200 hover:border-green-400",
+                    "bg-purple-50 border-purple-200 hover:border-purple-400",
+                    "bg-orange-50 border-orange-200 hover:border-orange-400",
+                    "bg-pink-50 border-pink-200 hover:border-pink-400",
+                    "bg-teal-50 border-teal-200 hover:border-teal-400",
+                    "bg-indigo-50 border-indigo-200 hover:border-indigo-400",
+                    "bg-yellow-50 border-yellow-200 hover:border-yellow-400",
+                    "bg-red-50 border-red-200 hover:border-red-400",
+                    "bg-cyan-50 border-cyan-200 hover:border-cyan-400",
+                  ];
+                  const c = colors[idx % colors.length];
+                  return (
                   <a
                     key={item.name}
                     href={item.href}
                     target="_blank"
                     rel="noopener"
-                    className="bg-white border border-border p-5 rounded-lg hover:shadow-lg hover:border-primary/30 transition-all duration-200 group flex flex-col"
+                    className={`${c} border p-5 rounded-lg hover:shadow-lg transition-all duration-200 group flex flex-col`}
                   >
                     <h3 className="font-montserrat font-bold text-sm text-dark-bg mb-2 group-hover:text-primary transition-colors">
                       {item.name}
@@ -126,7 +140,8 @@ export default function ServicosPublicosPage() {
                       Acessar →
                     </span>
                   </a>
-                ))}
+                  );
+                })}
               </div>
             </section>
           ))}
