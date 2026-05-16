@@ -2,6 +2,7 @@ import React from "react";
 import { getWeatherData } from "@/lib/weather";
 import { getQuotesData } from "@/lib/quotes";
 import { getBrasileiraoData } from "@/lib/brasileirao";
+import Image from "next/image";
 
 const Sidebar = async () => {
   const weather = await getWeatherData();
@@ -89,10 +90,10 @@ const Sidebar = async () => {
           <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-blue-600 pb-1 inline-block w-fit">
             {brasileirao.competition.name}
           </h3>
-          <div className="bg-white border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+          <div className="bg-white dark:bg-slate-800 border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
             <div className="max-h-[380px] overflow-y-auto">
               <table className="w-full text-[11px]">
-                <thead className="sticky top-0 bg-gray-50 border-b border-border">
+                <thead className="sticky top-0 bg-gray-50 dark:bg-slate-700 border-b border-border">
                   <tr className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">
                     <th className="py-2 px-1.5 text-center">#</th>
                     <th className="py-2 px-1.5 text-left">Time</th>
@@ -108,7 +109,7 @@ const Sidebar = async () => {
                   {brasileirao.entries.map((entry) => (
                     <tr
                       key={entry.position}
-                      className="border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors"
+                      className="border-b border-gray-100 dark:border-slate-700 last:border-none hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
                     >
                       <td className="py-1.5 px-1.5 text-center font-bold text-gray-400 text-[10px]">
                         {entry.position}
@@ -116,10 +117,13 @@ const Sidebar = async () => {
                       <td className="py-1.5 px-1.5">
                         <div className="flex items-center gap-1.5">
                           {entry.team.badge && (
-                            <img
+                            <Image
                               src={entry.team.badge}
-                              alt=""
+                              alt={entry.team.shortName || ""}
+                              width={16}
+                              height={16}
                               className="w-4 h-4 object-contain"
+                              unoptimized
                             />
                           )}
                           <span className="font-semibold text-dark-bg truncate max-w-[80px]">
@@ -172,7 +176,7 @@ const Sidebar = async () => {
       )}
 
       {/* Ad Banner placeholder */}
-      <div className="w-full h-[250px] bg-gray-50 border border-border flex items-center justify-center text-gray-300 text-xs font-bold uppercase tracking-widest">
+      <div className="w-full h-[250px] bg-gray-50 dark:bg-slate-800 border border-border flex items-center justify-center text-gray-300 dark:text-slate-600 text-xs font-bold uppercase tracking-widest">
         Publicidade
       </div>
     </aside>

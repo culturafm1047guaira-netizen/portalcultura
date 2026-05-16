@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Tailwind v4: habilita a variante dark: baseada em classe (controlada pelo next-themes) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #003366;          /* Azul Naval Premium */
   --color-primary-dark: #002244;
@@ -39,28 +42,24 @@
     min-height: 100vh;
     -webkit-text-size-adjust: 100%;
     line-height: 1.5;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Dark mode mais suave (fundo escuro real, não cinza azulado) */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-light-bg: #111111;
-      --color-text: #f0f0f0;
-      --color-card-bg: #111111;
-      --color-border: #333333;
-      --color-text-muted: #aaaaaa;
-    }
+  /* Dark mode controlado por classe .dark (next-themes) */
+  .dark {
+    --color-light-bg: #0f172a;
+    --color-text: #e2e8f0;
+    --color-card-bg: #1e293b;
+    --color-border: #334155;
+    --color-text-muted: #94a3b8;
+    --color-dark-bg: #e2e8f0;
+    --color-darker-bg: #0f172a;
+    --color-primary-soft: #1e3a5f;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-montserrat);
     color: var(--color-dark-bg);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    h1, h2, h3, h4, h5, h6 {
-      color: #ffffff;
-    }
   }
 }
 

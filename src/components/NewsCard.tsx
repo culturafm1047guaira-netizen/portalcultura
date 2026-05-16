@@ -30,7 +30,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
   if (lowerCat.includes("facebook")) catColor = "#1877F2";
 
   const imgPlaceholder = (
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-gray-400 font-bold uppercase text-[10px] tracking-widest text-center px-2">
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-700 dark:to-slate-800 text-gray-400 dark:text-slate-500 font-bold uppercase text-[10px] tracking-widest text-center px-2">
       <svg className="w-6 h-6 mb-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
       </svg>
@@ -41,7 +41,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
   if (compact) {
     return (
       <a href={link} target="_blank" rel="noopener" className="group flex gap-4 py-4 border-editorial">
-        <div className="relative w-24 h-24 shrink-0 overflow-hidden bg-gray-100 rounded-sm">
+        <div className="relative w-24 h-24 shrink-0 overflow-hidden bg-gray-100 dark:bg-slate-700 rounded-sm">
           {image && !imgError ? (
             <Image 
               src={image} 
@@ -61,7 +61,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
             {title}
           </h3>
           <div className="flex items-center gap-3 mt-auto pt-2">
-            <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">Há {formattedDate} • {source}</span>
+            <span className="text-[10px] text-gray-400 dark:text-slate-500 font-medium whitespace-nowrap">Há {formattedDate} • {source}</span>
             <div className="flex items-center gap-2 ml-auto">
               <button 
                 onClick={(e) => {
@@ -92,7 +92,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
 
   return (
     <a href={link} target="_blank" rel="noopener" className="group flex flex-col h-full pb-6">
-      <div className="relative aspect-video w-full overflow-hidden bg-gray-100 mb-3 rounded-sm">
+      <div className="relative aspect-video w-full overflow-hidden bg-gray-100 dark:bg-slate-700 mb-3 rounded-sm">
         {image && !imgError ? (
           <Image 
             src={image} 
@@ -114,7 +114,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
         <p className="text-[13px] text-text-muted line-clamp-2 leading-relaxed mt-2">
           {excerpt}
         </p>
-        <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-50">
+        <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-50 dark:border-slate-700">
           <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{source}</span>
           <div className="flex items-center gap-3 ml-auto">
             <button 

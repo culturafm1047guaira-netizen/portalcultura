@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat, Source_Sans_3 } from "next/font/google";
 import Player from "@/components/Player";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -50,12 +51,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${montserrat.variable} ${sourceSans.variable} antialiased`}>
+    <html lang="pt-BR" className={`${montserrat.variable} ${sourceSans.variable} antialiased`} suppressHydrationWarning>
       <body>
-        <div className="pb-16 lg:pb-0">
-          {children}
-        </div>
-        <Player />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="pb-16 lg:pb-0">
+            {children}
+          </div>
+          <Player />
+        </ThemeProvider>
       </body>
     </html>
   );

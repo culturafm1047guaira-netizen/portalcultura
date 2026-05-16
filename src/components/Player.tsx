@@ -23,7 +23,7 @@ const Player = () => {
       md:w-auto md:bottom-6 md:right-6 md:left-auto md:max-w-sm
     `}>
       <div className={`
-        bg-primary md:bg-white/95 md:backdrop-blur-xl md:border md:border-gray-200 
+        bg-primary md:bg-white/95 md:dark:bg-slate-800/95 md:backdrop-blur-xl md:border md:border-gray-200 md:dark:border-slate-600 
         text-white md:text-text 
         shadow-[0_-4px_20px_rgba(0,0,0,0.15)] md:shadow-2xl 
         h-16 md:h-auto md:p-3 md:rounded-2xl 

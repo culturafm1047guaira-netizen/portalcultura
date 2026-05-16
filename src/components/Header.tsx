@@ -19,7 +19,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white/90 backdrop-blur-md support-[backdrop-filter]:bg-white/80 border-b border-border sticky top-0 z-40 transition-colors duration-300">
+    <header className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-border sticky top-0 z-40 transition-colors duration-300">
       <div className="container py-3">
         <div className="flex items-center justify-between gap-5 flex-wrap lg:flex-nowrap">
           
@@ -47,7 +47,7 @@ const Header = () => {
 
           <nav className={`
             lg:flex flex-1 w-full lg:w-auto
-            ${isMenuOpen ? "block absolute top-full left-0 w-full bg-white/95 backdrop-blur-md border-b border-border shadow-lg" : "hidden"}
+            ${isMenuOpen ? "block absolute top-full left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-border shadow-lg" : "hidden"}
           `}>
             <ul className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-8 p-4 lg:p-0">
               {navItems.map((item) => (
@@ -79,7 +79,7 @@ const Header = () => {
                 name="q"
                 type="search" 
                 placeholder="Buscar" 
-                className="w-48 bg-gray-50 border border-gray-200 rounded-full px-4 py-1.5 text-sm text-text focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 group-hover:border-gray-300"
+                className="w-48 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-full px-4 py-1.5 text-sm text-text focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 group-hover:border-gray-300"
               />
               <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-primary transition-colors duration-300">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
