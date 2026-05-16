@@ -1,5 +1,15 @@
 import Parser from "rss-parser";
 
+export type NewsItem = {
+  title: string;
+  link: string;
+  image: string | null;
+  excerpt: string;
+  pubDate: string;
+  source: string;
+  category: string;
+};
+
 type FeedItem = {
   title?: string;
   link?: string;
@@ -272,8 +282,6 @@ export async function getNews(): Promise<NewsItem[]> {
       finalNewsList = [...mockFacebook, ...finalNewsList];
     }
   }
-
-  return finalNewsList;
 
   return finalNewsList;
 }
