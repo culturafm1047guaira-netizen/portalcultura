@@ -59,6 +59,9 @@ function extractImage(item: any): string | null {
   return null;
 }
 
+// Sources that are known to NOT include images in their RSS feed
+const SOURCES_NEEDING_OG_IMAGE = ['O Diário Online', 'Guaira News'];
+
 const FEEDS = [
   { url: 'https://g1.globo.com/rss/g1/sp/ribeirao-preto-franca/', source: 'G1 Ribeirão', category: 'Regional' },
   { url: 'https://g1.globo.com/rss/g1/', source: 'G1', category: 'Brasil' },
@@ -71,14 +74,13 @@ const FEEDS = [
   { url: 'https://www.jornaldebarretos.com.br/feed', source: 'Jornal de Barretos', category: 'Regional' },
   { url: 'https://www.odiarioonline.com.br/feed', source: 'O Diário Online', category: 'Regional' },
   { url: 'https://www.guairanews.com/feed/', source: 'Guaira News', category: 'Regional' },
-  // { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook', category: 'Facebook' }, // rss.app trial expirado
 ];
 
 async function fetchOpenGraphImage(url: string): Promise<string | null> {
   if (!url || url === "#") return null;
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
+    const timeout = setTimeout(() => controller.abort(), 12000);
     const response = await fetch(url, {
       signal: controller.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
@@ -99,12 +101,42 @@ async function fetchOpenGraphImage(url: string): Promise<string | null> {
   }
 }
 
+/** Enrich news items that are missing images by fetching og:image from article page.
+ *  Processes items in batches to avoid overwhelming servers. */
+async function enrichWithOgImages(newsItems: any[]): Promise<any[]> {
+  const BATCH_SIZE = 5;
+  const enriched = [...newsItems];
+
+  // Collect indices of items that need enrichment
+  const needsEnrichment: number[] = [];
+  for (let i = 0; i < enriched.length; i++) {
+    if (!enriched[i].image) {
+      needsEnrichment.push(i);
+    }
+  }
+
+  // Process in batches
+  for (let batchStart = 0; batchStart < needsEnrichment.length; batchStart += BATCH_SIZE) {
+    const batch = needsEnrichment.slice(batchStart, batchStart + BATCH_SIZE);
+    const results = await Promise.allSettled(
+      batch.map(idx => fetchOpenGraphImage(enriched[idx].link))
+    );
+    results.forEach((result, j) => {
+      if (result.status === 'fulfilled' && result.value) {
+        enriched[batch[j]].image = result.value;
+      }
+    });
+  }
+
+  return enriched;
+}
+
 export async function getNews() {
   const results = await Promise.allSettled(
     FEEDS.map(async (feed) => {
       try {
         const data = await parser.parseURL(feed.url);
-        return (data.items || []).slice(0, 10).map(item => {
+        const items = (data.items || []).slice(0, 10).map(item => {
           return {
             title: item.title || "",
             link: item.link || "#",
@@ -115,6 +147,26 @@ export async function getNews() {
             category: feed.category
           };
         });
+
+        // For sources that never include images in RSS, immediately try og:image
+        if (SOURCES_NEEDING_OG_IMAGE.includes(feed.source)) {
+          const enrichedItems = await Promise.allSettled(
+            items.slice(0, 6).map(async (news) => {
+              if (!news.image) {
+                const ogImg = await fetchOpenGraphImage(news.link);
+                if (ogImg) news.image = ogImg;
+              }
+              return news;
+            })
+          );
+          const finalItems = enrichedItems.map(r =>
+            r.status === 'fulfilled' ? r.value : null
+          ).filter(Boolean);
+          // Append remaining items that weren't enriched
+          return [...finalItems, ...items.slice(6)];
+        }
+
+        return items;
       } catch (e) {
         return [];
       }
@@ -130,17 +182,10 @@ export async function getNews() {
   
   const sortedNews = allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
 
-  // Enrich top news that are missing images (limit to top 15 to avoid slow loading)
-  const enrichedNews = await Promise.all(
-    sortedNews.slice(0, 15).map(async (news) => {
-      if (!news.image) {
-        const ogImg = await fetchOpenGraphImage(news.link);
-        if (ogImg) news.image = ogImg;
-      }
-      return news;
-    })
-  );
+  // Enrich remaining top news that still have no image (catches any source)
+  const topSlice = sortedNews.slice(0, 20);
+  const restSlice = sortedNews.slice(20);
+  const enrichedTop = await enrichWithOgImages(topSlice);
 
-  // Return enriched top news + rest of news
-  return [...enrichedNews, ...sortedNews.slice(15)];
+  return [...enrichedTop, ...restSlice];
 }

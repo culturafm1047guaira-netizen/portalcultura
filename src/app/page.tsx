@@ -22,7 +22,6 @@ export default async function Home() {
   const categories = [
     { id: "Regional", label: "Regional", color: "var(--color-cat-regional)" },
     { id: "Brasil", label: "Brasil", color: "var(--color-cat-brasil)" },
-    { id: "Facebook", label: "Facebook Rádio Cultura", color: "#1877F2" },
     { id: "Esportes", label: "Esportes", color: "var(--color-cat-esportes)" },
   ];
 

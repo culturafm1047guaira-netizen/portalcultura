@@ -2,6 +2,7 @@ import React from "react";
 import { getWeatherData } from "@/lib/weather";
 import { getQuotesData } from "@/lib/quotes";
 import { getBrasileiraoData } from "@/lib/brasileirao";
+import FacebookFeed from "@/components/FacebookFeed";
 
 const Sidebar = async () => {
   const weather = await getWeatherData();
@@ -82,6 +83,9 @@ const Sidebar = async () => {
           )}
         </div>
       </div>
+
+      {/* Facebook Feed */}
+      <FacebookFeed />
       
       {/* Brasileirão Standings */}
       {brasileirao.entries.length > 0 && (
