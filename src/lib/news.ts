@@ -74,7 +74,6 @@ const FEEDS = [
   { url: 'https://www.jornaldebarretos.com.br/feed', source: 'Jornal de Barretos', category: 'Regional' },
   { url: 'https://www.odiarioonline.com.br/feed', source: 'O Diário Online', category: 'Regional' },
   { url: 'https://www.guairanews.com/feed/', source: 'Guaira News', category: 'Regional' },
-  { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook Rádio Cultura', category: 'Facebook' },
 ];
 
 async function fetchOpenGraphImage(url: string): Promise<string | null> {
@@ -132,7 +131,45 @@ async function enrichWithOgImages(newsItems: any[]): Promise<any[]> {
   return enriched;
 }
 
-export async function getNews() {
+async function fetchFacebookGraphAPI(): Promise<NewsItem[]> {
+  const pageId = process.env.FACEBOOK_PAGE_ID;
+  const token = process.env.FACEBOOK_ACCESS_TOKEN;
+
+  if (!pageId || !token) return [];
+
+  try {
+    const url = `https://graph.facebook.com/v19.0/${pageId}/posts?fields=message,created_time,full_picture,permalink_url&access_token=${token}&limit=3`;
+    const res = await fetch(url, { next: { revalidate: 1800 } });
+    if (!res.ok) return [];
+    
+    const data = await res.json();
+    if (!data || !data.data) return [];
+
+    const items: NewsItem[] = data.data.map((post: any) => {
+      const message = post.message || 'Acompanhe as novidades na página da Rádio Cultura FM 104.7!';
+      const excerpt = message.length > 120 ? message.substring(0, 120) + '...' : message;
+      // Define a title based on the first line or a default
+      let title = message.split('\n')[0].trim();
+      if (title.length > 80) title = title.substring(0, 80) + '...';
+
+      return {
+        title: title || 'Postagem da Rádio Cultura',
+        link: post.permalink_url || `https://facebook.com/${pageId}`,
+        image: post.full_picture || '/img/placeholder-news.jpg', // Replace with a default placeholder if needed
+        excerpt: excerpt,
+        pubDate: post.created_time || new Date().toISOString(),
+        source: 'Facebook Rádio Cultura',
+        category: 'Facebook'
+      };
+    });
+    
+    return items;
+  } catch {
+    return [];
+  }
+}
+
+export async function getNews(): Promise<NewsItem[]> {
   const results = await Promise.allSettled(
     FEEDS.map(async (feed) => {
       try {
@@ -190,35 +227,40 @@ export async function getNews() {
 
   let finalNewsList = [...enrichedTop, ...restSlice];
 
-  // Caso o Feed do Facebook (rss.app) esteja expirado e não tenha retornado nada,
-  // inserimos 3 postagens mockadas para garantir que o layout dos 3 cards funcione perfeitamente.
-  const hasFacebook = finalNewsList.some(n => n.category === 'Facebook');
-  if (!hasFacebook) {
+  // Integrar Facebook API nativa
+  const facebookPosts = await fetchFacebookGraphAPI();
+
+  if (facebookPosts.length > 0) {
+    // Se conseguiu ler do Facebook via API Oficial, insere no topo
+    finalNewsList = [...facebookPosts, ...finalNewsList];
+  } else {
+    // Se não tem tokens configurados ou se deu erro, cria os mocks provisórios.
+    // O texto do mock já instrui que a API precisa ser configurada.
     const mockFacebook = [
       {
-        title: "Acompanhe nossa programação ao vivo todos os dias com as melhores músicas!",
+        title: "Aguardando Configuração da API do Facebook",
         link: "https://www.facebook.com/radioculturadeguaira/",
         image: "https://scontent.fudi1-1.fna.fbcdn.net/v/t39.30808-6/440785199_763266225916056_7934444583151817112_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=hR1W70K61oAQ7kNvgGHrT32&_nc_ht=scontent.fudi1-1.fna&oh=00_AYBq26Y-m82-oX-6V-9yP--j9i8yv-6eO3499_k98Qy0Yg&oe=666139CD",
-        excerpt: "Fique ligado na 104.7 FM para não perder as principais notícias e entretenimento da nossa região...",
+        excerpt: "As postagens reais aparecerão aqui assim que você colocar os códigos FACEBOOK_PAGE_ID e FACEBOOK_ACCESS_TOKEN no sistema.",
         pubDate: new Date().toISOString(),
         source: "Facebook Rádio Cultura",
         category: "Facebook"
       },
       {
-        title: "Confira a cobertura exclusiva da Festa do Peão 2026 com nossa equipe!",
+        title: "Siga as instruções do tutorial para gerar a sua chave de acesso!",
         link: "https://www.facebook.com/radioculturadeguaira/",
         image: "https://scontent.fudi1-2.fna.fbcdn.net/v/t39.30808-6/438186178_757643569811655_1603706059632832585_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=Z79Z4Y8R9rYQ7kNvgFRZ0hX&_nc_ht=scontent.fudi1-2.fna&oh=00_AYDBuU37-X9e_w9X-V5Y2--j9i8yv-6eO3499_k98Qy0Yg&oe=666113A3",
-        excerpt: "Estivemos presentes nos melhores momentos do rodeio, confira as fotos exclusivas!",
-        pubDate: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+        excerpt: "Uma vez que o Token seja gerado no painel 'Facebook for Developers', o site lerá a página nativamente.",
+        pubDate: new Date(Date.now() - 86400000).toISOString(),
         source: "Facebook Rádio Cultura",
         category: "Facebook"
       },
       {
-        title: "Atenção Guaíra: Mudanças no trânsito a partir desta segunda-feira",
+        title: "O Portal Cultura FM agora possui conexão ultra-rápida e oficial com a Meta",
         link: "https://www.facebook.com/radioculturadeguaira/",
         image: "https://scontent.fudi1-2.fna.fbcdn.net/v/t39.30808-6/438128362_755502396692439_3300539126297314546_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=W9H0Y_9Y8X8Q7kNvgF-0y6V&_nc_ht=scontent.fudi1-2.fna&oh=00_AYBq26Y-m82-oX-6V-9yP--j9i8yv-6eO3499_k98Qy0Yg&oe=666112C3",
-        excerpt: "O departamento de trânsito informa que as ruas do centro terão sentido único...",
-        pubDate: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+        excerpt: "A tecnologia Graph API não depende de serviços pagos. Basta realizar o setup inicial uma única vez.",
+        pubDate: new Date(Date.now() - 172800000).toISOString(),
         source: "Facebook Rádio Cultura",
         category: "Facebook"
       }
