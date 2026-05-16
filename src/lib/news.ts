@@ -71,15 +71,18 @@ const FEEDS = [
   { url: 'https://www.jornaldebarretos.com.br/feed', source: 'Jornal de Barretos', category: 'Regional' },
   { url: 'https://www.odiarioonline.com.br/feed', source: 'O Diário Online', category: 'Regional' },
   { url: 'https://www.guairanews.com/feed/', source: 'Guaira News', category: 'Regional' },
-  { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook', category: 'Facebook' },
+  // { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook', category: 'Facebook' }, // rss.app trial expirado
 ];
 
 async function fetchOpenGraphImage(url: string): Promise<string | null> {
   if (!url || url === "#") return null;
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
-    const response = await fetch(url, { signal: controller.signal });
+    const timeout = setTimeout(() => controller.abort(), 20000);
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+    });
     const html = await response.text();
     clearTimeout(timeout);
     
