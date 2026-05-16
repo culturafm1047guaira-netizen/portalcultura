@@ -74,8 +74,7 @@ const FEEDS = [
   { url: 'https://www.jornaldebarretos.com.br/feed', source: 'Jornal de Barretos', category: 'Regional' },
   { url: 'https://www.odiarioonline.com.br/feed', source: 'O Diário Online', category: 'Regional' },
   { url: 'https://www.guairanews.com/feed/', source: 'Guaira News', category: 'Regional' },
-  // Link expirado mantido apenas como fallback. Substituir por um novo assim que gerado.
-  { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook Rádio Cultura', category: 'Facebook' },
+  { url: 'https://rss.app/feeds/7ZNpqqsngFaNsVtF.xml', source: 'Facebook Rádio Cultura', category: 'Facebook' },
 ];
 
 async function fetchOpenGraphImage(url: string): Promise<string | null> {
