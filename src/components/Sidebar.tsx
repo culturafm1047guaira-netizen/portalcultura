@@ -37,13 +37,13 @@ const Sidebar = async () => {
         </div>
       </div>
 
-      {/* Financial & Agro Quotes */}
+      {/* Financial Quotes */}
       <div className="flex flex-col">
         <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-green-600 pb-1 inline-block w-fit">
-          Cotações em Tempo Real
+          Financeiro
         </h3>
         <div className="bg-white border border-border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          {quotes.map((item, i) => (
+          {quotes.financial.map((item, i) => (
             <div key={i} className="flex justify-between items-center py-2.5 border-b border-gray-100 last:border-none text-[13px]">
               <span className="text-gray-500 font-bold">{item.label}</span>
               <div className="flex items-center gap-2">
@@ -54,6 +54,32 @@ const Sidebar = async () => {
               </div>
             </div>
           ))}
+          {quotes.financial.length === 0 && (
+            <span className="text-[12px] text-gray-400">Indisponível</span>
+          )}
+        </div>
+      </div>
+
+      {/* Commodities Quotes */}
+      <div className="flex flex-col">
+        <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-amber-600 pb-1 inline-block w-fit">
+          Commodities
+        </h3>
+        <div className="bg-white border border-border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          {quotes.commodities.map((item, i) => (
+            <div key={i} className="flex justify-between items-center py-2.5 border-b border-gray-100 last:border-none text-[13px]">
+              <span className="text-gray-500 font-bold">{item.label}</span>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-dark-bg">{item.val}</span>
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${item.trend === "up" ? "bg-green-100 text-green-700" : item.trend === "down" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-500"}`}>
+                  {item.change}
+                </span>
+              </div>
+            </div>
+          ))}
+          {quotes.commodities.length === 0 && (
+            <span className="text-[12px] text-gray-400">Indisponível</span>
+          )}
         </div>
       </div>
       

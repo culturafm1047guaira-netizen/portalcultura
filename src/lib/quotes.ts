@@ -1,152 +1,119 @@
-function formatChange(pctChange: string | undefined): string {
-  if (!pctChange) return '0,00%'
-  const num = parseFloat(pctChange)
-  const prefix = num > 0 ? '+' : ''
-  const formatted = num === 0 ? '0,00' : pctChange.replace('.', ',')
-  return `${prefix}${formatted}%`
-}
-
-function formatTrend(pctChange: string | undefined): 'up' | 'down' {
-  return parseFloat(pctChange || '0') >= 0 ? 'up' : 'down'
+interface QuoteItem {
+  label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string
 }
 
 function formatBRL(value: number): string {
   return `R$ ${value.toFixed(2).replace('.', ',')}`
 }
 
-async function fetchBcbRate(currencyCode: string): Promise<number | null> {
-  try {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const year = now.getFullYear();
-    const dateStr = `${month}-${day}-${year}`;
-
-    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaDia(moeda=@moeda,dataCotacao=@dataCotacao)?@moeda='${currencyCode}'&@dataCotacao='${dateStr}'&$format=json&$top=1`;
-
-    const res = await fetch(url, { next: { revalidate: 3600 } });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (data.value?.length > 0) {
-      return parseFloat(data.value[0].cotacaoCompra);
-    }
-    return null;
-  } catch {
-    return null;
-  }
+function fmtChange(pct: number | undefined | null): string {
+  if (pct == null || isNaN(pct)) return '0,00%'
+  const prefix = pct > 0 ? '+' : ''
+  return `${prefix}${pct.toFixed(2).replace('.', ',')}%`
 }
 
-interface QuoteItem {
-  label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string
+function fmtTrend(val: number | undefined | null): 'up' | 'down' | 'stable' {
+  if (val == null || val === 0) return 'stable'
+  return val > 0 ? 'up' : 'down'
 }
 
 async function fetchFinancials(): Promise<QuoteItem[]> {
-  let usd = 0, eur = 0, xau = 0, brentUsd = 0;
-  let usdPct: string | undefined, eurPct: string | undefined, xauPct: string | undefined, brentPct: string | undefined;
+  let usd = 0, eur = 0, xau = 0
+  let usdPct: number | null = null, eurPct: number | null = null, xauPct: number | null = null
 
   try {
-    const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,XAU-BRL,XBR-USD', { 
+    const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,XAU-BRL', {
       next: { revalidate: 1800 }
-    });
+    })
     if (res.ok) {
-      const data = await res.json();
-      usd = parseFloat(data.USDBRL?.bid || '0');
-      eur = parseFloat(data.EURBRL?.bid || '0');
-      xau = parseFloat(data.XAUBRL?.bid || '0');
-      brentUsd = parseFloat(data.XBRUSD?.bid || '0');
-      usdPct = data.USDBRL?.pctChange;
-      eurPct = data.EURBRL?.pctChange;
-      xauPct = data.XAUBRL?.pctChange;
-      brentPct = data.XBRUSD?.pctChange;
+      const data = await res.json()
+      usd = parseFloat(data.USDBRL?.bid || '0')
+      eur = parseFloat(data.EURBRL?.bid || '0')
+      xau = parseFloat(data.XAUBRL?.bid || '0')
+      usdPct = parseFloat(data.USDBRL?.pctChange) || null
+      eurPct = parseFloat(data.EURBRL?.pctChange) || null
+      xauPct = parseFloat(data.XAUBRL?.pctChange) || null
     }
   } catch {}
 
-  if (!usd || !eur) {
-    const [bcbUsd, bcbEur] = await Promise.all([
-      !usd ? fetchBcbRate('USD') : Promise.resolve(null),
-      !eur ? fetchBcbRate('EUR') : Promise.resolve(null)
-    ]);
-    if (bcbUsd) { usd = bcbUsd; usdPct = undefined; }
-    if (bcbEur) { eur = bcbEur; eurPct = undefined; }
+  if (usd === 0 || eur === 0) {
+    try {
+      const now = new Date()
+      const day = String(now.getDate()).padStart(2, '0')
+      const month = String(now.getMonth() + 1).padStart(2, '0')
+      const year = now.getFullYear()
+
+      for (const code of ['USD', 'EUR']) {
+        const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaDia(moeda=@moeda,dataCotacao=@dataCotacao)?@moeda='${code}'&@dataCotacao='${month}-${day}-${year}'&$format=json&$top=1`
+        const r = await fetch(url, { next: { revalidate: 3600 } })
+        if (r.ok) {
+          const j = await r.json()
+          if (j.value?.length > 0) {
+            const v = parseFloat(j.value[0].cotacaoCompra)
+            if (code === 'USD' && usd === 0) usd = v
+            if (code === 'EUR' && eur === 0) eur = v
+          }
+        }
+      }
+    } catch {}
   }
 
-  if (!usd && !eur && !xau && !brentUsd) return [];
+  const xauGram = xau > 0 ? xau / 31.1035 : 0
 
-  const brentBrl = brentUsd * usd;
+  const items: QuoteItem[] = []
+  if (usd > 0) items.push({ label: 'Dólar Americano', val: formatBRL(usd), trend: fmtTrend(usdPct), change: fmtChange(usdPct) })
+  if (eur > 0) items.push({ label: 'Euro', val: formatBRL(eur), trend: fmtTrend(eurPct), change: fmtChange(eurPct) })
+  if (xauGram > 0) items.push({ label: 'Ouro (g)', val: formatBRL(xauGram), trend: fmtTrend(xauPct), change: fmtChange(xauPct) })
 
-  return [
-    {
-      label: 'Dólar Americano',
-      val: formatBRL(usd),
-      trend: formatTrend(usdPct),
-      change: formatChange(usdPct)
-    },
-    {
-      label: 'Euro',
-      val: formatBRL(eur),
-      trend: formatTrend(eurPct),
-      change: formatChange(eurPct)
-    },
-    {
-      label: 'Ouro (g)',
-      val: formatBRL(xau),
-      trend: formatTrend(xauPct),
-      change: formatChange(xauPct)
-    },
-    {
-      label: 'Petróleo Brent',
-      val: formatBRL(brentBrl),
-      trend: formatTrend(brentPct),
-      change: formatChange(brentPct)
-    }
-  ];
+  return items
 }
 
-async function fetchCepeaIndicator(name: string, slug: string): Promise<QuoteItem | null> {
+interface AgroItem {
+  nome: string
+  valor: number
+  variacao: number
+  unidade: string
+}
+
+async function fetchCommodities(): Promise<QuoteItem[]> {
   try {
-    const res = await fetch(`https://www.cepea.esalq.usp.br/br/indicador/${slug}.aspx`, {
-      headers: { 'User-Agent': 'Mozilla/5.0' },
+    const res = await fetch('https://www.redacaoagro.com.br/api/cotacoes.php', {
       next: { revalidate: 3600 }
-    });
-    if (!res.ok) return null;
-    const html = await res.text();
-    const tableRegex = /<tr[^>]*>\s*<td[^>]*>\d{2}\/\d{2}\/\d{4}<\/td>\s*<td[^>]*>([\d.,]+)<\/td>\s*<td[^>]*>([\d.,+-]+)<\/td>/i;
-    const match = html.match(tableRegex);
-    if (match) {
-      const priceVal = parseFloat(match[1].replace(/\./g, '').replace(',', '.'));
-      const varVal = parseFloat(match[2].replace(',', '.'));
-      return {
-        label: name,
-        val: `R$ ${priceVal.toFixed(2).replace('.', ',')}`,
-        trend: isNaN(varVal) ? 'stable' : varVal >= 0 ? 'up' : 'down',
-        change: isNaN(varVal) ? '0,00%' : `${varVal > 0 ? '+' : ''}${varVal.toFixed(2).replace('.', ',')}%`
-      };
+    })
+    if (!res.ok) return []
+    const data = await res.json()
+    if (data?.status !== 'ok') return []
+
+    const map: Record<string, { label: string; key: string; unit: string }> = {
+      soja: { label: 'Soja', key: 'soja', unit: 'sc 60kg' },
+      milho: { label: 'Milho', key: 'milho', unit: 'sc 60kg' },
+      boi_gordo: { label: 'Boi Gordo', key: 'boi_gordo', unit: '@' },
+      cafe: { label: 'Café Arábica', key: 'cafe', unit: 'sc 60kg' },
+      acucar: { label: 'Açúcar (Cana)', key: 'acucar', unit: 'sc 50kg' },
     }
-    return null;
-  } catch (e) { return null; }
+
+    const items: QuoteItem[] = []
+    for (const [slug, cfg] of Object.entries(map)) {
+      const raw = data.commodities?.[slug] as AgroItem | undefined
+      if (raw && raw.valor > 0) {
+        items.push({
+          label: `${raw.nome}`,
+          val: `R$ ${raw.valor.toFixed(2).replace('.', ',')}`,
+          trend: fmtTrend(raw.variacao),
+          change: fmtChange(raw.variacao),
+        })
+      }
+    }
+    return items
+  } catch {
+    return []
+  }
 }
 
 export async function getQuotesData() {
-  const [financials, soja, milho] = await Promise.all([
+  const [financial, commodities] = await Promise.all([
     fetchFinancials(),
-    fetchCepeaIndicator('Soja (sc)', 'soja'),
-    fetchCepeaIndicator('Milho (sc)', 'milho')
-  ]);
-
-  const quotes: QuoteItem[] = [...financials];
-  if (soja) quotes.push(soja);
-  if (milho) quotes.push(milho);
-
-  if (quotes.length === 0 || quotes.every(q => q.val === 'R$ 0,00')) {
-    return [
-        { label: "Dólar Americano", val: "R$ 5,15", trend: "up", change: "+0.12%" },
-        { label: "Euro", val: "R$ 5,48", trend: "down", change: "-0.08%" },
-        { label: "Soja (sc)", val: "R$ 128,00", trend: "stable", change: "0.0%" },
-        { label: "Milho (sc)", val: "R$ 62,30", trend: "down", change: "-1.2%" },
-        { label: "Ouro (g)", val: "R$ 382,40", trend: "up", change: "+0.35%" },
-        { label: "Petróleo Brent", val: "R$ 425,60", trend: "down", change: "-1.20%" }
-    ];
-  }
-
-  return quotes;
+    fetchCommodities(),
+  ])
+  return { financial, commodities }
 }
