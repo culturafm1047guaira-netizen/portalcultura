@@ -1,10 +1,12 @@
 import React from "react";
 import { getWeatherData } from "@/lib/weather";
 import { getQuotesData } from "@/lib/quotes";
+import { getBrasileiraoData } from "@/lib/brasileirao";
 
 const Sidebar = async () => {
   const weather = await getWeatherData();
   const quotes = await getQuotesData();
+  const brasileirao = await getBrasileiraoData();
 
   return (
     <aside className="flex flex-col gap-8 w-full">
@@ -55,6 +57,94 @@ const Sidebar = async () => {
         </div>
       </div>
       
+      {/* Brasileirão Standings */}
+      {brasileirao.entries.length > 0 && (
+        <div className="flex flex-col">
+          <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-blue-600 pb-1 inline-block w-fit">
+            {brasileirao.competition.name}
+          </h3>
+          <div className="bg-white border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+            <div className="max-h-[380px] overflow-y-auto">
+              <table className="w-full text-[11px]">
+                <thead className="sticky top-0 bg-gray-50 border-b border-border">
+                  <tr className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">
+                    <th className="py-2 px-1.5 text-center">#</th>
+                    <th className="py-2 px-1.5 text-left">Time</th>
+                    <th className="py-2 px-1.5 text-center">P</th>
+                    <th className="py-2 px-1.5 text-center">V</th>
+                    <th className="py-2 px-1.5 text-center">E</th>
+                    <th className="py-2 px-1.5 text-center">D</th>
+                    <th className="py-2 px-1.5 text-center hidden sm:table-cell">SG</th>
+                    <th className="py-2 px-1.5 text-center">Últ.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {brasileirao.entries.map((entry) => (
+                    <tr
+                      key={entry.position}
+                      className="border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="py-1.5 px-1.5 text-center font-bold text-gray-400 text-[10px]">
+                        {entry.position}
+                      </td>
+                      <td className="py-1.5 px-1.5">
+                        <div className="flex items-center gap-1.5">
+                          {entry.team.badge && (
+                            <img
+                              src={entry.team.badge}
+                              alt=""
+                              className="w-4 h-4 object-contain"
+                            />
+                          )}
+                          <span className="font-semibold text-dark-bg truncate max-w-[80px]">
+                            {entry.team.shortName}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-1.5 px-1.5 text-center font-extrabold text-dark-bg">
+                        {entry.points}
+                      </td>
+                      <td className="py-1.5 px-1.5 text-center text-gray-500">
+                        {entry.wins}
+                      </td>
+                      <td className="py-1.5 px-1.5 text-center text-gray-500">
+                        {entry.draws}
+                      </td>
+                      <td className="py-1.5 px-1.5 text-center text-gray-500">
+                        {entry.losses}
+                      </td>
+                      <td className="py-1.5 px-1.5 text-center font-medium hidden sm:table-cell">
+                        {entry.goalDifference > 0
+                          ? `+${entry.goalDifference}`
+                          : entry.goalDifference}
+                      </td>
+                      <td className="py-1.5 px-1.5">
+                        <div className="flex gap-0.5 justify-center">
+                          {entry.recentForm.slice(0, 3).map((f, i) => (
+                            <span
+                              key={i}
+                              className={`inline-block w-3 h-3 rounded-[2px] text-[6px] font-bold flex items-center justify-center ${
+                                f === "W"
+                                  ? "bg-green-500 text-white"
+                                  : f === "D"
+                                    ? "bg-gray-300 text-gray-600"
+                                    : "bg-red-500 text-white"
+                              }`}
+                            >
+                              {f === "W" ? "V" : f === "D" ? "E" : "D"}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Ad Banner placeholder */}
       <div className="w-full h-[250px] bg-gray-50 border border-border flex items-center justify-center text-gray-300 text-xs font-bold uppercase tracking-widest">
         Publicidade
