@@ -123,150 +123,32 @@ async function fetchFinancials(): Promise<QuoteItem[]> {
   return items
 }
 
-/** Scrape CEPEA/Esalq indicators page for commodity prices */
-async function scrapeCepeaIndicator(slug: string): Promise<{ nome: string; valor: number; variacao: number } | null> {
+async function fetchCommodities(): Promise<QuoteItem[]> {
   try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 15000)
-    const url = `https://www.cepea.esalq.usp.br/br/indicador/${slug}.aspx`
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
-        'Referer': 'https://www.google.com/',
-      },
+    const res = await fetch('https://www.redacaoagro.com.br/api/cotacoes.php', {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      next: { revalidate: 3600 }
     })
-    clearTimeout(timeout)
-    if (!res.ok) return null
-    const html = await res.text()
-
-    // Extract the latest price from CEPEA indicator page
-    // The price is typically in a table or span element  
-    // Pattern: look for R$/sc, R$/@ or similar value patterns
-    const priceMatch = html.match(/(?:R\$\s*|valor[^>]*>)\s*([\d.,]+)/i)
-    const varMatch = html.match(/(?:varia[çc][ãa]o|var\.?)[^>]*>?\s*([+-]?[\d.,]+)\s*%/i)
-
-    if (priceMatch) {
-      const valor = parseFloat(priceMatch[1].replace(/\./g, '').replace(',', '.'))
-      const variacao = varMatch ? parseFloat(varMatch[1].replace(',', '.')) : 0
-      
-      const nameMap: Record<string, string> = {
-        'soja': 'Soja (sc 60kg)',
-        'milho': 'Milho (sc 60kg)',
-        'boi-gordo': 'Boi Gordo (@)',
-        'cafe': 'Café Arábica (sc)',
-        'acucar': 'Açúcar Cristal (sc)',
-      }
-      
-      return { nome: nameMap[slug] || slug, valor, variacao }
-    }
-    return null
-  } catch { return null }
-}
-
-/** Fetch commodity prices from Notícias Agrícolas as fallback (scraping) */
-async function scrapeNoticiasAgricolas(): Promise<QuoteItem[]> {
-  try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 15000)
-    const res = await fetch('https://www.noticiasagricolas.com.br/cotacoes', {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      },
-    })
-    clearTimeout(timeout)
     if (!res.ok) return []
-    const html = await res.text()
+    const data = await res.json()
+    if (data.status !== 'ok' || !data.commodities) return []
 
     const items: QuoteItem[] = []
+    const targets = ['soja', 'milho', 'boi_gordo', 'cafe', 'acucar']
     
-    // Simplifed regex to match NA homepage structure
-    const indicators = [
-      { search: /soja[^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Soja (sc 60kg)' },
-      { search: /milho[^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Milho (sc 60kg)' },
-      { search: /boi gordo[^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Boi Gordo (@)' },
-      { search: /caf[eé][^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Café Arábica (sc)' },
-      { search: /a[çc][uú]car[^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Açúcar Cristal (sc)' },
-    ]
-
-    for (const ind of indicators) {
-      const match = html.match(ind.search)
-      if (match) {
-        const valor = parseFloat(match[1].replace(/\./g, '').replace(',', '.'))
-        const variacao = parseFloat(match[2].replace(',', '.'))
-        if (valor > 0) {
-          items.push({
-            label: ind.label,
-            val: formatBRL(valor),
-            trend: fmtTrend(variacao),
-            change: fmtChange(variacao),
-          })
-        }
+    for (const key of targets) {
+      const item = data.commodities[key]
+      if (item && item.valor > 0) {
+        items.push({
+          label: item.nome,
+          val: formatBRL(parseFloat(item.valor)),
+          trend: fmtTrend(parseFloat(item.variacao)),
+          change: fmtChange(parseFloat(item.variacao))
+        })
       }
     }
-
-    // Se a regex falhar na tabela completa, tenta regex genérica por proximidade de texto
-    if (items.length === 0) {
-       const fallbackIndicators = [
-        { search: /soja.{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Soja (sc 60kg)' },
-        { search: /milho.{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Milho (sc 60kg)' },
-        { search: /boi gordo.{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Boi Gordo (@)' },
-        { search: /caf[eé].{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Café Arábica (sc)' },
-        { search: /a[çc][uú]car.{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Açúcar Cristal (sc)' },
-      ]
-      for (const ind of fallbackIndicators) {
-        const match = html.match(ind.search)
-        if (match) {
-          const valor = parseFloat(match[1].replace(/\./g, '').replace(',', '.'))
-          const variacao = parseFloat(match[2].replace(',', '.'))
-          if (valor > 0) {
-            items.push({
-              label: ind.label,
-              val: formatBRL(valor),
-              trend: fmtTrend(variacao),
-              change: fmtChange(variacao),
-            })
-          }
-        }
-      }
-    }
-
     return items
   } catch { return [] }
-}
-
-async function fetchCommodities(): Promise<QuoteItem[]> {
-  // Strategy: Try CEPEA scraping first, then Notícias Agrícolas as fallback
-  const slugs = ['soja', 'milho', 'boi-gordo', 'cafe', 'acucar']
-  
-  // Try CEPEA first (parallel requests)
-  const cepeaResults = await Promise.allSettled(
-    slugs.map(slug => scrapeCepeaIndicator(slug))
-  )
-
-  const items: QuoteItem[] = []
-  for (const result of cepeaResults) {
-    if (result.status === 'fulfilled' && result.value && result.value.valor > 0) {
-      items.push({
-        label: result.value.nome,
-        val: formatBRL(result.value.valor),
-        trend: fmtTrend(result.value.variacao),
-        change: fmtChange(result.value.variacao),
-      })
-    }
-  }
-
-  // If CEPEA failed (403 or no data), try Notícias Agrícolas
-  if (items.length === 0) {
-    const naItems = await scrapeNoticiasAgricolas()
-    if (naItems.length > 0) return naItems
-  }
-
-  // If all scraping failed, return empty (will show "Indisponível" in the UI)
-  return items
 }
 
 export async function getQuotesData() {
