@@ -171,13 +171,10 @@ async function scrapeNoticiasAgricolas(): Promise<QuoteItem[]> {
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 15000)
-    const res = await fetch('https://www.noticiasagricolas.com.br/cotacoes/indicadores', {
+    const res = await fetch('https://www.noticiasagricolas.com.br/cotacoes', {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
-        'Referer': 'https://www.google.com/',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
       },
     })
     clearTimeout(timeout)
@@ -186,15 +183,13 @@ async function scrapeNoticiasAgricolas(): Promise<QuoteItem[]> {
 
     const items: QuoteItem[] = []
     
-    // Parse CEPEA indicators from the page HTML
-    // Notícias Agrícolas displays indicators in structured table/list format
-    // Pattern: commodity name followed by price and variation
+    // Simplifed regex to match NA homepage structure
     const indicators = [
-      { search: /soja[^<]*?R\$\s*([\d.,]+)[^<]*?([+-]?[\d.,]+)\s*%/i, label: 'Soja (sc 60kg)' },
-      { search: /milho[^<]*?R\$\s*([\d.,]+)[^<]*?([+-]?[\d.,]+)\s*%/i, label: 'Milho (sc 60kg)' },
-      { search: /boi\s*gordo[^<]*?R\$\s*([\d.,]+)[^<]*?([+-]?[\d.,]+)\s*%/i, label: 'Boi Gordo (@)' },
-      { search: /caf[eé]\s*ar[aá]bica[^<]*?R\$\s*([\d.,]+)[^<]*?([+-]?[\d.,]+)\s*%/i, label: 'Café Arábica (sc)' },
-      { search: /a[çc][uú]car[^<]*?R\$\s*([\d.,]+)[^<]*?([+-]?[\d.,]+)\s*%/i, label: 'Açúcar Cristal (sc)' },
+      { search: /soja[^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Soja (sc 60kg)' },
+      { search: /milho[^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Milho (sc 60kg)' },
+      { search: /boi gordo[^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Boi Gordo (@)' },
+      { search: /caf[eé][^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Café Arábica (sc)' },
+      { search: /a[çc][uú]car[^<]*<\/td>\s*<td[^>]*>\s*([\d.,]+)\s*<\/td>\s*<td[^>]*>\s*([+-]?[\d.,]+)/i, label: 'Açúcar Cristal (sc)' },
     ]
 
     for (const ind of indicators) {
@@ -209,6 +204,32 @@ async function scrapeNoticiasAgricolas(): Promise<QuoteItem[]> {
             trend: fmtTrend(variacao),
             change: fmtChange(variacao),
           })
+        }
+      }
+    }
+
+    // Se a regex falhar na tabela completa, tenta regex genérica por proximidade de texto
+    if (items.length === 0) {
+       const fallbackIndicators = [
+        { search: /soja.{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Soja (sc 60kg)' },
+        { search: /milho.{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Milho (sc 60kg)' },
+        { search: /boi gordo.{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Boi Gordo (@)' },
+        { search: /caf[eé].{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Café Arábica (sc)' },
+        { search: /a[çc][uú]car.{1,100}?R\$\s*([\d.,]+).{1,50}?([+-]?[\d.,]+)\s*%/i, label: 'Açúcar Cristal (sc)' },
+      ]
+      for (const ind of fallbackIndicators) {
+        const match = html.match(ind.search)
+        if (match) {
+          const valor = parseFloat(match[1].replace(/\./g, '').replace(',', '.'))
+          const variacao = parseFloat(match[2].replace(',', '.'))
+          if (valor > 0) {
+            items.push({
+              label: ind.label,
+              val: formatBRL(valor),
+              trend: fmtTrend(variacao),
+              change: fmtChange(variacao),
+            })
+          }
         }
       }
     }

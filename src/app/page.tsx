@@ -73,22 +73,15 @@ export default async function Home() {
                       Ver todas →
                     </a>
                   </div>
-                  
-                  {cat.id === "Facebook" ? (
-                    <div className="w-full flex justify-center bg-gray-50 p-6 border border-border rounded-lg">
-                      <FacebookFeed />
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                      {allNews
-                        .filter(n => n.category === cat.id && n !== heroNews)
-                        .slice(0, 3)
-                        .map((news, i) => (
-                          <NewsCard key={i} {...news} />
-                        ))
-                      }
-                    </div>
-                  )}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                    {allNews
+                      .filter(n => n.category === cat.id && n !== heroNews)
+                      .slice(0, 3)
+                      .map((news, i) => (
+                        <NewsCard key={i} {...news} />
+                      ))
+                    }
+                  </div>
                 </div>
               ))}
 
