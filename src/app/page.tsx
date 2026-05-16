@@ -9,6 +9,7 @@ import Hero from "@/components/Hero";
 import NewsCard from "@/components/NewsCard";
 import Sidebar from "@/components/Sidebar";
 import VideoGallery from "@/components/VideoGallery";
+import FacebookFeed from "@/components/FacebookFeed";
 import { getNews } from "@/lib/news";
 
 export const revalidate = 600;
@@ -21,6 +22,7 @@ export default async function Home() {
 
   const categories = [
     { id: "Regional", label: "Regional", color: "var(--color-cat-regional)" },
+    { id: "Facebook", label: "Facebook Rádio Cultura", color: "#1877F2" },
     { id: "Brasil", label: "Brasil", color: "var(--color-cat-brasil)" },
     { id: "Esportes", label: "Esportes", color: "var(--color-cat-esportes)" },
   ];
@@ -72,15 +74,21 @@ export default async function Home() {
                     </a>
                   </div>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                    {allNews
-                      .filter(n => n.category === cat.id && n !== heroNews)
-                      .slice(0, 3)
-                      .map((news, i) => (
-                        <NewsCard key={i} {...news} />
-                      ))
-                    }
-                  </div>
+                  {cat.id === "Facebook" ? (
+                    <div className="w-full flex justify-center bg-gray-50 p-6 border border-border rounded-lg">
+                      <FacebookFeed />
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                      {allNews
+                        .filter(n => n.category === cat.id && n !== heroNews)
+                        .slice(0, 3)
+                        .map((news, i) => (
+                          <NewsCard key={i} {...news} />
+                        ))
+                      }
+                    </div>
+                  )}
                 </div>
               ))}
 
