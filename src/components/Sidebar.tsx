@@ -15,24 +15,24 @@ const Sidebar = async () => {
         <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-primary pb-1 inline-block w-fit">
           Clima em Guaíra
         </h3>
-        <div className="bg-white border border-border p-5 rounded-lg text-text shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-gradient-to-br from-blue-500 to-sky-400 p-5 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Guaíra, SP</span>
-            <span className="text-[11px] uppercase text-primary font-bold">{weather.condition}</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-white/80">Guaíra, SP</span>
+            <span className="text-[11px] uppercase text-yellow-200 font-extrabold tracking-widest">{weather.condition}</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 drop-shadow-sm">
             <div className="text-[48px] font-black leading-none tracking-tighter">
               {weather.temp}°
             </div>
-            <svg className="w-10 h-10 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-10 h-10 text-yellow-300 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 4.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V5a.75.75 0 01.75-.75zm0 12a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75zM5 12a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 12zm14 0a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zM7.05 7.05a.75.75 0 011.06 0l1.06 1.06a.75.75 0 11-1.06 1.06L7.05 8.11a.75.75 0 010-1.06zm9.9 9.9a.75.75 0 011.06 0l1.06 1.06a.75.75 0 11-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zM7.05 16.95a.75.75 0 010-1.06l1.06-1.06a.75.75 0 111.06 1.06l-1.06 1.06a.75.75 0 01-1.06 0zm9.9-9.9a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0z" />
               <path d="M12 8.5A3.5 3.5 0 1012 15a3.5 3.5 0 000-7z" />
             </svg>
           </div>
-          <div className="flex gap-6 text-[13px] font-bold text-gray-400 mt-4 pt-4 border-t border-gray-100">
-            <span className="flex items-center gap-1"><span className="text-primary">↑</span> {weather.max}°</span>
-            <span className="flex items-center gap-1"><span className="text-blue-500">↓</span> {weather.min}°</span>
-            <span className="text-[10px] text-gray-300 ml-auto self-center">UMID: {weather.humidity}</span>
+          <div className="flex gap-6 text-[13px] font-bold text-white/90 mt-4 pt-4 border-t border-white/20">
+            <span className="flex items-center gap-1"><span className="text-red-200">↑</span> {weather.max}°</span>
+            <span className="flex items-center gap-1"><span className="text-blue-200">↓</span> {weather.min}°</span>
+            <span className="text-[10px] text-white/70 ml-auto self-center tracking-widest">UMID: {weather.humidity}</span>
           </div>
         </div>
       </div>
@@ -42,20 +42,20 @@ const Sidebar = async () => {
         <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-green-600 pb-1 inline-block w-fit">
           Financeiro
         </h3>
-        <div className="bg-white border border-border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-100 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
           {quotes.financial.map((item, i) => (
-            <div key={i} className="flex justify-between items-center py-2.5 border-b border-gray-100 last:border-none text-[13px]">
-              <span className="text-gray-500 font-bold">{item.label}</span>
+            <div key={i} className="flex justify-between items-center py-2.5 border-b border-emerald-100/50 last:border-none text-[13px]">
+              <span className="text-emerald-800/70 font-bold">{item.label}</span>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-dark-bg">{item.val}</span>
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${item.trend === "up" ? "bg-green-100 text-green-700" : item.trend === "down" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-500"}`}>
+                <span className="font-extrabold text-emerald-900">{item.val}</span>
+                <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${item.trend === "up" ? "bg-emerald-200 text-emerald-800" : item.trend === "down" ? "bg-red-200 text-red-800" : "bg-emerald-100 text-emerald-600"}`}>
                   {item.change}
                 </span>
               </div>
             </div>
           ))}
           {quotes.financial.length === 0 && (
-            <span className="text-[12px] text-gray-400">Indisponível</span>
+            <span className="text-[12px] text-emerald-600/50">Indisponível</span>
           )}
         </div>
       </div>
@@ -65,20 +65,20 @@ const Sidebar = async () => {
         <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-amber-600 pb-1 inline-block w-fit">
           Commodities
         </h3>
-        <div className="bg-white border border-border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-amber-100 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
           {quotes.commodities.map((item, i) => (
-            <div key={i} className="flex justify-between items-center py-2.5 border-b border-gray-100 last:border-none text-[13px]">
-              <span className="text-gray-500 font-bold">{item.label}</span>
+            <div key={i} className="flex justify-between items-center py-2.5 border-b border-amber-200/40 last:border-none text-[13px]">
+              <span className="text-amber-900/60 font-bold">{item.label}</span>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-dark-bg">{item.val}</span>
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${item.trend === "up" ? "bg-green-100 text-green-700" : item.trend === "down" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-500"}`}>
+                <span className="font-extrabold text-amber-950">{item.val}</span>
+                <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${item.trend === "up" ? "bg-emerald-200 text-emerald-800" : item.trend === "down" ? "bg-red-200 text-red-800" : "bg-amber-200 text-amber-800"}`}>
                   {item.change}
                 </span>
               </div>
             </div>
           ))}
           {quotes.commodities.length === 0 && (
-            <span className="text-[12px] text-gray-400">Indisponível</span>
+            <span className="text-[12px] text-amber-600/50">Indisponível</span>
           )}
         </div>
       </div>
