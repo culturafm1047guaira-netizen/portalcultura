@@ -74,6 +74,8 @@ const FEEDS = [
   { url: 'https://www.jornaldebarretos.com.br/feed', source: 'Jornal de Barretos', category: 'Regional' },
   { url: 'https://www.odiarioonline.com.br/feed', source: 'O Diário Online', category: 'Regional' },
   { url: 'https://www.guairanews.com/feed/', source: 'Guaira News', category: 'Regional' },
+  // Link expirado mantido apenas como fallback. Substituir por um novo assim que gerado.
+  { url: 'https://rss.app/feeds/2LAuSQwLtjvj9B5C.xml', source: 'Facebook Rádio Cultura', category: 'Facebook' },
 ];
 
 async function fetchOpenGraphImage(url: string): Promise<string | null> {
@@ -227,46 +229,52 @@ export async function getNews(): Promise<NewsItem[]> {
 
   let finalNewsList = [...enrichedTop, ...restSlice];
 
-  // Integrar Facebook API nativa
-  const facebookPosts = await fetchFacebookGraphAPI();
+  // Integrar Facebook API nativa (Prioridade 1)
+  let facebookPosts = await fetchFacebookGraphAPI();
 
   if (facebookPosts.length > 0) {
-    // Se conseguiu ler do Facebook via API Oficial, insere no topo
+    // Se conseguiu ler do Facebook via API Oficial, substitui eventuais posts do RSS (se houver) e insere no topo
+    finalNewsList = finalNewsList.filter(n => n.category !== 'Facebook');
     finalNewsList = [...facebookPosts, ...finalNewsList];
   } else {
-    // Se não tem tokens configurados ou se deu erro, cria os mocks provisórios.
-    // O texto do mock já instrui que a API precisa ser configurada.
-    const mockFacebook = [
-      {
-        title: "Aguardando Configuração da API do Facebook",
-        link: "https://www.facebook.com/radioculturadeguaira/",
-        image: "https://scontent.fudi1-1.fna.fbcdn.net/v/t39.30808-6/440785199_763266225916056_7934444583151817112_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=hR1W70K61oAQ7kNvgGHrT32&_nc_ht=scontent.fudi1-1.fna&oh=00_AYBq26Y-m82-oX-6V-9yP--j9i8yv-6eO3499_k98Qy0Yg&oe=666139CD",
-        excerpt: "As postagens reais aparecerão aqui assim que você colocar os códigos FACEBOOK_PAGE_ID e FACEBOOK_ACCESS_TOKEN no sistema.",
-        pubDate: new Date().toISOString(),
-        source: "Facebook Rádio Cultura",
-        category: "Facebook"
-      },
-      {
-        title: "Siga as instruções do tutorial para gerar a sua chave de acesso!",
-        link: "https://www.facebook.com/radioculturadeguaira/",
-        image: "https://scontent.fudi1-2.fna.fbcdn.net/v/t39.30808-6/438186178_757643569811655_1603706059632832585_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=Z79Z4Y8R9rYQ7kNvgFRZ0hX&_nc_ht=scontent.fudi1-2.fna&oh=00_AYDBuU37-X9e_w9X-V5Y2--j9i8yv-6eO3499_k98Qy0Yg&oe=666113A3",
-        excerpt: "Uma vez que o Token seja gerado no painel 'Facebook for Developers', o site lerá a página nativamente.",
-        pubDate: new Date(Date.now() - 86400000).toISOString(),
-        source: "Facebook Rádio Cultura",
-        category: "Facebook"
-      },
-      {
-        title: "O Portal Cultura FM agora possui conexão ultra-rápida e oficial com a Meta",
-        link: "https://www.facebook.com/radioculturadeguaira/",
-        image: "https://scontent.fudi1-2.fna.fbcdn.net/v/t39.30808-6/438128362_755502396692439_3300539126297314546_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=W9H0Y_9Y8X8Q7kNvgF-0y6V&_nc_ht=scontent.fudi1-2.fna&oh=00_AYBq26Y-m82-oX-6V-9yP--j9i8yv-6eO3499_k98Qy0Yg&oe=666112C3",
-        excerpt: "A tecnologia Graph API não depende de serviços pagos. Basta realizar o setup inicial uma única vez.",
-        pubDate: new Date(Date.now() - 172800000).toISOString(),
-        source: "Facebook Rádio Cultura",
-        category: "Facebook"
-      }
-    ];
-    finalNewsList = [...mockFacebook, ...finalNewsList];
+    // Se a Graph API não estiver configurada, usa os posts do RSS que já foram carregados acima.
+    // Se o RSS falhou ou retornou vazio (ex: trial expirado), inserimos os mocks visuais.
+    const hasFacebook = finalNewsList.some(n => n.category === 'Facebook');
+    if (!hasFacebook) {
+      const mockFacebook = [
+        {
+          title: "Aguardando Link RSS ou API do Facebook",
+          link: "https://www.facebook.com/radioculturadeguaira/",
+          image: "https://scontent.fudi1-1.fna.fbcdn.net/v/t39.30808-6/440785199_763266225916056_7934444583151817112_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=hR1W70K61oAQ7kNvgGHrT32&_nc_ht=scontent.fudi1-1.fna&oh=00_AYBq26Y-m82-oX-6V-9yP--j9i8yv-6eO3499_k98Qy0Yg&oe=666139CD",
+          excerpt: "As postagens reais aparecerão aqui assim que o novo link do RSS.app for configurado no código.",
+          pubDate: new Date().toISOString(),
+          source: "Facebook Rádio Cultura",
+          category: "Facebook"
+        },
+        {
+          title: "Cole sua chave do Render no chat para automação!",
+          link: "https://www.facebook.com/radioculturadeguaira/",
+          image: "https://scontent.fudi1-2.fna.fbcdn.net/v/t39.30808-6/438186178_757643569811655_1603706059632832585_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=Z79Z4Y8R9rYQ7kNvgFRZ0hX&_nc_ht=scontent.fudi1-2.fna&oh=00_AYDBuU37-X9e_w9X-V5Y2--j9i8yv-6eO3499_k98Qy0Yg&oe=666113A3",
+          excerpt: "O sistema fará o upload de um robô de leitura gratuito para a sua nuvem sem você precisar programar.",
+          pubDate: new Date(Date.now() - 86400000).toISOString(),
+          source: "Facebook Rádio Cultura",
+          category: "Facebook"
+        },
+        {
+          title: "O Portal Cultura FM está pronto para ler qualquer Facebook",
+          link: "https://www.facebook.com/radioculturadeguaira/",
+          image: "https://scontent.fudi1-2.fna.fbcdn.net/v/t39.30808-6/438128362_755502396692439_3300539126297314546_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=W9H0Y_9Y8X8Q7kNvgF-0y6V&_nc_ht=scontent.fudi1-2.fna&oh=00_AYBq26Y-m82-oX-6V-9yP--j9i8yv-6eO3499_k98Qy0Yg&oe=666112C3",
+          excerpt: "A tecnologia Graph API não depende de serviços pagos. Basta realizar o setup inicial uma única vez.",
+          pubDate: new Date(Date.now() - 172800000).toISOString(),
+          source: "Facebook Rádio Cultura",
+          category: "Facebook"
+        }
+      ];
+      finalNewsList = [...mockFacebook, ...finalNewsList];
+    }
   }
+
+  return finalNewsList;
 
   return finalNewsList;
 }
