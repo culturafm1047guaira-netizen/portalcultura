@@ -1,4 +1,5 @@
 import Parser from "rss-parser";
+import { getNewsAPIData } from "./newsapi";
 
 export type NewsItem = {
   title: string;
@@ -237,6 +238,12 @@ export async function getNews(): Promise<NewsItem[]> {
   const enrichedTop = await enrichWithOgImages(topSlice);
 
   let finalNewsList = [...enrichedTop, ...restSlice];
+
+  // Integrar NewsAPI (se configurada)
+  const newsApiArticles = await getNewsAPIData();
+  if (newsApiArticles.length > 0) {
+    finalNewsList = [...newsApiArticles, ...finalNewsList];
+  }
 
   // Integrar Facebook API nativa (Prioridade 1)
   let facebookPosts = await fetchFacebookGraphAPI();

@@ -2,12 +2,20 @@ import React from "react";
 import { getWeatherData } from "@/lib/weather";
 import { getQuotesData } from "@/lib/quotes";
 import { getBrasileiraoData } from "@/lib/brasileirao";
+import { getCryptoData } from "@/lib/coingecko";
+import { getApod } from "@/lib/nasa";
+import { getJoke } from "@/lib/joke";
 import Image from "next/image";
 
 const Sidebar = async () => {
-  const weather = await getWeatherData();
-  const quotes = await getQuotesData();
-  const brasileirao = await getBrasileiraoData();
+  const [weather, quotes, brasileirao, crypto, apod, joke] = await Promise.all([
+    getWeatherData(),
+    getQuotesData(),
+    getBrasileiraoData(),
+    getCryptoData(),
+    getApod(),
+    getJoke(),
+  ]);
 
   return (
     <aside className="flex flex-col gap-8 w-full">
@@ -35,8 +43,51 @@ const Sidebar = async () => {
             <span className="flex items-center gap-1"><span className="text-blue-200">↓</span> {weather.min}°</span>
             <span className="text-[10px] text-white/70 ml-auto self-center tracking-widest">UMID: {weather.humidity}</span>
           </div>
+          {/* Previsão 7 dias */}
+          {weather.daily.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-white/70 mb-2">Previsão 7 dias</div>
+              <div className="flex justify-between gap-1">
+                {weather.daily.map((day, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-0.5">
+                    <span className={`text-[9px] font-bold ${i === 0 ? "text-yellow-200" : "text-white/70"}`}>
+                      {day.weekday}
+                    </span>
+                    <span className="text-sm">{day.icon}</span>
+                    <span className="text-[10px] font-bold text-white">{day.tempMax}°</span>
+                    <span className="text-[8px] text-white/60">{day.tempMin}°</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Cryptocurrencies */}
+      {crypto.length > 0 && (
+        <div className="flex flex-col">
+          <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-purple-600 pb-1 inline-block w-fit">
+            Criptomoedas
+          </h3>
+          <div className="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-100 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            {crypto.map((item, i) => (
+              <div key={i} className="flex justify-between items-center py-2.5 border-b border-purple-100/50 last:border-none text-[13px]">
+                <div className="flex items-center gap-2">
+                  <Image src={item.image} alt={item.name} width={16} height={16} className="w-4 h-4 rounded-full" unoptimized />
+                  <span className="text-purple-800/70 font-bold">{item.name}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-purple-900">{item.priceBRL}</span>
+                  <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${item.trend === "up" ? "bg-emerald-200 text-emerald-800" : item.trend === "down" ? "bg-red-200 text-red-800" : "bg-purple-100 text-purple-600"}`}>
+                    {item.change24h}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Financial Quotes */}
       <div className="flex flex-col">
@@ -171,6 +222,60 @@ const Sidebar = async () => {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* NASA APOD */}
+      {apod && (
+        <div className="flex flex-col">
+          <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-indigo-600 pb-1 inline-block w-fit">
+            Astro do Dia 🚀
+          </h3>
+          <div className="bg-white dark:bg-slate-800 border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+            {apod.url && (
+              <div className="relative w-full aspect-video overflow-hidden">
+                <Image
+                  src={apod.url}
+                  alt={apod.title}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+            )}
+            <div className="p-3">
+              <h4 className="font-montserrat font-bold text-[12px] text-dark-bg dark:text-white mb-1 leading-tight">
+                {apod.title}
+              </h4>
+              <p className="text-[10px] text-gray-500 leading-relaxed line-clamp-3">
+                {apod.explanation}
+              </p>
+              {apod.copyright && (
+                <span className="text-[8px] text-gray-400 mt-1 block">
+                  © {apod.copyright}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Piada do Dia */}
+      {joke && (
+        <div className="flex flex-col">
+          <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-yellow-500 pb-1 inline-block w-fit">
+            Piada do Dia 😄
+          </h3>
+          <div className="bg-gradient-to-br from-yellow-50 to-amber-50 border border-yellow-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <p className="text-[13px] font-medium text-yellow-900 leading-relaxed">
+              {joke.setup}
+            </p>
+            {joke.punchline && (
+              <p className="text-[13px] font-extrabold text-yellow-800 mt-2 italic">
+                {joke.punchline}
+              </p>
+            )}
           </div>
         </div>
       )}
