@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat, Source_Sans_3 } from "next/font/google";
-import Player from "@/components/Player";
+import WhatsAppPeao from "@/components/WhatsAppPeao";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
@@ -59,10 +59,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="pb-16 lg:pb-0">
-            {children}
-          </div>
-          <Player />
+          {children}
+          <WhatsAppPeao />
         </ThemeProvider>
       </body>
     </html>

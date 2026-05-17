@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import TopBar from "@/components/TopBar";
 import Ticker from "@/components/Ticker";
 import BreakingNews from "@/components/BreakingNews";
+import Player from "@/components/Player";
 import Hero from "@/components/Hero";
 import NewsCard from "@/components/NewsCard";
 import Sidebar from "@/components/Sidebar";
@@ -31,6 +32,7 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen bg-white">
       <TopBar />
       <BreakingNews newsTitle={allNews[0]?.title} />
+      <Player />
       <Header />
       <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
 
