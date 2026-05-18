@@ -64,6 +64,16 @@ const Sidebar = async () => {
         </div>
       </div>
 
+      {/* Ad Banner */}
+      <div className="w-full h-[200px] bg-gradient-to-br from-primary to-primary-dark border border-border flex flex-col items-center justify-center gap-2 rounded-lg shadow-sm">
+        <span className="text-white text-lg font-black uppercase tracking-[0.2em]">
+          ANUNCIE AQUI
+        </span>
+        <span className="text-white/80 text-sm font-bold tracking-wider">
+          (17) 3331-1177
+        </span>
+      </div>
+
       {/* Cryptocurrencies */}
       {crypto.length > 0 && (
         <div className="flex flex-col">
@@ -110,6 +120,16 @@ const Sidebar = async () => {
             <span className="text-[12px] text-emerald-600/50">Indisponível</span>
           )}
         </div>
+      </div>
+
+      {/* Ad Banner */}
+      <div className="w-full h-[200px] bg-gradient-to-br from-primary to-primary-dark border border-border flex flex-col items-center justify-center gap-2 rounded-lg shadow-sm">
+        <span className="text-white text-lg font-black uppercase tracking-[0.2em]">
+          ANUNCIE AQUI
+        </span>
+        <span className="text-white/80 text-sm font-bold tracking-wider">
+          (17) 3331-1177
+        </span>
       </div>
 
       {/* Commodities Quotes */}
@@ -260,6 +280,16 @@ const Sidebar = async () => {
           </div>
         </div>
       )}
+
+      {/* Ad Banner */}
+      <div className="w-full h-[200px] bg-gradient-to-br from-primary to-primary-dark border border-border flex flex-col items-center justify-center gap-2 rounded-lg shadow-sm">
+        <span className="text-white text-lg font-black uppercase tracking-[0.2em]">
+          ANUNCIE AQUI
+        </span>
+        <span className="text-white/80 text-sm font-bold tracking-wider">
+          (17) 3331-1177
+        </span>
+      </div>
 
       {/* Piada do Dia */}
       {joke && (
