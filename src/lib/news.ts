@@ -1,5 +1,6 @@
 import Parser from "rss-parser";
 import { getNewsAPIData } from "./newsapi";
+import { getUnsplashImage } from "./unsplash";
 
 export type NewsItem = {
   title: string;
@@ -238,6 +239,30 @@ export async function getNews(): Promise<NewsItem[]> {
   const enrichedTop = await enrichWithOgImages(topSlice);
 
   let finalNewsList = [...enrichedTop, ...restSlice];
+
+  // Unsplash fallback: busca uma imagem por categoria para itens sem imagem
+  const CATEGORY_UNSPLASH_QUERY: Record<string, string> = {
+    Regional: "brazil countryside city landscape",
+    Brasil: "brazil flag landmark",
+    Esportes: "brazilian football stadium sport",
+    Educação: "education classroom brazil school",
+    Saúde: "hospital health brazil",
+    Justiça: "justice courthouse brazil law",
+    Facebook: "social media community",
+  };
+  const categoryCache = new Map<string, string>();
+  for (const item of finalNewsList) {
+    if (!item.image) {
+      const query = CATEGORY_UNSPLASH_QUERY[item.category];
+      if (query && !categoryCache.has(item.category)) {
+        const photo = await getUnsplashImage(query);
+        if (photo) categoryCache.set(item.category, photo.url);
+      }
+      if (categoryCache.has(item.category)) {
+        item.image = categoryCache.get(item.category);
+      }
+    }
+  }
 
   // Integrar NewsAPI (se configurada)
   const newsApiArticles = await getNewsAPIData();
