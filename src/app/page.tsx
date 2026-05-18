@@ -13,6 +13,8 @@ import VideoGallery from "@/components/VideoGallery";
 import FacebookFeed from "@/components/FacebookFeed";
 import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
+import BoredSection from "@/components/BoredSection";
+import JobicySection from "@/components/JobicySection";
 import { getNews } from "@/lib/news";
 
 export const revalidate = 600;
@@ -65,28 +67,101 @@ export default async function Home() {
           {/* Coluna Principal: Categorias em 3 colunas */}
           <div className="flex-1 min-w-0">
             <div className="flex flex-col gap-16">
-              {categories.map((cat) => (
-                <div key={cat.id}>
-                  <div className="flex items-center gap-4 mb-6">
-                    <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: cat.color }}>
-                      {cat.label}
-                    </h2>
-                    <div className="flex-1 border-b border-border" />
-                    <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: cat.color }}>
-                      Ver todas →
-                    </a>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                    {allNews
-                      .filter(n => n.category === cat.id && n !== heroNews)
-                      .slice(0, 3)
-                      .map((news, i) => (
-                        <NewsCard key={i} {...news} />
-                      ))
-                    }
-                  </div>
+              {/* Regional */}
+              <div key="Regional">
+                <div className="flex items-center gap-4 mb-6">
+                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-regional)" }}>
+                    Regional
+                  </h2>
+                  <div className="flex-1 border-b border-border" />
+                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-regional)" }}>
+                    Ver todas →
+                  </a>
                 </div>
-              ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                  {allNews
+                    .filter(n => n.category === "Regional" && n !== heroNews)
+                    .slice(0, 3)
+                    .map((news, i) => (
+                      <NewsCard key={i} {...news} />
+                    ))
+                  }
+                </div>
+              </div>
+
+              <BoredSection />
+
+              {/* Facebook */}
+              <div key="Facebook">
+                <div className="flex items-center gap-4 mb-6">
+                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "#1877F2" }}>
+                    Facebook Rádio Cultura
+                  </h2>
+                  <div className="flex-1 border-b border-border" />
+                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "#1877F2" }}>
+                    Ver todas →
+                  </a>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                  {allNews
+                    .filter(n => n.category === "Facebook" && n !== heroNews)
+                    .slice(0, 3)
+                    .map((news, i) => (
+                      <NewsCard key={i} {...news} />
+                    ))
+                  }
+                </div>
+              </div>
+
+              <JobicySection />
+
+              {/* Brasil */}
+              <div key="Brasil">
+                <div className="flex items-center gap-4 mb-6">
+                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-brasil)" }}>
+                    Brasil
+                  </h2>
+                  <div className="flex-1 border-b border-border" />
+                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-brasil)" }}>
+                    Ver todas →
+                  </a>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                  {allNews
+                    .filter(n => n.category === "Brasil" && n !== heroNews)
+                    .slice(0, 3)
+                    .map((news, i) => (
+                      <NewsCard key={i} {...news} />
+                    ))
+                  }
+                </div>
+              </div>
+
+              <EspnSection />
+
+              {/* Esportes */}
+              <div key="Esportes">
+                <div className="flex items-center gap-4 mb-6">
+                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-esportes)" }}>
+                    Esportes
+                  </h2>
+                  <div className="flex-1 border-b border-border" />
+                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-esportes)" }}>
+                    Ver todas →
+                  </a>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                  {allNews
+                    .filter(n => n.category === "Esportes" && n !== heroNews)
+                    .slice(0, 3)
+                    .map((news, i) => (
+                      <NewsCard key={i} {...news} />
+                    ))
+                  }
+                </div>
+              </div>
+
+              <DeezerSection />
 
               {/* Mais Notícias */}
               <div>
@@ -118,10 +193,6 @@ export default async function Home() {
           </aside>
 
         </div>
-
-        <DeezerSection />
-
-        <EspnSection />
 
         <div className="mt-16 pt-12 border-t border-border">
           <VideoGallery />
