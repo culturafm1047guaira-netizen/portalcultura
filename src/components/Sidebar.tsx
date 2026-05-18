@@ -281,8 +281,13 @@ const Sidebar = async () => {
       )}
 
       {/* Ad Banner placeholder */}
-      <div className="w-full h-[250px] bg-gray-50 dark:bg-slate-800 border border-border flex items-center justify-center text-gray-300 dark:text-slate-600 text-xs font-bold uppercase tracking-widest">
-        Publicidade
+      <div className="w-full h-[250px] bg-gradient-to-br from-primary to-primary-dark border border-border flex flex-col items-center justify-center gap-2 rounded-lg shadow-sm">
+        <span className="text-white text-lg font-black uppercase tracking-[0.2em]">
+          ANUNCIE AQUI
+        </span>
+        <span className="text-white/80 text-sm font-bold tracking-wider">
+          (17) 3331-1177
+        </span>
       </div>
     </aside>
   );

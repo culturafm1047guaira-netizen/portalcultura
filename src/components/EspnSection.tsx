@@ -5,6 +5,7 @@ const statusLabels: Record<string, string> = {
   Scheduled: "Agendado",
   "In Progress": "Ao Vivo",
   Halftime: "Intervalo",
+  "Full Time": "Finalizado",
   Final: "Finalizado",
   Ended: "Encerrado",
   Postponed: "Adiado",
