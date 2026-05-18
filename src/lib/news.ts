@@ -1,6 +1,5 @@
 import Parser from "rss-parser";
 import { getNewsAPIData } from "./newsapi";
-import { getUnsplashImage } from "./unsplash";
 
 export type NewsItem = {
   title: string;
@@ -240,27 +239,20 @@ export async function getNews(): Promise<NewsItem[]> {
 
   let finalNewsList = [...enrichedTop, ...restSlice];
 
-  // Unsplash fallback: busca uma imagem por categoria para itens sem imagem
-  const CATEGORY_UNSPLASH_QUERY: Record<string, string> = {
-    Regional: "brazil countryside city landscape",
-    Brasil: "brazil flag landmark",
-    Esportes: "brazilian football stadium sport",
-    Educação: "education classroom brazil school",
-    Saúde: "hospital health brazil",
-    Justiça: "justice courthouse brazil law",
-    Facebook: "social media community",
+  // Fallback de imagem para itens sem foto
+  const PLACEHOLDER_BY_CATEGORY: Record<string, string> = {
+    Regional: "https://placehold.co/800x450/0066cc/ffffff?text=Regional",
+    Brasil: "https://placehold.co/800x450/008000/ffffff?text=Brasil",
+    Esportes: "https://placehold.co/800x450/00a000/ffffff?text=Esportes",
+    Educação: "https://placehold.co/800x450/e67300/ffffff?text=Educação",
+    Saúde: "https://placehold.co/800x450/cc0066/ffffff?text=Saúde",
+    Justiça: "https://placehold.co/800x450/6600cc/ffffff?text=Justiça",
+    Facebook: "https://placehold.co/800x450/1877F2/ffffff?text=Facebook",
   };
-  const categoryCache = new Map<string, string>();
   for (const item of finalNewsList) {
     if (!item.image) {
-      const query = CATEGORY_UNSPLASH_QUERY[item.category];
-      if (query && !categoryCache.has(item.category)) {
-        const photo = await getUnsplashImage(query);
-        if (photo) categoryCache.set(item.category, photo.url);
-      }
-      if (categoryCache.has(item.category)) {
-        item.image = categoryCache.get(item.category);
-      }
+      const fallback = PLACEHOLDER_BY_CATEGORY[item.category] || "https://placehold.co/800x450/003366/ffffff?text=Notícias";
+      item.image = fallback;
     }
   }
 
