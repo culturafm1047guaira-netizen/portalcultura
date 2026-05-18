@@ -10,9 +10,17 @@ const DeezerSection = async () => {
     <div className="pt-12 border-t border-border">
       <div className="flex items-center gap-4 mb-8">
         <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight text-dark-bg">
-          🎵 Top Música
+          🎵 Top Músicas do Momento (Deezer)
         </h2>
         <div className="flex-1 border-b border-border" />
+        <a
+          href="https://www.deezer.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] font-bold uppercase tracking-widest text-primary hover:opacity-70 transition-opacity shrink-0"
+        >
+          Deezer →
+        </a>
       </div>
 
       {artists.length > 0 && (
