@@ -5,6 +5,8 @@ import { getBrasileiraoData } from "@/lib/brasileirao";
 import { getCryptoData } from "@/lib/coingecko";
 import { getApod } from "@/lib/nasa";
 import { getJoke } from "@/lib/joke";
+import BoredWidget from "@/components/BoredWidget";
+import JobicyWidget from "@/components/JobicyWidget";
 import Image from "next/image";
 
 const Sidebar = async () => {
@@ -279,6 +281,10 @@ const Sidebar = async () => {
           </div>
         </div>
       )}
+
+      <BoredWidget />
+
+      <JobicyWidget />
 
       {/* Ad Banner placeholder */}
       <div className="w-full h-[250px] bg-gray-50 dark:bg-slate-800 border border-border flex items-center justify-center text-gray-300 dark:text-slate-600 text-xs font-bold uppercase tracking-widest">

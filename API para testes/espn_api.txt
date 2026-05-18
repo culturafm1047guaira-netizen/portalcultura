@@ -1,0 +1,151 @@
+=======================================================
+  ESPN API — Guia de Acesso
+  Não oficial | Sem autenticação | Gratuita
+=======================================================
+
+AVISO: API não oficial, descoberta por engenharia reversa.
+Endpoints podem mudar sem aviso. Ideal para projetos pessoais
+e MVPs. Para produção com SLA, considere Sportradar.
+
+-------------------------------------------------------
+BASE URLs
+-------------------------------------------------------
+https://site.api.espn.com/apis/site/v2/sports/{esporte}/{liga}/{recurso}
+https://sports.core.api.espn.com/v2/sports/{esporte}/{liga}
+https://site.web.api.espn.com/apis/site/v2/sports/{esporte}/{liga}/{recurso}
+
+-------------------------------------------------------
+AUTENTICAÇÃO
+-------------------------------------------------------
+Nenhuma. Requisições GET diretas, sem chave de API.
+
+-------------------------------------------------------
+ESPORTES E LIGAS SUPORTADAS
+-------------------------------------------------------
+football/nfl           — Futebol americano (NFL)
+football/college-football — Futebol universitário
+basketball/nba         — Basquete (NBA)
+basketball/mens-college-basketball
+baseball/mlb           — Beisebol (MLB)
+hockey/nhl             — Hóquei (NHL)
+soccer/eng.1           — Premier League
+soccer/esp.1           — La Liga
+soccer/ger.1           — Bundesliga
+soccer/ita.1           — Serie A
+soccer/usa.1           — MLS
+soccer/bra.1           — Brasileirão
+
+-------------------------------------------------------
+ENDPOINTS — PLACARES / SCOREBOARD
+-------------------------------------------------------
+
+Placar atual (hoje):
+GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard
+
+Placar por data específica:
+GET https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20250518
+
+Placar por intervalo de datas:
+GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20250320-20250323&groups=50&limit=500
+
+-------------------------------------------------------
+ENDPOINTS — DETALHES DE JOGO
+-------------------------------------------------------
+
+Resumo completo de um jogo (box score, plays, stats):
+GET https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event={game_id}&region=us&lang=en&contentorigin=espn
+
+Exemplo real (NBA Finals Game 7 2016):
+GET https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=400878160
+
+-------------------------------------------------------
+ENDPOINTS — TIMES
+-------------------------------------------------------
+
+Lista de todos os times:
+GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams
+
+Detalhes de um time (ID 9 = Dallas Cowboys):
+GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/9
+
+Schedule de um time:
+GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/9/schedule?season=2025&seasontype=2
+
+Parâmetros seasontype:
+  1 = Pré-temporada
+  2 = Temporada regular
+  3 = Pós-temporada / Playoffs
+
+-------------------------------------------------------
+ENDPOINTS — CLASSIFICAÇÃO / STANDINGS
+-------------------------------------------------------
+
+GET https://site.api.espn.com/apis/v2/sports/basketball/nba/standings
+GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/standings
+
+-------------------------------------------------------
+ENDPOINTS — NOTÍCIAS
+-------------------------------------------------------
+
+Notícias gerais da liga:
+GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/news
+
+Notícias de um atleta específico:
+GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?athlete={athlete_id}
+
+-------------------------------------------------------
+ENDPOINTS — ATLETAS / JOGADORES
+-------------------------------------------------------
+
+Lista de jogadores de um time:
+GET https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/roster
+
+-------------------------------------------------------
+ENDPOINTS — TODOS OS EVENTOS DE UMA TEMPORADA
+-------------------------------------------------------
+
+GET https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2025/types/2/events?limit=1000
+
+-------------------------------------------------------
+EXEMPLO EM PYTHON
+-------------------------------------------------------
+
+import requests
+
+url = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"
+response = requests.get(url)
+data = response.json()
+
+for game in data["events"]:
+    print(game["name"], "-", game["status"]["type"]["description"])
+
+-------------------------------------------------------
+EXEMPLO EM JAVASCRIPT (fetch)
+-------------------------------------------------------
+
+const url = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
+
+fetch(url)
+  .then(res => res.json())
+  .then(data => {
+    data.events.forEach(game => {
+      const [away, home] = game.competitions[0].competitors;
+      console.log(`${away.team.displayName} @ ${home.team.displayName}`);
+    });
+  });
+
+-------------------------------------------------------
+DOCUMENTAÇÃO COMUNITÁRIA
+-------------------------------------------------------
+https://github.com/pseudo-r/Public-ESPN-API
+https://github.com/ahump20/public-espn-api
+https://gist.github.com/nntrn/ee26cb2a0716de0947a0a4e9a157bc1c
+
+-------------------------------------------------------
+BOAS PRÁTICAS
+-------------------------------------------------------
+- Implemente cache nas respostas para reduzir chamadas
+- Adicione tratamento de erro robusto (endpoints podem mudar)
+- Não faça polling excessivo (sem rate limit publicado,
+  mas uso abusivo pode gerar bloqueio de IP)
+- Para futebol (soccer), o slug da liga é obrigatório (ex: eng.1)

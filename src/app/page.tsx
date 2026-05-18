@@ -11,6 +11,8 @@ import NewsCard from "@/components/NewsCard";
 import Sidebar from "@/components/Sidebar";
 import VideoGallery from "@/components/VideoGallery";
 import FacebookFeed from "@/components/FacebookFeed";
+import DeezerSection from "@/components/DeezerSection";
+import EspnSection from "@/components/EspnSection";
 import { getNews } from "@/lib/news";
 
 export const revalidate = 600;
@@ -116,6 +118,10 @@ export default async function Home() {
           </aside>
 
         </div>
+
+        <DeezerSection />
+
+        <EspnSection />
 
         <div className="mt-16 pt-12 border-t border-border">
           <VideoGallery />
