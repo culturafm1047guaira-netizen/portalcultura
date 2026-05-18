@@ -1,0 +1,14 @@
+name: Revalidate a cada 4 horas
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
+
+jobs:
+  revalidate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revalidar página inicial
+        run: |
+          curl -L "${{ secrets.SITE_URL }}/api/revalidate?secret=${{ secrets.REVALIDATION_SECRET }}"
