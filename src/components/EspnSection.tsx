@@ -20,7 +20,7 @@ const EspnSection = async () => {
   if (matches.length === 0) return null;
 
   return (
-    <div className="mt-16 pt-12 border-t border-border">
+    <div className="pt-12 border-t border-border">
       <div className="flex items-center gap-4 mb-8">
         <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight text-dark-bg">
           ⚽ Jogos do Brasileirão
