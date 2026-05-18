@@ -13,8 +13,6 @@ import VideoGallery from "@/components/VideoGallery";
 import FacebookFeed from "@/components/FacebookFeed";
 import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
-import BoredSection from "@/components/BoredSection";
-import JobicySection from "@/components/JobicySection";
 import { getNews } from "@/lib/news";
 
 export const revalidate = 600;
@@ -89,8 +87,6 @@ export default async function Home() {
                 </div>
               </div>
 
-              <BoredSection />
-
               {/* Facebook */}
               <div key="Facebook">
                 <div className="flex items-center gap-4 mb-6">
@@ -112,8 +108,6 @@ export default async function Home() {
                   }
                 </div>
               </div>
-
-              <JobicySection />
 
               {/* Brasil */}
               <div key="Brasil">
