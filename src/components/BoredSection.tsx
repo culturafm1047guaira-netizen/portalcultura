@@ -13,6 +13,13 @@ const typeLabels: Record<string, string> = {
   busywork: "Produtividade",
 };
 
+const priceLabel = (price: number) => {
+  if (price === 0) return "Grátis";
+  if (price <= 0.3) return "Custo Baixo";
+  if (price <= 0.6) return "Custo Moderado";
+  return "Custo Alto";
+};
+
 const BoredSection = async () => {
   const activity = await getRandomActivity();
 
@@ -39,7 +46,7 @@ const BoredSection = async () => {
             {activity.participants} {activity.participants === 1 ? "pessoa" : "pessoas"}
           </span>
           <span className="text-[10px] font-bold uppercase tracking-wider bg-pink-200/60 dark:bg-pink-800/40 text-pink-800 dark:text-pink-200 px-3 py-1 rounded-full">
-            {activity.price === 0 ? "Grátis" : "💰 Pago"}
+            {priceLabel(activity.price)}
           </span>
         </div>
       </div>

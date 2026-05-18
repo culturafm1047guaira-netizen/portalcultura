@@ -8,6 +8,25 @@ const jobTypeLabels: Record<string, string> = {
   "part-time": "Meio Período",
 };
 
+const levelLabels: Record<string, string> = {
+  senior: "Sênior",
+  "mid-level": "Pleno",
+  junior: "Júnior",
+  lead: "Líder",
+  director: "Diretor",
+  manager: "Gerente",
+  intern: "Estágio",
+  entry: "Iniciante",
+  executive: "Executivo",
+};
+
+const currencySymbol: Record<string, string> = {
+  USD: "US$",
+  BRL: "R$",
+  EUR: "€",
+  GBP: "£",
+};
+
 const JobicySection = async () => {
   const jobs = await getRemoteJobs(8, "brazil");
 
@@ -54,16 +73,17 @@ const JobicySection = async () => {
               </span>
               {job.jobLevel && (
                 <span className="text-[8px] font-bold uppercase tracking-wider bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-200 px-1.5 py-0.5 rounded">
-                  {job.jobLevel}
+                  {levelLabels[job.jobLevel.toLowerCase()] || job.jobLevel}
                 </span>
               )}
             </div>
             {(job.annualSalaryMin || job.annualSalaryMax) && (
               <p className="text-[10px] font-bold text-teal-700 dark:text-teal-300 mt-auto">
-                {job.annualSalaryMin && `$${job.annualSalaryMin}`}
+                {currencySymbol[job.salaryCurrency] || job.salaryCurrency}{" "}
+                {job.annualSalaryMin && parseInt(job.annualSalaryMin).toLocaleString("pt-BR")}
                 {job.annualSalaryMin && job.annualSalaryMax && " - "}
-                {job.annualSalaryMax && `$${job.annualSalaryMax}`}
-                {job.salaryCurrency && ` ${job.salaryCurrency}`}
+                {job.annualSalaryMax && parseInt(job.annualSalaryMax).toLocaleString("pt-BR")}
+                {" "}/ano
               </p>
             )}
           </a>
@@ -77,7 +97,7 @@ const JobicySection = async () => {
           rel="noopener noreferrer"
           className="text-[10px] font-bold uppercase tracking-widest text-teal-600 hover:text-teal-700 transition-colors"
         >
-          via Jobicy →
+          Fonte: Jobicy →
         </a>
       </div>
     </div>

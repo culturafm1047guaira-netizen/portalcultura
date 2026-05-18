@@ -1,6 +1,18 @@
 import React from "react";
 import { getBrasileiraoScores } from "@/lib/espn";
 
+const statusLabels: Record<string, string> = {
+  Scheduled: "Agendado",
+  "In Progress": "Ao Vivo",
+  Halftime: "Intervalo",
+  Final: "Finalizado",
+  Ended: "Encerrado",
+  Postponed: "Adiado",
+  Cancelled: "Cancelado",
+  Delayed: "Atrasado",
+  Rain: "Suspenso (Chuva)",
+};
+
 const EspnSection = async () => {
   const matches = await getBrasileiraoScores();
 
@@ -28,7 +40,7 @@ const EspnSection = async () => {
             >
               <div className="flex items-center justify-between mb-3">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                  {match.status}
+                  {statusLabels[match.status] || match.status}
                 </span>
                 <span className="text-[9px] text-gray-400">
                   {new Date(match.date).toLocaleDateString("pt-BR", {
