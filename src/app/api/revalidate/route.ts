@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get("secret");
+  const secret = request.headers.get("x-revalidate-secret");
 
   if (secret !== process.env.REVALIDATION_SECRET) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });

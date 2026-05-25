@@ -10,7 +10,6 @@ import Hero from "@/components/Hero";
 import NewsCard from "@/components/NewsCard";
 import Sidebar from "@/components/Sidebar";
 import VideoGallery from "@/components/VideoGallery";
-import FacebookFeed from "@/components/FacebookFeed";
 import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
 import { getNews } from "@/lib/news";
@@ -31,7 +30,7 @@ export default async function Home() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen">
       <TopBar />
       <Player />
       <Header />
@@ -45,7 +44,7 @@ export default async function Home() {
 
         {/* Banner Publicitário */}
         <div className="w-full mb-12">
-          <div className="relative w-full overflow-hidden rounded-sm border border-border bg-white">
+          <div className="relative w-full overflow-hidden rounded-sm border border-border bg-white dark:bg-slate-900">
             <Image 
               src="/img/banner-festa-peao.jpg" 
               alt="Publicidade" 
@@ -72,7 +71,7 @@ export default async function Home() {
                     Regional
                   </h2>
                   <div className="flex-1 border-b border-border" />
-                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-regional)" }}>
+                  <a href="/busca?q=Regional" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-regional)" }}>
                     Ver todas →
                   </a>
                 </div>
@@ -80,8 +79,8 @@ export default async function Home() {
                   {allNews
                     .filter(n => n.category === "Regional" && n !== heroNews)
                     .slice(0, 3)
-                    .map((news, i) => (
-                      <NewsCard key={i} {...news} />
+                    .map((news) => (
+                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
                     ))
                   }
                 </div>
@@ -94,7 +93,7 @@ export default async function Home() {
                     Facebook Rádio Cultura
                   </h2>
                   <div className="flex-1 border-b border-border" />
-                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "#1877F2" }}>
+                  <a href="/busca?q=Facebook" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "#1877F2" }}>
                     Ver todas →
                   </a>
                 </div>
@@ -102,8 +101,8 @@ export default async function Home() {
                   {allNews
                     .filter(n => n.category === "Facebook" && n !== heroNews)
                     .slice(0, 3)
-                    .map((news, i) => (
-                      <NewsCard key={i} {...news} />
+                    .map((news) => (
+                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
                     ))
                   }
                 </div>
@@ -116,7 +115,7 @@ export default async function Home() {
                     Brasil
                   </h2>
                   <div className="flex-1 border-b border-border" />
-                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-brasil)" }}>
+                  <a href="/busca?q=Brasil" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-brasil)" }}>
                     Ver todas →
                   </a>
                 </div>
@@ -124,8 +123,8 @@ export default async function Home() {
                   {allNews
                     .filter(n => n.category === "Brasil" && n !== heroNews)
                     .slice(0, 3)
-                    .map((news, i) => (
-                      <NewsCard key={i} {...news} />
+                    .map((news) => (
+                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
                     ))
                   }
                 </div>
@@ -140,7 +139,7 @@ export default async function Home() {
                     Esportes
                   </h2>
                   <div className="flex-1 border-b border-border" />
-                  <a href="#" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-esportes)" }}>
+                  <a href="/busca?q=Esportes" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-esportes)" }}>
                     Ver todas →
                   </a>
                 </div>
@@ -148,8 +147,8 @@ export default async function Home() {
                   {allNews
                     .filter(n => n.category === "Esportes" && n !== heroNews)
                     .slice(0, 3)
-                    .map((news, i) => (
-                      <NewsCard key={i} {...news} />
+                    .map((news) => (
+                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
                     ))
                   }
                 </div>
@@ -170,8 +169,8 @@ export default async function Home() {
                   {allNews
                     .filter(n => n !== heroNews && !categories.some(c => n.category === c.id))
                     .slice(0, 3)
-                    .map((news, i) => (
-                      <NewsCard key={i} {...news} />
+                    .map((news) => (
+                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
                     ))
                   }
                 </div>

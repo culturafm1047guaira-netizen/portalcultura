@@ -43,6 +43,12 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rádio Cultura FM 104.7 — Portal de Notícias | Guaíra, SP",
+    description: "Rádio Cultura FM 104.7 — Portal de Notícias de Guaíra, SP. Últimas notícias de Regional, Brasil, Esportes, Saúde, Educação e Justiça. Ouça ao vivo!",
+    images: ["/img/og-image.png"],
+  },
 };
 
 export default function RootLayout({

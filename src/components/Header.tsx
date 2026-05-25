@@ -6,6 +6,22 @@ import Image from "next/image";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const headerRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isMenuOpen]);
 
   const navItems = [
     { name: "Início", href: "/" },
@@ -19,7 +35,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-border sticky top-0 z-40 transition-colors duration-300">
+    <header ref={headerRef} className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-border sticky top-0 z-40 transition-colors duration-300">
       <div className="container py-3">
         <div className="flex items-center justify-between gap-5 flex-wrap lg:flex-nowrap">
           

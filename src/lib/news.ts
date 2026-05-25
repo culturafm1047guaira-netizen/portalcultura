@@ -33,8 +33,9 @@ const parser = new Parser<Record<string, unknown>, FeedItem>({
   },
 });
 
-function extractImage(item: any): string | null {
-  const html = item.contentEncoded || item.content || item.description || "";
+function extractImage(item: FeedItem | Record<string, any>): string | null {
+  const anyItem = item as any;
+  const html = anyItem.contentEncoded || anyItem.content || anyItem.description || "";
 
   // 1. <img src=""> (aspas duplas ou simples)
   const imgDq = html.match(/<img[^>]+src="([^">]+)"/);
@@ -46,7 +47,7 @@ function extractImage(item: any): string | null {
   // 2. media:content como campo RSS (G1 e outros)
   if (item.mediaContent) {
     if (Array.isArray(item.mediaContent)) {
-      const img = item.mediaContent.find((m: any) => m.$?.type?.includes('image') || m.$?.url);
+      const img = item.mediaContent.find((m: Record<string, any>) => m.$?.type?.includes('image') || m.$?.url);
       if (img?.$?.url) return img.$.url.replace(/&amp;/g, '&');
     } else if (item.mediaContent?.$?.url) {
       return item.mediaContent.$.url.replace(/&amp;/g, '&');
@@ -115,7 +116,7 @@ async function fetchOpenGraphImage(url: string): Promise<string | null> {
 
 /** Enrich news items that are missing images by fetching og:image from article page.
  *  Processes items in batches to avoid overwhelming servers. */
-async function enrichWithOgImages(newsItems: any[]): Promise<any[]> {
+async function enrichWithOgImages(newsItems: NewsItem[]): Promise<NewsItem[]> {
   const BATCH_SIZE = 5;
   const enriched = [...newsItems];
 
@@ -157,7 +158,7 @@ async function fetchFacebookGraphAPI(): Promise<NewsItem[]> {
     const data = await res.json();
     if (!data || !data.data) return [];
 
-    const items: NewsItem[] = data.data.map((post: any) => {
+    const items: NewsItem[] = data.data.map((post: Record<string, any>) => {
       const message = post.message || 'Acompanhe as novidades na página da Rádio Cultura FM 104.7!';
       const excerpt = message.length > 120 ? message.substring(0, 120) + '...' : message;
       // Define a title based on the first line or a default
@@ -211,7 +212,7 @@ export async function getNews(): Promise<NewsItem[]> {
           );
           const finalItems = enrichedItems.map(r =>
             r.status === 'fulfilled' ? r.value : null
-          ).filter(Boolean);
+          ).filter((item): item is NewsItem => item !== null);
           // Append remaining items that weren't enriched
           return [...finalItems, ...items.slice(6)];
         }
@@ -223,7 +224,7 @@ export async function getNews(): Promise<NewsItem[]> {
     })
   );
 
-  let allNews: any[] = [];
+  let allNews: NewsItem[] = [];
   results.forEach(r => {
     if (r.status === "fulfilled") {
       allNews = allNews.concat(r.value);
@@ -269,42 +270,6 @@ export async function getNews(): Promise<NewsItem[]> {
     // Se conseguiu ler do Facebook via API Oficial, substitui eventuais posts do RSS (se houver) e insere no topo
     finalNewsList = finalNewsList.filter(n => n.category !== 'Facebook');
     finalNewsList = [...facebookPosts, ...finalNewsList];
-  } else {
-    // Se a Graph API não estiver configurada, usa os posts do RSS que já foram carregados acima.
-    // Se o RSS falhou ou retornou vazio (ex: trial expirado), inserimos os mocks visuais.
-    const hasFacebook = finalNewsList.some(n => n.category === 'Facebook');
-    if (!hasFacebook) {
-      const mockFacebook = [
-        {
-          title: "Aguardando Link RSS ou API do Facebook",
-          link: "https://www.facebook.com/radioculturadeguaira/",
-          image: "https://scontent.fudi1-1.fna.fbcdn.net/v/t39.30808-6/440785199_763266225916056_7934444583151817112_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=hR1W70K61oAQ7kNvgGHrT32&_nc_ht=scontent.fudi1-1.fna&oh=00_AYBq26Y-m82-oX-6V-9yP--j9i8yv-6eO3499_k98Qy0Yg&oe=666139CD",
-          excerpt: "As postagens reais aparecerão aqui assim que o novo link do RSS.app for configurado no código.",
-          pubDate: new Date().toISOString(),
-          source: "Facebook Rádio Cultura",
-          category: "Facebook"
-        },
-        {
-          title: "Cole sua chave do Render no chat para automação!",
-          link: "https://www.facebook.com/radioculturadeguaira/",
-          image: "https://scontent.fudi1-2.fna.fbcdn.net/v/t39.30808-6/438186178_757643569811655_1603706059632832585_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=Z79Z4Y8R9rYQ7kNvgFRZ0hX&_nc_ht=scontent.fudi1-2.fna&oh=00_AYDBuU37-X9e_w9X-V5Y2--j9i8yv-6eO3499_k98Qy0Yg&oe=666113A3",
-          excerpt: "O sistema fará o upload de um robô de leitura gratuito para a sua nuvem sem você precisar programar.",
-          pubDate: new Date(Date.now() - 86400000).toISOString(),
-          source: "Facebook Rádio Cultura",
-          category: "Facebook"
-        },
-        {
-          title: "O Portal Cultura FM está pronto para ler qualquer Facebook",
-          link: "https://www.facebook.com/radioculturadeguaira/",
-          image: "https://scontent.fudi1-2.fna.fbcdn.net/v/t39.30808-6/438128362_755502396692439_3300539126297314546_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=W9H0Y_9Y8X8Q7kNvgF-0y6V&_nc_ht=scontent.fudi1-2.fna&oh=00_AYBq26Y-m82-oX-6V-9yP--j9i8yv-6eO3499_k98Qy0Yg&oe=666112C3",
-          excerpt: "A tecnologia Graph API não depende de serviços pagos. Basta realizar o setup inicial uma única vez.",
-          pubDate: new Date(Date.now() - 172800000).toISOString(),
-          source: "Facebook Rádio Cultura",
-          category: "Facebook"
-        }
-      ];
-      finalNewsList = [...mockFacebook, ...finalNewsList];
-    }
   }
 
   return finalNewsList;

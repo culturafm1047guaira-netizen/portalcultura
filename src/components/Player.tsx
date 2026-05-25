@@ -50,13 +50,13 @@ const Player = () => {
 
         {isPlaying && (
           <div className="flex items-center gap-1.5 h-6">
-            {[1, 2, 3, 4, 5, 6].map(i => (
+            {[1, 2, 3, 4, 5, 6].map((i, index) => (
               <div
                 key={i}
                 className="w-1.5 rounded-full animate-[vis-anim_0.6s_infinite_alternate] bg-white shadow-[0_0_8px_rgba(255,255,255,0.5)]"
                 style={{
                   animationDelay: `${i * 0.12}s`,
-                  height: `${Math.random() * 10 + 10}px`
+                  height: `${[14, 18, 12, 16, 10, 15][index]}px`
                 }}
               />
             ))}
@@ -72,12 +72,7 @@ const Player = () => {
         onPause={() => setIsPlaying(false)}
       />
 
-      <style jsx>{`
-        @keyframes vis-anim {
-          0% { height: 4px; }
-          100% { height: 16px; }
-        }
-      `}</style>
+
     </div>
   );
 };

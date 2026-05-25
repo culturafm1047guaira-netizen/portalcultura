@@ -4,8 +4,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TopBar from "@/components/TopBar";
 import NewsCard from "@/components/NewsCard";
+import Player from "@/components/Player";
 import Sidebar from "@/components/Sidebar";
 import { getNews } from "@/lib/news";
+
+export const revalidate = 600;
 
 export default async function SearchPage({
   searchParams,
@@ -24,8 +27,9 @@ export default async function SearchPage({
     : [];
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen">
       <TopBar />
+      <Player />
       <Header />
 
       <main className="container py-12 flex-1">
@@ -50,8 +54,8 @@ export default async function SearchPage({
 
             {filteredNews.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                {filteredNews.map((news, i) => (
-                  <NewsCard key={i} {...news} />
+                {filteredNews.map((news) => (
+                  <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
                 ))}
               </div>
             ) : (
