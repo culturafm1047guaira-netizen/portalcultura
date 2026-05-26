@@ -127,7 +127,7 @@ export default function ServicosPublicosPage() {
                     key={item.name}
                     href={item.href}
                     target="_blank"
-                    rel="noopener"
+                    rel="noopener noreferrer"
                     className={`${c} border p-5 rounded-lg hover:shadow-lg transition-all duration-200 group flex flex-col`}
                   >
                     <h3 className="font-montserrat font-bold text-sm text-dark-bg mb-2 group-hover:text-primary transition-colors">

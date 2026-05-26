@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Revalidar página inicial
         run: |
-          curl -L "${{ secrets.SITE_URL }}/api/revalidate?secret=${{ secrets.REVALIDATION_SECRET }}"
+          curl -L -H "x-revalidate-secret: ${{ secrets.REVALIDATION_SECRET }}" "${{ secrets.SITE_URL }}/api/revalidate"

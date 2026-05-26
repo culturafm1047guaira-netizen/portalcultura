@@ -272,5 +272,22 @@ export async function getNews(): Promise<NewsItem[]> {
     finalNewsList = [...facebookPosts, ...finalNewsList];
   }
 
+  // Fallback: se não há posts do Facebook, verifica se o RSS já tem algum
+  const hasFacebook = finalNewsList.some(n => n.category === 'Facebook');
+  if (!hasFacebook) {
+    const fallbackFacebook = [
+      {
+        title: "Siga a Rádio Cultura FM no Facebook!",
+        link: "https://www.facebook.com/radioculturadeguaira/",
+        image: "https://placehold.co/800x450/1877F2/ffffff?text=Siga+nos+no+Facebook",
+        excerpt: "Acompanhe as novidades, programação e bastidores da Rádio Cultura FM 104.7 no Facebook.",
+        pubDate: new Date().toISOString(),
+        source: "Facebook Rádio Cultura",
+        category: "Facebook"
+      },
+    ];
+    finalNewsList = [...fallbackFacebook, ...finalNewsList];
+  }
+
   return finalNewsList;
 }

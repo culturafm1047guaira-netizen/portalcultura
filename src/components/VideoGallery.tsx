@@ -17,7 +17,7 @@ const VideoGallery = () => {
         <a 
           href="https://youtube.com/@culturafmguaira-sp" 
           target="_blank" 
-          rel="noopener"
+          rel="noopener noreferrer"
           className="text-[11px] font-bold text-red-600 hover:text-red-700 transition-all uppercase tracking-wider"
         >
           Ver canal no YouTube →
