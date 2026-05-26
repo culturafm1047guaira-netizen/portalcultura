@@ -1,8 +1,8 @@
-name: Revalidate a cada 4 horas
+name: Revalidate a cada 2 horas
 
 on:
   schedule:
-    - cron: "0 */4 * * *"
+    - cron: "0 */2 * * *"
   workflow_dispatch:
 
 jobs:
