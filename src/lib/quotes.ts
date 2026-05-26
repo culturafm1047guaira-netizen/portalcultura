@@ -28,7 +28,6 @@ async function fetchAwesomeFinancials(): Promise<{ usd: number; eur: number; xau
     const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,XAU-BRL', {
       signal: controller.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-      next: { revalidate: 1800 }
     })
     clearTimeout(timeout)
     if (!res.ok) return null
@@ -46,7 +45,7 @@ async function fetchAwesomeFinancials(): Promise<{ usd: number; eur: number; xau
 
 async function fetchFallbackFinancials(): Promise<{ usd: number; eur: number } | null> {
   try {
-    const res = await fetch('https://open.er-api.com/v6/latest/USD', { next: { revalidate: 3600 } })
+    const res = await fetch('https://open.er-api.com/v6/latest/USD')
     if (res.ok) {
       const data = await res.json()
       if (data?.rates?.BRL) {
@@ -66,7 +65,6 @@ async function fetchOilPrice(): Promise<{ price: number; changePct: number | nul
     const timeout = setTimeout(() => controller.abort(), 10000)
     const res = await fetch('https://api.oilpriceapi.com/v1/demo/prices', {
       signal: controller.signal,
-      next: { revalidate: 3600 },
     })
     clearTimeout(timeout)
     if (!res.ok) return null
@@ -127,7 +125,6 @@ async function fetchCommodities(): Promise<QuoteItem[]> {
   try {
     const res = await fetch('https://www.redacaoagro.com.br/api/cotacoes.php', {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-      next: { revalidate: 3600 }
     })
     if (!res.ok) return []
     const data = await res.json()
