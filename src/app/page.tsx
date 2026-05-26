@@ -12,6 +12,7 @@ import Sidebar from "@/components/Sidebar";
 import VideoGallery from "@/components/VideoGallery";
 import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
+import FacebookEmbed from "@/components/FacebookEmbed";
 import { getNews } from "@/lib/news";
 
 export const revalidate = 600;
@@ -21,6 +22,7 @@ export default async function Home() {
 
   // Hero = primeira notícia Regional (rádio regional)
   const heroNews = allNews.find(n => n.category === "Regional") || allNews[0];
+  const facebookPosts = allNews.filter(n => n.category === "Facebook" && n !== heroNews);
 
   const categories = [
     { id: "Regional", label: "Regional", color: "var(--color-cat-regional)" },
@@ -93,19 +95,19 @@ export default async function Home() {
                     Facebook Rádio Cultura
                   </h2>
                   <div className="flex-1 border-b border-border" />
-                  <a href="/busca?q=Facebook" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "#1877F2" }}>
+                  <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "#1877F2" }}>
                     Ver todas →
                   </a>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                  {allNews
-                    .filter(n => n.category === "Facebook" && n !== heroNews)
-                    .slice(0, 3)
-                    .map((news) => (
+                {facebookPosts.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                    {facebookPosts.slice(0, 3).map((news) => (
                       <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
-                    ))
-                  }
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <FacebookEmbed />
+                )}
               </div>
 
               {/* Brasil */}
