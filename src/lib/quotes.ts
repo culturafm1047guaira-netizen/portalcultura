@@ -28,6 +28,7 @@ async function fetchAwesomeFinancials(): Promise<{ usd: number; eur: number; xau
     const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,XAU-BRL', {
       signal: controller.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      next: { revalidate: 300 },
     })
     clearTimeout(timeout)
     if (!res.ok) return null
@@ -65,6 +66,7 @@ async function fetchOilPrice(): Promise<{ price: number; changePct: number | nul
     const timeout = setTimeout(() => controller.abort(), 10000)
     const res = await fetch('https://api.oilpriceapi.com/v1/demo/prices', {
       signal: controller.signal,
+      next: { revalidate: 600 },
     })
     clearTimeout(timeout)
     if (!res.ok) return null
@@ -125,13 +127,14 @@ async function fetchCommodities(): Promise<QuoteItem[]> {
   try {
     const res = await fetch('https://www.redacaoagro.com.br/api/cotacoes.php', {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      next: { revalidate: 300 },
     })
     if (!res.ok) return []
     const data = await res.json()
     if (data.status !== 'ok' || !data.commodities) return []
 
     const items: QuoteItem[] = []
-    const targets = ['soja', 'milho', 'boi_gordo', 'cafe', 'acucar']
+    const targets = ['soja', 'milho', 'boi_gordo', 'cafe', 'acucar', 'trigo', 'algodao']
     
     for (const key of targets) {
       const item = data.commodities[key]
