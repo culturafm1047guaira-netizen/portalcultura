@@ -29,7 +29,8 @@ function translateJoke(joke: any): JokeData | null {
 export async function getJoke(): Promise<JokeData | null> {
   try {
     const res = await fetch(
-      "https://v2.jokeapi.dev/joke/Any?lang=pt&blacklistFlags=nsfw,religious,political,racist,sexist,explicit"
+      "https://v2.jokeapi.dev/joke/Any?lang=pt&blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
+      { next: { revalidate: 300 } }
     );
     if (!res.ok) return null;
     const data = await res.json();
