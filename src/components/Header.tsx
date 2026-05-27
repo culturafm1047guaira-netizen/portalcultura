@@ -26,6 +26,7 @@ const Header = () => {
   const navItems = [
     { name: "Início", href: "/" },
     { name: "Programação", href: "/programacao" },
+    { name: "Economia", href: "/economia" },
     { name: "Serviços Públicos", href: "/servicos-publicos" },
     { name: "Sobre", href: "/sobre" },
     { name: "Contato", href: "/contato" },

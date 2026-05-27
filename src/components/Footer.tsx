@@ -33,6 +33,7 @@ const Footer = () => {
             <div className="flex flex-col gap-1.5">
               <Link href="/" className="text-[13px] text-white hover:text-white transition-colors">Início</Link>
               <Link href="/programacao" className="text-[13px] text-white hover:text-white transition-colors">Programação</Link>
+              <Link href="/economia" className="text-[13px] text-white hover:text-white transition-colors">Economia</Link>
               <Link href="/sobre" className="text-[13px] text-white hover:text-white transition-colors">Sobre</Link>
               <Link href="/contato" className="text-[13px] text-white hover:text-white transition-colors">Contato</Link>
               <Link href="/termos" className="text-[13px] text-white hover:text-white transition-colors">Termos de Uso</Link>
