@@ -13,9 +13,10 @@ export const revalidate = 600;
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string, limit?: string }>;
 }) {
-  const { q: query } = await searchParams;
+  const { q: query, limit } = await searchParams;
+  const currentLimit = parseInt(limit || "12", 10);
   const allNews = await getNews();
 
   const filteredNews = query
@@ -26,8 +27,11 @@ export default async function SearchPage({
       )
     : [];
 
+  const displayedNews = filteredNews.slice(0, currentLimit);
+  const hasMore = currentLimit < filteredNews.length;
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-slate-900">
       <TopBar />
       <Player />
       <Header />
@@ -53,10 +57,24 @@ export default async function SearchPage({
             </div>
 
             {filteredNews.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                {filteredNews.map((news) => (
-                  <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
-                ))}
+              <div className="flex flex-col gap-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+                  {displayedNews.map((news) => (
+                    <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
+                  ))}
+                </div>
+                
+                {hasMore && (
+                  <div className="flex justify-center mt-4">
+                    <Link 
+                      href={`/busca?q=${encodeURIComponent(query || "")}&limit=${currentLimit + 12}`}
+                      className="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-full transition-colors shadow-md hover:shadow-lg"
+                      scroll={false}
+                    >
+                      Carregar mais notícias
+                    </Link>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="py-20 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">

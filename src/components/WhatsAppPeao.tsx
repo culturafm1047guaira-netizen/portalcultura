@@ -172,13 +172,13 @@ const WhatsAppPeao = () => {
       href="https://api.whatsapp.com/send?phone=551733311155"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-4 right-6 z-50 flex items-end gap-2 cursor-pointer group"
+      className="fixed bottom-4 right-4 md:right-6 z-50 flex items-end gap-2 cursor-pointer group"
       style={{ animation: "peao-bounce 2s ease-in-out infinite" }}
       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.animation = "none" }}
       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.animation = "peao-bounce 2s ease-in-out infinite" }}
     >
       {/* Speech bubble */}
-      <div className="relative bg-white dark:bg-slate-800 border-2 border-[#D94B4B] rounded-2xl px-4 py-2.5 shadow-lg mb-6 order-1">
+      <div className="relative hidden md:block bg-white dark:bg-slate-800 border-2 border-[#D94B4B] rounded-2xl px-4 py-2.5 shadow-lg mb-6 order-1">
         <div className="absolute right-[-10px] bottom-[18px] w-0 h-0 border-8 border-y-8 border-l-8 border-transparent border-l-[#D94B4B] dark:border-l-slate-800" />
         <p className="text-[14px] font-bold text-dark-bg dark:text-white whitespace-nowrap">
           🎵 Peça sua música
@@ -190,7 +190,7 @@ const WhatsAppPeao = () => {
 
       {/* Character */}
       <div
-        className="relative order-2 w-[72px] h-[108px]"
+        className="relative order-2 w-[54px] h-[81px] md:w-[72px] md:h-[108px]"
         style={{ animation: "peao-wiggle 4s ease-in-out infinite" }}
         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.animation = "none" }}
         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.animation = "peao-wiggle 4s ease-in-out infinite" }}

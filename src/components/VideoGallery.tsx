@@ -1,11 +1,36 @@
 import React from "react";
 
-const VideoGallery = () => {
-  const videos = [
+const VideoGallery = async () => {
+  let videos = [
     { id: "cFzhaLcq0Xk", title: "Programa Raízes Sertanejas - 10/05/2026" },
     { id: "t9KR7G1ohVU", title: "Programa Raízes Sertanejas - 03/05/2026" },
     { id: "MVyyC4qLA5g", title: "Programa Raízes Sertanejas - 29/03/2026" },
   ];
+
+  try {
+    const apiKey = process.env.YOUTUBE_API_KEY;
+    // Canal da rádio. Se não houver, usa o env.
+    const channelId = process.env.YOUTUBE_CHANNEL_ID || "UC..."; // Substitua pelo ID real se souber
+
+    if (apiKey && process.env.YOUTUBE_CHANNEL_ID) {
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${process.env.YOUTUBE_CHANNEL_ID}&part=snippet,id&order=date&maxResults=3&type=video`,
+        { next: { revalidate: 3600 } }
+      );
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.items && data.items.length > 0) {
+          videos = data.items.map((item: any) => ({
+            id: item.id.videoId,
+            title: item.snippet.title.replace(/&quot;/g, '"').replace(/&#39;/g, "'"),
+          }));
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao buscar vídeos do YouTube:", error);
+  }
 
   return (
     <div className="w-full mb-16">
