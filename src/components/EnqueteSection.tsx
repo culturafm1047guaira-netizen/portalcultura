@@ -115,7 +115,7 @@ export default function EnqueteSection() {
             📊
           </span>
           <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-            Enquete
+            Enquete da Semana
           </h2>
         </div>
         <div className="flex-1 border-b border-border" />
