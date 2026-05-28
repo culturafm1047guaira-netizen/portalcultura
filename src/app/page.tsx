@@ -14,6 +14,7 @@ import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
 
 import HoroscopoCarousel from "@/components/HoroscopoSection";
+import EnqueteSection from "@/components/EnqueteSection";
 import { NewsArticleSchema } from "@/components/JsonLd";
 import { getNews } from "@/lib/news";
 import { getAllHoroscopos } from "@/lib/horoscopo";
@@ -166,6 +167,8 @@ export default async function Home() {
                   }
                 </div>
               </div>
+
+              <EnqueteSection />
             </div>
           </div>
 
