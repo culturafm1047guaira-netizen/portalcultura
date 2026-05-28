@@ -14,6 +14,7 @@ import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
 
 import HoroscopoCarousel from "@/components/HoroscopoSection";
+import { NewsArticleSchema } from "@/components/JsonLd";
 import { getNews } from "@/lib/news";
 import { getAllHoroscopos } from "@/lib/horoscopo";
 
@@ -42,6 +43,7 @@ export default async function Home() {
         {/* Top Section: Hero taking full width of the grid container */}
         <div className="w-full mb-12 border-b border-border pb-12">
           {heroNews && <Hero news={heroNews} />}
+          {heroNews && <NewsArticleSchema news={heroNews} />}
         </div>
 
         {/* Banner Publicitário */}
@@ -86,6 +88,9 @@ export default async function Home() {
                     ))
                   }
                 </div>
+                {allNews.filter(n => n.category === "Regional" && n !== heroNews).slice(0, 3).map(n => (
+                  <NewsArticleSchema key={`schema-${n.source}-${n.pubDate}-${n.title}`} news={n} />
+                ))}
               </div>
 
               {/* Horóscopo */}
@@ -111,6 +116,9 @@ export default async function Home() {
                     ))
                   }
                 </div>
+                {allNews.filter(n => n.category === "Brasil" && n !== heroNews).slice(0, 3).map(n => (
+                  <NewsArticleSchema key={`schema-${n.source}-${n.pubDate}-${n.title}`} news={n} />
+                ))}
               </div>
 
               <EspnSection />

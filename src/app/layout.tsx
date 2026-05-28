@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Montserrat, Source_Sans_3 } from "next/font/google";
 import WhatsAppPeao from "@/components/WhatsAppPeao";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { OrganizationSchema, WebSiteSchema } from "@/components/JsonLd";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -65,6 +66,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <OrganizationSchema />
+          <WebSiteSchema />
           {children}
           <WhatsAppPeao />
         </ThemeProvider>
