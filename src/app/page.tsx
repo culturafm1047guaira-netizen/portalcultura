@@ -13,12 +13,14 @@ import VideoGallery from "@/components/VideoGallery";
 import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
 import FacebookEmbed from "@/components/FacebookEmbed";
+import HoroscopoCarousel from "@/components/HoroscopoSection";
 import { getNews } from "@/lib/news";
+import { getAllHoroscopos } from "@/lib/horoscopo";
 
 export const revalidate = 600;
 
 export default async function Home() {
-  const allNews = await getNews();
+  const [allNews, horoscopos] = await Promise.all([getNews(), getAllHoroscopos()]);
 
   // Hero = primeira notícia Regional (rádio regional)
   const heroNews = allNews.find(n => n.category === "Regional") || allNews[0];
@@ -109,6 +111,9 @@ export default async function Home() {
                   <FacebookEmbed />
                 )}
               </div>
+
+              {/* Horóscopo */}
+              <HoroscopoCarousel signos={horoscopos} />
 
               {/* Brasil */}
               <div key="Brasil">
