@@ -305,18 +305,71 @@ const Sidebar = async () => {
       {/* Piada do Dia */}
       {resolved.joke && (
         <div className="flex flex-col">
-          <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-yellow-500 pb-1 inline-block w-fit">
-            Piada do Dia 😄
-          </h3>
-          <div className="bg-gradient-to-br from-yellow-50 to-amber-50 border border-yellow-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <p className="text-[13px] font-medium text-yellow-900 leading-relaxed">
-              {resolved.joke.setup}
-            </p>
-            {resolved.joke.punchline && (
-              <p className="text-[13px] font-extrabold text-yellow-800 mt-2 italic">
-                {resolved.joke.punchline}
-              </p>
-            )}
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center text-[11px] shadow-sm shrink-0">
+              🎤
+            </span>
+            <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text">
+              Piada do Dia
+            </h3>
+            <div className="flex-1 border-b border-dashed border-amber-200/50 dark:border-amber-800/30" />
+          </div>
+
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1e] border border-amber-200/20 dark:border-amber-600/20 shadow-lg hover:shadow-xl transition-all duration-300 group">
+            {/* Spotlight effect */}
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%)" }} />
+            <div className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(251,191,36,0.05) 0%, transparent 70%)" }} />
+
+            {/* Stage curtain top decoration */}
+            <div className="relative h-2 flex">
+              <div className="flex-1 bg-gradient-to-r from-amber-700 via-amber-500 to-amber-700 opacity-70" />
+              <div className="w-16 h-2 bg-gradient-to-r from-amber-600 to-amber-400 relative">
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-3 bg-amber-400 rounded-b-full" />
+              </div>
+              <div className="flex-1 bg-gradient-to-l from-amber-700 via-amber-500 to-amber-700 opacity-70" />
+            </div>
+
+            {/* Content */}
+            <div className="relative px-5 py-5">
+              {/* Microphone decorative */}
+              <div className="absolute top-3 right-3 text-amber-500/20 dark:text-amber-400/15 text-3xl leading-none select-none pointer-events-none group-hover:scale-110 transition-transform duration-500">
+                🎙
+              </div>
+
+              {/* Joke setup */}
+              <div className="flex items-start gap-3">
+                <span className="text-amber-400/60 dark:text-amber-300/50 text-lg leading-none mt-0.5 select-none">❝</span>
+                <p className="text-[13px] font-medium text-amber-100/90 leading-relaxed flex-1">
+                  {resolved.joke.setup}
+                </p>
+              </div>
+
+              {/* Punchline */}
+              {resolved.joke.punchline && (
+                <div className="mt-4 pt-3 border-t border-amber-400/15 dark:border-amber-500/10">
+                  <div className="flex items-start gap-3">
+                    <span className="text-amber-400/60 dark:text-amber-300/50 text-lg leading-none mt-0.5 select-none">❞</span>
+                    <p className="text-[13px] font-extrabold text-amber-300 dark:text-amber-200 leading-relaxed flex-1 italic">
+                      {resolved.joke.punchline}
+                      <span className="inline-block ml-1 text-amber-400/70 group-hover:animate-pulse">😂</span>
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Audience reaction dots */}
+              <div className="flex gap-1.5 mt-4 justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                {["😂", "😆", "🤣", "😅"].map((emoji, i) => (
+                  <span
+                    key={i}
+                    className="text-[10px] opacity-60 hover:opacity-100 transition-all cursor-default hover:scale-125"
+                    style={{ animationDelay: `${i * 150}ms` }}
+                  >
+                    {emoji}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}
