@@ -12,7 +12,7 @@ import Sidebar from "@/components/Sidebar";
 import VideoGallery from "@/components/VideoGallery";
 import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
-import FacebookEmbed from "@/components/FacebookEmbed";
+
 import HoroscopoCarousel from "@/components/HoroscopoSection";
 import { getNews } from "@/lib/news";
 import { getAllHoroscopos } from "@/lib/horoscopo";
@@ -24,11 +24,9 @@ export default async function Home() {
 
   // Hero = primeira notícia Regional (rádio regional)
   const heroNews = allNews.find(n => n.category === "Regional") || allNews[0];
-  const facebookPosts = allNews.filter(n => n.category === "Facebook" && n !== heroNews);
 
   const categories = [
     { id: "Regional", label: "Regional", color: "var(--color-cat-regional)" },
-    { id: "Facebook", label: "Facebook Rádio Cultura", color: "#1877F2" },
     { id: "Brasil", label: "Brasil", color: "var(--color-cat-brasil)" },
     { id: "Esportes", label: "Esportes", color: "var(--color-cat-esportes)" },
   ];
@@ -88,28 +86,6 @@ export default async function Home() {
                     ))
                   }
                 </div>
-              </div>
-
-              {/* Facebook */}
-              <div key="Facebook">
-                <div className="flex items-center gap-4 mb-6">
-                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "#1877F2" }}>
-                    Facebook Rádio Cultura
-                  </h2>
-                  <div className="flex-1 border-b border-border" />
-                  <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "#1877F2" }}>
-                    Ver todas →
-                  </a>
-                </div>
-                {facebookPosts.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                    {facebookPosts.slice(0, 3).map((news) => (
-                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
-                    ))}
-                  </div>
-                ) : (
-                  <FacebookEmbed />
-                )}
               </div>
 
               {/* Horóscopo */}
