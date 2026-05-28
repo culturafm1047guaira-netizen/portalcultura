@@ -1,42 +1,199 @@
+const JOKES: { setup: string; punchline: string; category: string }[] = [
+  { setup: "Por que o fogo sempre conta a verdade?", punchline: "Porque ele queima!", category: "trocadilho" },
+  { setup: "O que o advogado do cachorro disse no julgamento?", punchline: "Senhoria, a defesa vai latir!", category: "trocadilho" },
+  { setup: "Por que o livro de matemática ficou triste?", punchline: "Porque tinha muitos problemas.", category: "trocadilho" },
+  { setup: "O que o tomate foi fazer no banco?", punchline: "Tirar extrato.", category: "trocadilho" },
+  { setup: "Por que o esqueleto não brigou com ninguém?", punchline: "Porque ele não tem estômago pra isso.", category: "trocadilho" },
+  { setup: "O que o zero disse para o oito?", punchline: "Belo cinto!", category: "trocadilho" },
+  { setup: "Como se chama um psiquiatra que atende apenas pinóquios?", punchline: "Pulmãozinho de aço.", category: "trocadilho" },
+  { setup: "O que o pato disse para a pata?", punchline: "Vem quá!", category: "trocadilho" },
+  { setup: "Por que o café foi processado?", punchline: "Porque ele era muito expresso.", category: "trocadilho" },
+  { setup: "O que o pagodeiro foi fazer na igreja?", punchline: "Cantar pá God.", category: "trocadilho" },
+  { setup: "Qual é o rei dos queijos?", punchline: "O reiqueijão.", category: "trocadilho" },
+  { setup: "Por que a galinha atravessou a rua?", punchline: "Para chegar do outro lado. Por que você achou que ia ter uma piada diferente?", category: "clássica" },
+  { setup: "O que um canibal disse ao ver o amigo pulando de paraquedas?", punchline: "Olha só o lanche que está caindo do céu!", category: "absurda" },
+  { setup: "Dois policiais estão numa viatura. Um vira pro outro e pergunta:", punchline: "— É alarme ou é tiro? O outro responde: — É alarme, porque se fosse tiro a gente já tinha ido embora.", category: "trocadilho" },
+  { setup: "Por que o computador foi preso?", punchline: "Porque executou um programa.", category: "trocadilho" },
+  { setup: "O que o JavaScript disse para o HTML?", punchline: "Você é o DOM da minha vida.", category: "nerd" },
+  { setup: "Quantos programadores são necessários para trocar uma lâmpada?", punchline: "Nenhum, isso é problema de hardware.", category: "nerd" },
+  { setup: "O que o CSS disse para o HTML?", punchline: "Você me deixa estilizado.", category: "nerd" },
+  { setup: "Um SQL entrou num bar e foi logo perguntando:", punchline: "— Pode me dar uma tabela?", category: "nerd" },
+  { setup: "O que o astronauta falou quando a nave não funcionou?", punchline: "Sem combustível, sem viagem!", category: "absurda" },
+  { setup: "O Joãozinho chegou da escola e disse pra mãe:", punchline: "— Mãe, hoje eu tirei um zero em matemática! A mãe respondeu: — Outro? Quantos zeros você precisa juntar pra passar de ano?", category: "infantil" },
+  { setup: "Um cara entra numa loja e pede:", punchline: "— Quero comprar um sapato para o meu pé direito. O vendedor pergunta: — E o pé esquerdo? O cara responde: — É canhoto, não usa.", category: "absurda" },
+  { setup: "Sabe por que o Batman colocou o cinto de utilidades dele no micro-ondas?", punchline: "Porque ele queria um Bat-super-aquecido.", category: "trocadilho" },
+  { setup: "Qual é o contrário de volátil?", punchline: "Vem cá, não vai não!", category: "trocadilho" },
+  { setup: "O que a parede disse para o quadro?", punchline: "Deixa que eu te penduro.", category: "trocadilho" },
+  { setup: "Por que os elétrons nunca pagam impostos?", punchline: "Porque eles são pró-tons.", category: "nerd" },
+  { setup: "O que o vento disse para a nuvem?", punchline: "Você está flutuando no meu pensamento.", category: "poética" },
+  { setup: "O médico virou para o paciente e disse:", punchline: "— O senhor está com uma síndrome de vira-lata. O paciente respondeu: — Au, au, pelo menos não é cinomose.", category: "absurda" },
+  { setup: "Entra um cachorro num bar e diz:", punchline: "— Não vou pedir nada, só vim pagar a conta do meu dono.", category: "absurda" },
+  { setup: "Qual o animal mais antigo?", punchline: "A zebra, porque ela é preta e branca (foto preto e branco).", category: "infantil" },
+  { setup: "Por que o boi olhou para trás?", punchline: "Porque ele viu a bermuda do moleque.", category: "infantil" },
+  { setup: "O que o cisco disse para o olho?", punchline: "Você não é o único que chora por mim.", category: "poética" },
+  { setup: "Sabe qual é a fórmula do gelo seco?", punchline: "H₂O + Frio.", category: "nerd" },
+  { setup: "O que a calculadora disse para o engenheiro?", punchline: "Você pode contar comigo.", category: "trocadilho" },
+  { setup: "O bêbado chega no bar e pede:", punchline: "— Me vê um drink. O dono do bar pergunta: — Qual? O bêbado responde: — Um drive-thru: pode mandar lá pra fora.", category: "absurda" },
+  { setup: "Qual a cidade que não tem táxi?", punchline: "Não-ó-bus.", category: "trocadilho" },
+  { setup: "O que a água mineral disse para o copo?", punchline: "Você é o vidro da minha vida.", category: "poética" },
+  { setup: "Por que o ovo não conta segredos?", punchline: "Porque ele pode se quebrar.", category: "infantil" },
+  { setup: "O que o pneu disse para o asfalto?", punchline: "Você me cala, mas não me para.", category: "poética" },
+  { setup: "Qual a fruta que anda de trem?", punchline: "O kiwi, porque ele é ki-wi (qui-via).", category: "trocadilho" },
+  { setup: "O que o palhaço disse para o médico?", punchline: "— Doutor, estou me sentindo um pouco pirado.", category: "trocadilho" },
+  { setup: "Por que o Batman não come carne vermelha?", punchline: "Porque ele é mor-cego.", category: "trocadilho" },
+  { setup: "Quantas formigas cabem em um potinho de mostarda?", punchline: "Nenhuma, porque formiga não gosta de mostarda.", category: "absurda" },
+  { setup: "O que a TV disse para o controle remoto?", punchline: "Você me dá canais.", category: "trocadilho" },
+  { setup: "Sabe por que o espantalho ganhou um prêmio?", punchline: "Porque ele era o máximo no campo.", category: "trocadilho" },
+  { setup: "O que o lápis disse para o papel?", punchline: "Você não tem ideia do que eu escrevo por você.", category: "poética" },
+  { setup: "O que o camisolão disse pra sandália?", punchline: "Você é o meu par.", category: "poética" },
+  { setup: "Qual o único jejum que engorda?", punchline: "O de Jesus, porque ele multiplicou os pães.", category: "trocadilho" },
+  { setup: "O porteiro perguntou pro elevador:", punchline: "— Vai subir? O elevador respondeu: — Não, vou ficar aqui paradão mesmo.", category: "absurda" },
+  { setup: "O que é um pontinho amarelo no céu?", punchline: "Um Yellowcóptero de entrega.", category: "absurda" },
+  { setup: "Sabe qual é o esporte favorito dos átomos?", punchline: "A luta (grega, romana, etc.).", category: "nerd" },
+  { setup: "Por que a planta não gosta de fofoca?", punchline: "Porque ela prefere fotossíntese (foto sem tese).", category: "trocadilho" },
+  { setup: "O que o pedreiro disse para a parede?", punchline: "Vou te rebocar.", category: "trocadilho" },
+  { setup: "O cavalo entrou no bar e o barman perguntou:", punchline: "— Por que cara tão longa?", category: "clássica" },
+  { setup: "Qual é o salgado favorito do Batman?", punchline: "Batata frita.", category: "trocadilho" },
+  { setup: "O peixe perguntou pro outro: — O que a água tá fazendo?", punchline: "O outro respondeu: — Uai, água.", category: "absurda" },
+  { setup: "Por que o astrônomo foi mal na prova?", punchline: "Porque ele colou no Universo.", category: "nerd" },
+  { setup: "Do que o palhaço morreu?", punchline: "De coma alcoólico (cômicas alcoólicas).", category: "trocadilho" },
+  { setup: "O que o chão falou pro tapete?", punchline: "— Deixa que eu te cubro.", category: "trocadilho" },
+  { setup: "Sabe por que a bicicleta não consegue se equilibrar?", punchline: "Porque ela é two-tired (too tired = muito cansada).", category: "trocadilho" },
+  { setup: "O que o dente disse para o dentista?", punchline: "Você me arranca suspiros.", category: "poética" },
+  { setup: "O que a porta disse pra fechadura?", punchline: "Você é a chave do meu coração.", category: "poética" },
+  { setup: "Qual o contrário de grande?", punchline: "Ao contrário de grande é pequeno. Você esperava o quê?", category: "absurda" },
+  { setup: "Por que a lâmpada foi ao psicólogo?", punchline: "Porque ela estava com falta de brilho próprio.", category: "absurda" },
+  { setup: "O que o chocolate quente disse para o marshmallow?", punchline: "Você derrete meu coração.", category: "poética" },
+  { setup: "Sabe o que o engenheiro florestal falou sobre o reflorestamento?", punchline: "— Isso é madeira de mais qualidade.", category: "trocadilho" },
+  { setup: "Por que a cebola não conta piadas?", punchline: "Porque ela faz todo mundo chorar.", category: "trocadilho" },
+  { setup: "O que a padaria disse para o pão?", punchline: "Você é a massa da minha vida!", category: "poética" },
+  { setup: "Qual o livro mais pesado da biblioteca?", punchline: "O dicionário, porque tem milhares de palavras (palavras pesam?).", category: "absurda" },
+  { setup: "Por que o relógio foi calado?", punchline: "Porque deu mancheia.", category: "trocadilho" },
+  { setup: "O programador foi ao médico e reclamou:", punchline: "— Doutor, eu não consigo dormir, fico pensando em código. O médico disse: — Tenta desligar a mente. O programador: — Já tentei, mas sempre dá segmentation fault.", category: "nerd" },
+  { setup: "Dois programadores conversam:", punchline: "— Algo está errado. — O que? — Não sei, mas está compilando.", category: "nerd" },
+  { setup: "O que um bit disse para o outro?", punchline: "— Vamos dar um byte?", category: "nerd" },
+  { setup: "O que a web disse pro navegador?", punchline: "— Sem cache, sem carinho.", category: "nerd" },
+  { setup: "Por que o programador foi demitido?", punchline: "Porque ele só sabia dar console.log da vida.", category: "nerd" },
+  { setup: "Sabe por que o Wi-Fi e o casamento são parecidos?", punchline: "Porque depois que você assume, o sinal cai.", category: "absurda" },
+  { setup: "Qual o fim da picada?", punchline: "O mosquito, porque depois de picar ele morre.", category: "absurda" },
+  { setup: "O que a xícara disse pro café?", punchline: "Você me aquece por dentro.", category: "poética" },
+  { setup: "Por que a formiga tem paciência?", punchline: "Porque ela sabe que vai levar o que quer, mas no formigamento do tempo.", category: "absurda" },
+  { setup: "O que o gato disse pro rato antes de atacar?", punchline: "— Você está enlatado!", category: "absurda" },
+  { setup: "O que o neném disse pra mãe?", punchline: "— Mãe, eu acho que sou um preguiçoso. A mãe respondeu: — Por que, filho? — Porque eu só fico deitado.", category: "infantil" },
+  { setup: "Qual o único time que não perde nunca?", punchline: "O time dos Cientistas, porque eles têm a Física a favor (Física = Física, time de futebol fictício).", category: "nerd" },
+  { setup: "O que a Lua disse pro Sol?", punchline: "Você é tão grande e brilhante que me ofusca.", category: "poética" },
+  { setup: "Sabe qual a tecla favorita do programador?", punchline: "Ctrl+C Ctrl+V (copiar e colar).", category: "nerd" },
+  { setup: "O que o casamento disse pro divorciado?", punchline: "— Te avisei.", category: "absurda" },
+  { setup: "Por que o pão não fala?", punchline: "Porque ele é um pão-duro.", category: "trocadilho" },
+  { setup: "O vento disse pra bandeira:", punchline: "— Você é a razão pela qual eu me agito.", category: "poética" },
+  { setup: "Sabe o que o engenheiro disse pro prédio?", punchline: "— Relaxa, a estrutura aguenta.", category: "absurda" },
+  { setup: "O passarinho perguntou pro urubu:", punchline: "— Por que você é preto? O urubu respondeu: — Porque não compensa ser colorido e comer carniça.", category: "absurda" },
+  { setup: "O que o HD disse pra placa-mãe?", punchline: "— Você é a base de tudo.", category: "nerd" },
+  { setup: "Por que a impressora foi ao médico?", punchline: "Porque ela estava com papel protetor (papel protector = papel preso).", category: "nerd" },
+  { setup: "O óculos disse pro olho:", punchline: "— Sem mim você fica sem grau.", category: "poética" },
+  { setup: "Qual a fruta que mais entende de tecnologia?", punchline: "O kiwi, porque ele baixa vírus (kiwi -> key wi -> key wifi).", category: "trocadilho" },
+  { setup: "O arquiteto disse pra parede:", punchline: "— Não se preocupa, a planta resolve.", category: "absurda" },
+  { setup: "Sabe por que a formiga é pequena?", punchline: "Porque se ela fosse grande, chamaria formigão.", category: "infantil" },
+  { setup: "O que o garçom disse pro cliente que pediu uma sopa?", punchline: "— Vai ser hoje ou só na sopa (só na esperança)?", category: "trocadilho" },
+  { setup: "Por que aquele software foi expulso da festa?", punchline: "Porque ele deu break no clima.", category: "nerd" },
+  { setup: "O que a tela disse pro pixel?", punchline: "Você é a menor parte de mim, mas sem você eu não existo.", category: "nerd" },
+  { setup: "Qual a cidade mais doce do Brasil?", punchline: "Pé de Moleque (não existe, mas em MG tem doces).", category: "trocadilho" },
+  { setup: "O que a TV disse pro telespectador?", punchline: "— Você me dá audiência.", category: "absurda" },
+  { setup: "O baterista disse pro guitarrista:", punchline: "— Sem mim você fica sem ritmo. O guitarrista respondeu: — E sem mim você fica sem música.", category: "absurda" },
+  { setup: "Por que a água foi presa?", punchline: "Porque ela matou a sede.", category: "trocadilho" },
+  { setup: "O que a pizza disse pro forno?", punchline: "— Você me deixa quente por dentro.", category: "poética" },
+  { setup: "Sabe por que o programador não usa óculos escuros?", punchline: "Porque ele já usa dark mode.", category: "nerd" },
+  { setup: "O que um nucleossíntese disse pro outro?", punchline: "— Vamos fundir?", category: "nerd" },
+  { setup: "O que o papel disse pra caneta?", punchline: "— Você marca minha vida.", category: "poética" },
+  { setup: "Qual o parentesco do seu primo com o seu irmão?", punchline: "Primo-irmão.", category: "absurda" },
+  { setup: "O que o viajante disse pro mapa?", punchline: "— Me guia que eu te sigo.", category: "poética" },
+  { setup: "Por que o wi-fi não é casamenteiro?", punchline: "Porque ele só quer conexão, não compromisso.", category: "nerd" },
+  { setup: "O que o elevador disse pra escada?", punchline: "— Você sobe muito devagar.", category: "absurda" },
+  { setup: "O sorvete disse pro palito:", punchline: "— Você me segura firme.", category: "poética" },
+  { setup: "O alfaiate disse pro pano:", punchline: "— Vou te cortar, mas vai ficar bonito.", category: "absurda" },
+  { setup: "Por que o pombo correio se aposentou?", punchline: "Porque ele estava por fora (pombo = pombo correio, fora de forma).", category: "trocadilho" },
+  { setup: "O que a fonte disse pro rio?", punchline: "— Você é o meu destino.", category: "poética" },
+  { setup: "Qual o cúmulo da organização?", punchline: "Ter uma pasta chamada 'pessoal' dentro da pasta 'trabalho' dentro da pasta 'pessoal'.", category: "absurda" },
+  { setup: "Sabe por que o Batman nunca toma sopa?", punchline: "Porque ele é mor-cego (morcego não enxerga).", category: "trocadilho" },
+  { setup: "O que a Lua cheia disse pro lobisomem?", punchline: "— Você me transforma.", category: "poética" },
+  { setup: "O que o passarinho disse pra gaiola?", punchline: "— Você me prende, mas meu canto é livre.", category: "poética" },
+  { setup: "Sabe por que o astrônomo não come?", punchline: "Porque ele faz dieta de astronomia (astronomia = alto consumo de fibras? Não, é piada).", category: "nerd" },
+  { setup: "O que o óleo disse pra água?", punchline: "— A gente não se mistura.", category: "nerd" },
+  { setup: "O que o elefante disse pro rato?", punchline: "— Você é pequeno, mas tem presença.", category: "infantil" },
+  { setup: "Sabe qual a linguagem de programação favorita dos padeiros?", punchline: "Python (pão + thon = som de pão? Não, Python).", category: "nerd" },
+  { setup: "Como o programador morreu?", punchline: "Afogado no mar de dados.", category: "nerd" },
+  { setup: "O que o motor disse pro combustível?", punchline: "— Você me dá energia.", category: "poética" },
+  { setup: "Por que a geladeira não conta segredos?", punchline: "Porque ela pode congelar.", category: "absurda" },
+  { setup: "O semáforo disse pro carro:", punchline: "— Não me feche, estou aberto.", category: "absurda" },
+  { setup: "O que o teclado disse pro computador?", punchline: "— Sem mim você não digita nada.", category: "nerd" },
+  { setup: "Qual o cúmulo da força?", punchline: "Levantar a própria pet shop (pet shop = peso morto? Não).", category: "absurda" },
+  { setup: "Sabe por que o programador não sai de casa?", punchline: "Porque ele tem medo de bugs.", category: "nerd" },
+  { setup: "O que o cracker disse pro servidor?", punchline: "— Vou te derrubar.", category: "nerd" },
+  { setup: "Por que o céu não usa óculos?", punchline: "Porque ele tem visão de águia.", category: "absurda" },
+  { setup: "O professor perguntou: — O que é um ponto?", punchline: "O aluno respondeu: — É o fim de uma frase, professor. O professor disse: — E o que é uma frase? O aluno: — É um conjunto de palavras. O professor: — E o que é um conjunto? O aluno: — É matemática, professor.", category: "infantil" },
+  { setup: "O que o HTML disse pro CSS?", punchline: "— Você me deixa bonito.", category: "nerd" },
+  { setup: "O que a API disse pro desenvolvedor?", punchline: "— Me chama que eu respondo.", category: "nerd" },
+  { setup: "O garçom perguntou pro cliente:", punchline: "— O que vai ser? O cliente respondeu: — Uma água. O garçom: — Com gás? O cliente: — Não, obrigado, sem comentários.", category: "absurda" },
+  { setup: "Sabe qual o contrário de paz?", punchline: "Zap (WhatsApp).", category: "absurda" },
+  { setup: "O que o pneu falou pro motorista?", punchline: "— Não me calota.", category: "trocadilho" },
+  { setup: "O que o banco disse pro correntista?", punchline: "— Você está no vermelho, mas eu ainda acredito em você.", category: "absurda" },
+  { setup: "Sabe por que o espelho não conta mentiras?", punchline: "Porque ele reflete a verdade.", category: "poética" },
+  { setup: "O que a chave disse pro cadeado?", punchline: "— Você me tranca, mas eu te abro.", category: "poética" },
+  { setup: "O que o detector de metais disse pro arqueólogo?", punchline: "— Bip!", category: "absurda" },
+  { setup: "Por que a bateria do celular ficou triste?", punchline: "Porque ela estava sem carga emocional.", category: "nerd" },
+  { setup: "O que a nuvem disse pro servidor?", punchline: "— Eu guardo seus dados.", category: "nerd" },
+  { setup: "Sabe por que o café não dorme?", punchline: "Porque ele já é expresso.", category: "trocadilho" },
+  { setup: "O que a piscina disse pro nadador?", punchline: "— Vem fundo!", category: "absurda" },
+  { setup: "O professor perguntou pro aluno:", punchline: "— Quem descobriu o Brasil? O aluno respondeu: — Foram os portugueses, professor. Aí o professor pergunta: — E quem descobriu Portugal? O aluno pensou e disse: — Os brasileiros, quando foram lá passear.", category: "infantil" },
+  { setup: "O que a meia disse pro sapato?", punchline: "— Você me cobre bem.", category: "poética" },
+  { setup: "Por que a vaca foi no espaço?", punchline: "Para ver o vaqueiro (vaqueiro = vaqueiro espacial? Não).", category: "absurda" },
+  { setup: "Sabe por que a formiga não briga?", punchline: "Porque ela não quer criar caso (case = formigueiro).", category: "trocadilho" },
+  { setup: "O que a seta disse pro alvo?", punchline: "— Eu te acerto.", category: "absurda" },
+  { setup: "Qual o cúmulo da chatice?", punchline: "Ser uma pessoa tão chata que quando você morre, o epitáfio é: 'Aqui jaz — e ainda bem!'.", category: "absurda" },
+  { setup: "Sabe qual o manga favorito do programador?", punchline: "One Piece (um pedaço de código).", category: "nerd" },
+  { setup: "O que o remédio disse pra doença?", punchline: "— Vou te curar.", category: "absurda" },
+  { setup: "O que a torneira disse pro cano?", punchline: "— Você me dá vazão.", category: "poética" },
+  { setup: "Qual o cúmulo do azar?", punchline: "Cair de boca num bufê livre e estar de regime.", category: "absurda" },
+  { setup: "Por que o fio dental não gosta de festa?", punchline: "Porque ele só quer um fio (fio de nada).", category: "trocadilho" },
+  { setup: "O que a régua disse pro lápis?", punchline: "— Sem mim você não tem medida.", category: "poética" },
+  { setup: "Sabe qual a diferença entre o Batman e o Coringa?", punchline: "O Batman luta contra o crime, o Coringa luta contra a cara (trocadilho com 'cara' de palhaço).", category: "trocadilho" },
+  { setup: "O que o dentista disse pro paciente?", punchline: "— Abra bem a boca que eu vou arrancar seus segredos.", category: "absurda" },
+  { setup: "Por que o lago não tem WhatsApp?", punchline: "Porque ele só tem WhatsApp (whats = o quês? -> mato?).", category: "absurda" },
+  { setup: "O cabeleireiro disse pro cliente:", punchline: "— O senhor quer corte americano? O cliente: — Não, quero corte brasileiro, que corta e ainda faz amizade.", category: "absurda" },
+  { setup: "O que a guitarra disse pro músico?", punchline: "— Me toca com sentimento.", category: "poética" },
+  { setup: "Qual o cúmulo da pressa?", punchline: "Apertar o botão 'iniciar' antes do Windows carregar.", category: "nerd" },
+  { setup: "O que a lâmpada disse pro interruptor?", punchline: "— Você me acende.", category: "poética" },
+  { setup: "Por que o espanador ficou rico?", punchline: "Porque ele trabalhava com limpeza de crédito (trocadilho com 'limpeza').", category: "trocadilho" },
+  { setup: "Sabe por que o zumbi não come carne vegetal?", punchline: "Porque ele prefere cérebro (bro = brócolis? Não).", category: "absurda" },
+  { setup: "O que a chuva disse pro guarda-chuva?", punchline: "— Você me enfrenta.", category: "poética" },
+  { setup: "O médico disse pro paciente:", punchline: "— O senhor está com uma virose rara. O paciente: — Qual? O médico: — A virose do 'vou morrer' (virose rara = vou ser raro?).", category: "absurda" },
+  { setup: "Qual o contrário de 'não'?", punchline: "Sim... não, espera, o contrário de 'não' é 'sim'! Fácil.", category: "absurda" },
+];
+
+function seededRandom(seed: string): () => number {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  let state = Math.abs(hash);
+  return () => {
+    state = (state * 16807) % 2147483647;
+    return state / 2147483647;
+  };
+}
+
 export type JokeData = {
   setup: string;
   punchline: string;
   category: string;
 };
 
-function translateJoke(joke: any): JokeData | null {
-  if (!joke) return null;
-
-  if (joke.type === "single") {
-    return {
-      setup: joke.joke || "",
-      punchline: "",
-      category: joke.category || "geral",
-    };
-  }
-
-  if (joke.type === "twopart") {
-    return {
-      setup: joke.setup || "",
-      punchline: joke.delivery || "",
-      category: joke.category || "geral",
-    };
-  }
-
-  return null;
-}
-
 export async function getJoke(): Promise<JokeData | null> {
-  try {
-    const res = await fetch(
-      "https://v2.jokeapi.dev/joke/Any?lang=pt&blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
-      { next: { revalidate: 300 } }
-    );
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (data.error) return null;
-    return translateJoke(data);
-  } catch {
-    return null;
-  }
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const seed = `piada-${dateStr}`;
+  const rand = seededRandom(seed);
+  const index = Math.floor(rand() * JOKES.length);
+  return JOKES[index];
 }
