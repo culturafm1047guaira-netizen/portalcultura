@@ -18,6 +18,9 @@ Este repositório contém a versão modernizada (v3) do portal de notícias da R
 - `/img/`: Ativos visuais e logos oficiais processados.
 - `/sw.js`: Service Worker para suporte a PWA e cache offline.
 
+## 📄 Documentos de gestão
+- [Plano de Correção Global — 29-06-2026](correções%20em%2029-06-2026.md)
+
 ## 🛠 Como Rodar Localmente
 1. Certifique-se de ter o Python instalado.
 2. Instale as dependências: `pip install streamlit`
