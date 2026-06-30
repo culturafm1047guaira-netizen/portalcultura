@@ -4,20 +4,20 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #003366;          /* Azul Naval Premium */
-  --color-primary-dark: #002244;
-  --color-primary-light: #004488;
-  --color-primary-soft: #e6f0ff;
+  --color-primary: #0b4f7a;          /* Azul institucional premium */
+  --color-primary-dark: #093a58;
+  --color-primary-light: #1771a6;
+  --color-primary-soft: #edf5ff;
   
-  --color-dark-bg: #111111;         /* Quase preto para cabeçalhos ou destaques escuros */
-  --color-darker-bg: #000000;
+  --color-dark-bg: #111827;         /* Quase preto para cabeçalhos ou destaques escuros */
+  --color-darker-bg: #030712;
   
-  --color-light-bg: #ffffff;        /* Fundo branco total */
-  --color-card-bg: #ffffff;         /* Sem fundos em caixas */
+  --color-light-bg: #f8fbff;        /* Fundo branco levemente azulado */
+  --color-card-bg: #ffffff;
   
-  --color-text: #222222;            /* Texto super escuro (legibilidade alta) */
-  --color-text-muted: #555555;      /* Texto de apoio */
-  --color-border: #e2e8f0;          /* Borda fina e sutil */
+  --color-text: #0f172a;            /* Texto super escuro (legibilidade alta) */
+  --color-text-muted: #475569;      /* Texto de apoio */
+  --color-border: #e2e8f0;
 
   /* Cores específicas para as tags das categorias editoriais */
   --color-cat-regional: #0066cc;    /* Azul forte */
@@ -36,7 +36,10 @@
   }
 
   body {
-    background: var(--color-light-bg);
+    background:
+      radial-gradient(circle at top left, rgba(11, 79, 122, 0.09), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.06), transparent 20%),
+      var(--color-light-bg);
     color: var(--color-text);
     font-family: var(--font-source-sans);
     min-height: 100vh;

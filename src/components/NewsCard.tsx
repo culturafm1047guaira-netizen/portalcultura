@@ -71,8 +71,8 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
   }
 
   return (
-    <a href={link} target="_blank" rel="noopener noreferrer" className="group flex flex-col h-full pb-6">
-      <div className="relative aspect-video w-full overflow-hidden bg-gray-100 dark:bg-slate-700 mb-3 rounded-sm">
+    <a href={link} target="_blank" rel="noopener noreferrer" className="group flex h-full flex-col rounded-[24px] border border-border/70 bg-white p-3 shadow-[0_16px_50px_-30px_rgba(2,6,23,0.6)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-[0_24px_60px_-30px_rgba(11,79,122,0.7)] dark:border-slate-700/50 dark:bg-slate-800">
+      <div className="relative aspect-video w-full overflow-hidden rounded-[18px] bg-gray-100 dark:bg-slate-700">
         {image && !imgError ? (
           <Image 
             src={image} 
@@ -84,19 +84,19 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
           />
         ) : imgPlaceholder}
       </div>
-      <div className="flex flex-col flex-1">
-        <span className="text-[10px] font-extrabold uppercase tracking-widest mb-1.5" style={{ color: catColor }}>
+      <div className="flex flex-1 flex-col px-1 pb-1 pt-4">
+        <span className="mb-2 inline-flex w-fit rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.28em]" style={{ color: catColor, backgroundColor: 'color-mix(in srgb, currentColor 14%, transparent)' }}>
           {category}
         </span>
-        <h3 className="font-montserrat text-lg font-bold leading-tight text-text group-hover:text-primary transition-colors line-clamp-3">
+        <h3 className="font-montserrat text-[1.02rem] font-extrabold leading-tight text-text transition-colors duration-300 group-hover:text-primary line-clamp-3">
           {title}
         </h3>
-        <p className="text-[13px] text-text-muted line-clamp-2 leading-relaxed mt-2">
+        <p className="mt-2 text-[13px] text-text-muted line-clamp-2 leading-relaxed">
           {excerpt}
         </p>
-        <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-50 dark:border-slate-700">
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{source}</span>
-          <ShareButtons title={title} link={link} className="flex items-center gap-3 ml-auto" iconClassName="w-4 h-4 fill-current" />
+        <div className="mt-auto flex items-center gap-3 border-t border-gray-100 pt-4 dark:border-slate-700">
+          <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400">{source}</span>
+          <ShareButtons title={title} link={link} className="ml-auto flex items-center gap-3" iconClassName="w-4 h-4 fill-current" />
         </div>
       </div>
     </a>

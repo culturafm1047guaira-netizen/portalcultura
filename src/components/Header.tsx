@@ -36,7 +36,7 @@ const Header = () => {
   ];
 
   return (
-    <header ref={headerRef} className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-border sticky top-0 z-40 transition-colors duration-300">
+    <header ref={headerRef} className="sticky top-0 z-40 border-b border-border/70 bg-white/80 backdrop-blur-xl dark:bg-slate-900/80 transition-colors duration-300 shadow-[0_1px_0_0_rgba(15,23,42,0.02)]">
       <div className="container py-3">
         <div className="flex items-center justify-between gap-5 flex-wrap lg:flex-nowrap">
           
@@ -51,7 +51,7 @@ const Header = () => {
           </button>
 
           <Link href="/" className="flex items-center shrink-0 group">
-            <div className="relative h-24 w-48 sm:h-28 sm:w-56 md:h-32 md:w-64 transition-transform duration-300 group-hover:scale-105">
+            <div className="relative h-24 w-48 sm:h-28 sm:w-56 md:h-32 md:w-64 rounded-2xl border border-white/50 bg-white/60 p-2 shadow-[0_8px_24px_-18px_rgba(11,79,122,0.9)] transition-transform duration-300 group-hover:scale-[1.02] dark:bg-slate-900/60 dark:border-slate-700/40">
               <Image 
                 src="/img/logo_oficial.png" 
                 alt="Rádio Cultura" 
