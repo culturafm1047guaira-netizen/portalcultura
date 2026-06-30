@@ -1,20 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Source_Sans_3 } from "next/font/google";
+import { Bebas_Neue, IBM_Plex_Sans } from "next/font/google";
 import WhatsAppPeao from "@/components/WhatsAppPeao";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { OrganizationSchema, WebSiteSchema } from "@/components/JsonLd";
 import "./globals.css";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const bebas = Bebas_Neue({
+  variable: "--font-bebas",
   subsets: ["latin"],
-  weight: ["700", "800", "900"],
+  weight: ["400"],
+  display: "swap",
 });
 
-const sourceSans = Source_Sans_3({
-  variable: "--font-source-sans",
+const plex = IBM_Plex_Sans({
+  variable: "--font-plex",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const viewport: Viewport = {
@@ -58,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${montserrat.variable} ${sourceSans.variable} antialiased`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${bebas.variable} ${plex.variable} antialiased`} suppressHydrationWarning>
       <body>
         <ThemeProvider
           attribute="class"

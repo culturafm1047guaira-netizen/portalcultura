@@ -4,28 +4,40 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #0b4f7a;          /* Azul institucional premium */
+  --color-primary: #0b4f7a;
   --color-primary-dark: #093a58;
   --color-primary-light: #1771a6;
   --color-primary-soft: #edf5ff;
-  
-  --color-dark-bg: #111827;         /* Quase preto para cabeçalhos ou destaques escuros */
+
+  --color-sintonia-azul: #0B4F7A;       /* Azul institucional premium -- usado em chamadas de acao primarias, headers */
+  --color-cerrado-verde: #2D6A4F;       /* Verde do cerrado, representa agricultura regional de Guaíra */
+  --color-entardecer-laranja: #E88D2A;  /* Laranja do ferndacer do interior paulista, usado em priorizadores */
+  --color-vinil-preto: #1A1A1A;         /* Texto principal, cor da base para textos em contraste */
+  --color-papel-jornal: #F5F0E8;        /* Fundo de página, simula papel de jornal */
+  --color-estatica-branco: #FFFFFF;     /* Cards elevados, fondos bright */
+
+  /* Escala de cinzas derivada */
+  --color-frequencia-100: #E8ECEF;      /* Borda sutil */
+  --color-frequencia-300: #9CA3AF;      /* Muted text */
+  --color-frequencia-600: #4B5563;      /* Label, metadata */
+
+  --color-dark-bg: #111827;
   --color-darker-bg: #030712;
-  
-  --color-light-bg: #f8fbff;        /* Fundo branco levemente azulado */
+
+  --color-light-bg: #f8fbff;
   --color-card-bg: #ffffff;
-  
-  --color-text: #0f172a;            /* Texto super escuro (legibilidade alta) */
-  --color-text-muted: #475569;      /* Texto de apoio */
+
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
   --color-border: #e2e8f0;
 
   /* Cores específicas para as tags das categorias editoriais */
-  --color-cat-regional: #0066cc;    /* Azul forte */
-  --color-cat-brasil: #008000;      /* Verde escuro */
-  --color-cat-esportes: #00a000;    /* Verde vivo estilo GE */
-  --color-cat-educacao: #e67300;    /* Laranja */
-  --color-cat-saude: #cc0066;       /* Magenta */
-  --color-cat-justica: #6600cc;     /* Roxo */
+  --color-cat-regional: #0066cc;
+  --color-cat-brasil: #008000;
+  --color-cat-esportes: #00a000;
+  --color-cat-educacao: #e67300;
+  --color-cat-saude: #cc0066;
+  --color-cat-justica: #6600cc;
 }
 
 @layer base {
@@ -111,7 +123,186 @@
   75% { transform: rotate(-6deg); }
 }
 
-@keyframes vis-anim {
-  0% { height: 4px; }
-  100% { height: 16px; }
+/* Tipografia de exibição fluida para o "Hero Frequência" */
+:root {
+  --font-display: var(--font-bebas), "Arial Narrow", Impact, sans-serif;
+  --font-body: var(--font-plex), "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+
+  --text-hero-freq: clamp(4rem, 12vw, 8rem);
+  --text-hero-tag: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+/* Animações da assinatura "Onda Viva" */
+@keyframes hero-wave-pulse {
+  0%, 100% { transform: scaleY(0.9); }
+  50% { transform: scaleY(1.05); }
+}
+
+@keyframes hero-wave-digit {
+  0% { stroke-dashoffset: 600; opacity: 0; }
+  40% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes radio-bars {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+.hero-wave-digit {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: hero-wave-digit 1.8s ease-out forwards;
+}
+
+.hero-wave-digit-2 { animation-delay: 0.15s; }
+.hero-wave-digit-3 { animation-delay: 0.3s; }
+.hero-wave-digit-4 { animation-delay: 0.45s; }
+
+.hero-wave-pulse {
+  animation: hero-wave-pulse 3.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.player-equalizer-bar {
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  margin-right: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transform-origin: bottom;
+  animation: radio-bars 0.9s ease-in-out infinite;
+}
+.player-equalizer-bar:nth-child(2) { animation-delay: 0.15s; }
+.player-equalizer-bar:nth-child(3) { animation-delay: 0.3s; }
+.player-equalizer-bar:nth-child(4) { animation-delay: 0.45s; }
+
+/* Microinterações Codificadas por Categoria */
+.nav-link {
+  position: relative;
+  padding: 0.5rem 0.25rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-frequencia-600);
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease-out;
+}
+
+.nav-link:hover {
+  color: var(--color-sintonia-azul);
+}
+
+.nav-link:hover::after,
+.nav-link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.nav-link[aria-current="page"] {
+  color: var(--color-sintonia-azul);
+}
+
+.nav-link[data-category="local"] { color: var(--color-cerrado-verde); }
+.nav-link[data-category="regional"] { color: var(--color-sintonia-azul); }
+.nav-link[data-category="brasil"] { color: var(--color-frequencia-600); }
+.nav-link[data-category="agro"] { color: var(--color-entardecer-laranja); }
+
+.nav-link[data-category="local"]:hover,
+.nav-link[data-category="local"][aria-current="page"] { color: var(--color-cerrado-verde); }
+.nav-link[data-category="agro"]:hover,
+.nav-link[data-category="agro"][aria-current="page"] { color: var(--color-entardecer-laranja); }
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-wave-pulse,
+  .hero-wave-digit,
+  .player-equalizer-bar {
+    animation: none !important;
+  }
+  .hero-wave-digit {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* Focus visible global */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-entardecer-laranja);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.hero-freq {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-hero-freq);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--color-sintonia-azul);
+}
+
+.hero-tagline {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--text-hero-tag);
+  color: var(--color-vinil-preto);
+}
+
+.section-title {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.75rem;
+  color: var(--color-vinil-preto);
+}
+
+@media (max-width: 1024px) {
+  .section-title { font-size: 1.5rem; }
+}
+
+.card-title {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: var(--color-vinil-preto);
+}
+
+@media (max-width: 1024px) {
+  .card-title { font-size: 1rem; }
+}
+
+.excerpt-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--color-frequencia-600);
+}
+
+@media (max-width: 1024px) {
+  .excerpt-text { font-size: 0.9375rem; }
+}
+
+.meta-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--color-frequencia-300);
+}
+
+@media (max-width: 1024px) {
+  .meta-text { font-size: 0.75rem; }
 }
