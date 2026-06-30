@@ -11,6 +11,33 @@ export type NewsItem = {
   category: string;
 };
 
+// Domain allowlist for SSRF protection - only allow fetching images from these domains
+const ALLOWED_IMAGE_DOMAINS = [
+  "glbimg.com",
+  "ebc.com.br",
+  "acidadeon.com",
+  "jovempan.com.br",
+  "jornaldebarretos.com.br",
+  "odiarioonline.com.br",
+  "guairanews.com",
+  "rss.app",
+  "fbcdn.net",
+  "s3.us-east-1.wasabisys.com",
+  "placehold.co",
+  // Add any other trusted domains for image fetching
+];
+
+function isAllowedDomain(url: string): boolean {
+  try {
+    const { hostname } = new URL(url);
+    return ALLOWED_IMAGE_DOMAINS.some(domain => 
+      hostname.endsWith(domain) || hostname === domain
+    );
+  } catch {
+    return false;
+  }
+}
+
 type FeedItem = {
   title?: string;
   link?: string;
@@ -91,6 +118,12 @@ const FEEDS = [
 
 async function fetchOpenGraphImage(url: string): Promise<string | null> {
   if (!url || url === "#") return null;
+  
+  // SSRF protection: only fetch from allowed domains
+  if (!isAllowedDomain(url)) {
+    return null;
+  }
+  
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 12000);

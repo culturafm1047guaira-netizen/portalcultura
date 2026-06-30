@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
-export async function GET(request: NextRequest) {
-  const secret = request.headers.get("x-revalidate-secret");
+export async function POST(request: NextRequest) {
+  const token = request.headers.get("authorization")?.replace("Bearer ", "");
 
-  if (secret !== process.env.REVALIDATION_SECRET) {
-    return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
+  if (!token || token !== process.env.REVALIDATION_TOKEN) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 
   try {
