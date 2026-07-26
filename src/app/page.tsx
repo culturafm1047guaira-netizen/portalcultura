@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TopBar from "@/components/TopBar";
@@ -8,6 +7,7 @@ import Ticker from "@/components/Ticker";
 import Player from "@/components/Player";
 import HeroWave from "@/components/HeroWave";
 import CategoryNav from "@/components/CategoryNav";
+import BannerAniversario from "@/components/BannerAniversario";
 import Hero from "@/components/Hero";
 import NewsCard from "@/components/NewsCard";
 import Sidebar from "@/components/Sidebar";
@@ -58,18 +58,9 @@ export default async function Home() {
           {heroNews && <NewsArticleSchema news={heroNews} />}
         </div>
 
-        {/* Banner Publicitário */}
+        {/* Banner 70 Anos */}
         <div className="w-full mb-12">
-          <div className="relative w-full overflow-hidden rounded-sm border border-border bg-white dark:bg-slate-900">
-            <Image 
-              src="/img/banner-festa-peao.jpg" 
-              alt="Publicidade" 
-              width={1200}
-              height={300}
-              className="w-full h-auto object-contain"
-              priority
-            />
-          </div>
+          <BannerAniversario />
         </div>
 
 
