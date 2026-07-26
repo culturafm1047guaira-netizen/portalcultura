@@ -15,7 +15,7 @@ O portal foi reescrito em **Next.js 15 (App Router)** com React 19 e TypeScript.
 
 | Área | Descrição |
 |------|-----------|
-| **Homepage** | Hero editorial, categorias (Regional, Brasil, Esportes), ticker de manchetes, sidebar com widgets |
+| **Homepage** | Hero assinatura com frequência animada (HeroWave), navegação por categorias (CategoryNav), destaque editorial, ticker de manchetes, sidebar com widgets |
 | **Player ao vivo** | Stream `ice.fabricahost.com.br/radioculturaguaira` |
 | **Notícias** | Agregação de 12+ feeds RSS (G1, Agência Brasil, ACidade ON, Guaira News, etc.) |
 | **Economia** | Indicadores do Banco Central (dólar, Selic, inflação, PIX, crédito) |
@@ -64,7 +64,7 @@ O portal foi reescrito em **Next.js 15 (App Router)** com React 19 e TypeScript.
 │   │   ├── contato/            # Contato
 │   │   ├── termos/             # Termos de uso
 │   │   └── transparencia/      # Transparência
-│   ├── components/             # UI (Header, Hero, Player, Sidebar, etc.)
+│   ├── components/             # UI (Header, HeroWave, CategoryNav, Hero, Player, Sidebar, etc.)
 │   └── lib/                    # Integrações e lógica de negócio
 │       ├── news.ts             # Agregador RSS principal
 │       ├── dados-financeiros.ts
@@ -268,6 +268,8 @@ Resumo do estado atual do repositório após revisão completa:
 | `revalidate.yml` | ✅ Agora usa `POST` + `Authorization: Bearer` + `REVALIDATION_TOKEN` |
 | `package.json` | ✅ Adicionado script `test:e2e`; corrigido `collectCoverageFrom` |
 | `next.config.ts` | ✅ `placehold.co` adicionado ao `remotePatterns` |
+| Homepage Hero | ✅ HeroWave (frequência animada 104.7) + CategoryNav integrados |
+| `next.config.ts` | ✅ `remotePatterns` atualizado para Next.js 15.5 |
 | `scripts/notify.js` | ✅ Token Telegram movido para variáveis de ambiente |
 | `.env.example` | ✅ Renomeado `REVALIDATION_SECRET` → `REVALIDATION_TOKEN` |
 
