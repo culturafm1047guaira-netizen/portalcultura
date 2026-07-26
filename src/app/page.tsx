@@ -6,6 +6,8 @@ import TopBar from "@/components/TopBar";
 import Ticker from "@/components/Ticker";
 
 import Player from "@/components/Player";
+import HeroWave from "@/components/HeroWave";
+import CategoryNav from "@/components/CategoryNav";
 import Hero from "@/components/Hero";
 import NewsCard from "@/components/NewsCard";
 import Sidebar from "@/components/Sidebar";
@@ -40,8 +42,17 @@ export default async function Home() {
       <Header />
       <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
 
+      {/* Signature Hero Wave */}
+      <section className="bg-papel-jornal border-b border-frequencia-100">
+        <div className="container py-8 md:py-12">
+          <HeroWave />
+        </div>
+      </section>
+
+      <CategoryNav active="regional" />
+
       <main className="container py-8 flex-1">
-        {/* Top Section: Hero taking full width of the grid container */}
+        {/* Top Section: Featured news article */}
         <div className="w-full mb-12 border-b border-border pb-12">
           {heroNews && <Hero news={heroNews} />}
           {heroNews && <NewsArticleSchema news={heroNews} />}
