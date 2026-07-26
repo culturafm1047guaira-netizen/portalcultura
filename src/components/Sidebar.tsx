@@ -148,10 +148,20 @@ const Sidebar = async () => {
         <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-amber-600 pb-1 inline-block w-fit">
           Commodities
         </h3>
+        {resolved.quotes?.commoditiesUpdatedAt && (
+          <span className="text-[9px] text-amber-500/60 font-semibold tracking-wider uppercase mb-1 -mt-2">
+            Atualizado {resolved.quotes.commoditiesUpdatedAt}
+          </span>
+        )}
         <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-amber-100 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
           {resolved.quotes?.commodities.map((item, i) => (
             <div key={i} className="flex justify-between items-center py-2.5 border-b border-amber-200/40 last:border-none text-[13px]">
-              <span className="text-amber-900/60 font-bold">{item.label}</span>
+              <div className="flex flex-col">
+                <span className="text-amber-900/60 font-bold">{item.label}</span>
+                {item.unit && (
+                  <span className="text-[9px] text-amber-500/50 font-medium">{item.unit}</span>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-amber-950">{item.val}</span>
                 <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${item.trend === "up" ? "bg-emerald-200 text-emerald-800" : item.trend === "down" ? "bg-red-200 text-red-800" : "bg-amber-200 text-amber-800"}`}>

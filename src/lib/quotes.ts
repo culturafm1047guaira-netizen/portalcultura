@@ -1,5 +1,10 @@
 interface QuoteItem {
-  label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string
+  label: string; val: string; trend: 'up' | 'down' | 'stable'; change: string; unit?: string
+}
+
+interface CommoditiesData {
+  items: QuoteItem[]
+  updatedAt: string | null
 }
 
 function formatBRL(value: number): string {
@@ -125,8 +130,8 @@ async function fetchFinancials(): Promise<QuoteItem[]> {
 
 const COMMODITY_TARGETS = ['soja', 'milho', 'boi_gordo', 'cafe', 'acucar', 'trigo', 'algodao'] as const
 
-function parseCommodities(data: any): QuoteItem[] {
-  if (!data || data.status !== 'ok' || !data.commodities) return []
+function parseCommodities(data: any): CommoditiesData {
+  if (!data || data.status !== 'ok' || !data.commodities) return { items: [], updatedAt: null }
   const items: QuoteItem[] = []
   for (const key of COMMODITY_TARGETS) {
     const item = data.commodities[key]
@@ -136,10 +141,11 @@ function parseCommodities(data: any): QuoteItem[] {
         val: formatBRL(Number(item.valor)),
         trend: fmtTrend(Number(item.variacao)),
         change: fmtChange(Number(item.variacao)),
+        unit: item.unidade || undefined,
       })
     }
   }
-  return items
+  return { items, updatedAt: data.atualizacao || null }
 }
 
 async function fetchCommoditiesFrom(url: string, signal?: AbortSignal): Promise<any | null> {
@@ -157,7 +163,7 @@ async function fetchCommoditiesFrom(url: string, signal?: AbortSignal): Promise<
   }
 }
 
-async function fetchCommodities(): Promise<QuoteItem[]> {
+async function fetchCommodities(): Promise<CommoditiesData> {
   const PRIMARY = 'https://www.redacaoagro.com.br/api/cotacoes.php'
   const FALLBACK = 'https://www.redacaoagro.com.br/api/cotacoes.php?_='
 
@@ -165,32 +171,32 @@ async function fetchCommodities(): Promise<QuoteItem[]> {
   const timeout = setTimeout(() => controller.abort(), 8000)
 
   try {
-    // Primary attempt
     let data = await fetchCommoditiesFrom(PRIMARY, controller.signal)
-    if (data && parseCommodities(data).length > 0) {
+    let parsed = data ? parseCommodities(data) : null
+    if (parsed && parsed.items.length > 0) {
       clearTimeout(timeout)
-      return parseCommodities(data)
+      return parsed
     }
 
-    // Retry with cache-bust
     data = await fetchCommoditiesFrom(FALLBACK + Date.now())
-    if (data && parseCommodities(data).length > 0) {
+    parsed = data ? parseCommodities(data) : null
+    if (parsed && parsed.items.length > 0) {
       clearTimeout(timeout)
-      return parseCommodities(data)
+      return parsed
     }
 
     clearTimeout(timeout)
-    return []
+    return { items: [], updatedAt: null }
   } catch {
     clearTimeout(timeout)
-    return []
+    return { items: [], updatedAt: null }
   }
 }
 
 export async function getQuotesData() {
-  const [financial, commodities] = await Promise.all([
+  const [financial, commoditiesData] = await Promise.all([
     fetchFinancials(),
     fetchCommodities(),
   ])
-  return { financial, commodities }
+  return { financial, commodities: commoditiesData.items, commoditiesUpdatedAt: commoditiesData.updatedAt }
 }
