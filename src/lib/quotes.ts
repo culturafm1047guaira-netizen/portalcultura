@@ -123,32 +123,68 @@ async function fetchFinancials(): Promise<QuoteItem[]> {
   return items
 }
 
-async function fetchCommodities(): Promise<QuoteItem[]> {
+const COMMODITY_TARGETS = ['soja', 'milho', 'boi_gordo', 'cafe', 'acucar', 'trigo', 'algodao'] as const
+
+function parseCommodities(data: any): QuoteItem[] {
+  if (!data || data.status !== 'ok' || !data.commodities) return []
+  const items: QuoteItem[] = []
+  for (const key of COMMODITY_TARGETS) {
+    const item = data.commodities[key]
+    if (item && item.valor > 0) {
+      items.push({
+        label: item.nome,
+        val: formatBRL(Number(item.valor)),
+        trend: fmtTrend(Number(item.variacao)),
+        change: fmtChange(Number(item.variacao)),
+      })
+    }
+  }
+  return items
+}
+
+async function fetchCommoditiesFrom(url: string, signal?: AbortSignal): Promise<any | null> {
   try {
-    const res = await fetch('https://www.redacaoagro.com.br/api/cotacoes.php', {
+    const res = await fetch(url, {
+      signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
       next: { revalidate: 300 },
     })
-    if (!res.ok) return []
-    const data = await res.json()
-    if (data.status !== 'ok' || !data.commodities) return []
+    if (!res.ok) return null
+    const text = await res.text()
+    return JSON.parse(text)
+  } catch {
+    return null
+  }
+}
 
-    const items: QuoteItem[] = []
-    const targets = ['soja', 'milho', 'boi_gordo', 'cafe', 'acucar', 'trigo', 'algodao']
-    
-    for (const key of targets) {
-      const item = data.commodities[key]
-      if (item && item.valor > 0) {
-        items.push({
-          label: item.nome,
-          val: formatBRL(parseFloat(item.valor)),
-          trend: fmtTrend(parseFloat(item.variacao)),
-          change: fmtChange(parseFloat(item.variacao))
-        })
-      }
+async function fetchCommodities(): Promise<QuoteItem[]> {
+  const PRIMARY = 'https://www.redacaoagro.com.br/api/cotacoes.php'
+  const FALLBACK = 'https://www.redacaoagro.com.br/api/cotacoes.php?_='
+
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 8000)
+
+  try {
+    // Primary attempt
+    let data = await fetchCommoditiesFrom(PRIMARY, controller.signal)
+    if (data && parseCommodities(data).length > 0) {
+      clearTimeout(timeout)
+      return parseCommodities(data)
     }
-    return items
-  } catch { return [] }
+
+    // Retry with cache-bust
+    data = await fetchCommoditiesFrom(FALLBACK + Date.now())
+    if (data && parseCommodities(data).length > 0) {
+      clearTimeout(timeout)
+      return parseCommodities(data)
+    }
+
+    clearTimeout(timeout)
+    return []
+  } catch {
+    clearTimeout(timeout)
+    return []
+  }
 }
 
 export async function getQuotesData() {
