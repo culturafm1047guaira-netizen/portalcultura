@@ -52,15 +52,16 @@ jobs:
           ls -la
           test -f vercel.json || exit 1
           test -f package.json || exit 1
-          test -f index.html || exit 1
+          test -f next.config.ts || exit 1
+      
+      - name: Validate Next.js build
+        run: npm run build
       
       - name: Validate vercel.json
         run: node -e "JSON.parse(require('fs').readFileSync('vercel.json'))"
       
-      - name: Validate JSON files
-        run: |
-          node -e "JSON.parse(require('fs').readFileSync('package.json'))"
-          node -e "JSON.parse(require('fs').readFileSync('api/news.js'))"
+      - name: Validate package.json
+        run: node -e "JSON.parse(require('fs').readFileSync('package.json'))"
       
       - name: Vercel CLI install
         run: npm i -g vercel@latest

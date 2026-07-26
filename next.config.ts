@@ -15,9 +15,9 @@ function isDomainAllowed(domain: string): boolean {
            hostname.endsWith("rss.app") ||
            hostname.endsWith("*.rss.app") ||
            hostname.endsWith("*.fbcdn.net") ||
-           hostname.endsWith("s3.us-east-1.wasabisys.com") ||
-           hostname.endsWith("placehold.co") ||
-           hostname === "radioculturaguaira.com.br" ||
+            hostname.endsWith("s3.us-east-1.wasabisys.com") ||
+            hostname === "placehold.co" ||
+            hostname === "radioculturaguaira.com.br" ||
            hostname === "www.radioculturaguaira.com.br";
   } catch {
     return false;
@@ -57,6 +57,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.rss.app" },
       { protocol: "https", hostname: "*.fbcdn.net" },
       { protocol: "https", hostname: "s3.us-east-1.wasabisys.com" },
+      { protocol: "https", hostname: "placehold.co" },
     ].filter((pattern) => isDomainAllowed(pattern.hostname)),
   },
   headers: async () => [
