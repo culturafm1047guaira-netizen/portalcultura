@@ -26,16 +26,16 @@ const TopBar = () => {
   return (
     <div className="bg-[linear-gradient(135deg,#08131f,#0b4f7a_48%,#0f7aa8)] py-2 border-b border-white/10 text-[12px] shadow-sm">
       <div className="container flex justify-between items-center">
-        <div className="flex gap-5 items-center text-white/90">
-          <span className="flex items-center gap-1.5">
-            ✉ <a href="mailto:radioculturadeguaira@gmail.com" className="hover:text-white transition-colors">radioculturadeguaira@gmail.com</a>
+        <div className="flex gap-3 sm:gap-5 items-center text-white/90 min-w-0">
+          <span className="hidden sm:flex items-center gap-1.5 min-w-0">
+            ✉ <a href="mailto:radioculturadeguaira@gmail.com" className="hover:text-white transition-colors truncate">radioculturadeguaira@gmail.com</a>
           </span>
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1.5 shrink-0">
             ✆ <a href="tel:+551733311177" className="hover:text-white transition-colors">(17) 3331-1177</a>
           </span>
           <span className="hidden md:inline">{dateTime}</span>
         </div>
-        <div className="flex gap-5 items-center text-white">
+        <div className="flex gap-3 sm:gap-5 items-center text-white shrink-0">
           <ThemeToggle />
           <span className="text-white font-bold animate-pulse">● AO VIVO</span>
           <div className="hidden sm:flex gap-3">
