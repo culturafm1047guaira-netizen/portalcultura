@@ -2,26 +2,21 @@ import type { NextConfig } from "next";
 import withPWAInit from "@ducanh2912/next-pwa";
 import { env as t } from "process";
 
-function isDomainAllowed(domain: string): boolean {
-  try {
-    const { hostname } = new URL(domain);
-    return hostname.endsWith("glbimg.com") ||
-           hostname.endsWith("ebc.com.br") ||
-           hostname.endsWith("acidadeon.com") ||
-           hostname.endsWith("jovempan.com.br") ||
-           hostname.endsWith("jornaldebarretos.com.br") ||
-           hostname.endsWith("odiarioonline.com.br") ||
-           hostname.endsWith("guairanews.com") ||
-           hostname.endsWith("rss.app") ||
-           hostname.endsWith("*.rss.app") ||
-           hostname.endsWith("*.fbcdn.net") ||
-            hostname.endsWith("s3.us-east-1.wasabisys.com") ||
-            hostname === "placehold.co" ||
-            hostname === "radioculturaguaira.com.br" ||
-           hostname === "www.radioculturaguaira.com.br";
-  } catch {
-    return false;
-  }
+function isDomainAllowed(hostname: string): boolean {
+  return hostname.endsWith("glbimg.com") ||
+         hostname.endsWith("ebc.com.br") ||
+         hostname.endsWith("acidadeon.com") ||
+         hostname.endsWith("jovempan.com.br") ||
+         hostname.endsWith("jornaldebarretos.com.br") ||
+         hostname.endsWith("odiarioonline.com.br") ||
+         hostname.endsWith("guairanews.com") ||
+         hostname.endsWith("rss.app") ||
+         hostname.endsWith("fbcdn.net") ||
+         hostname.endsWith("s3.us-east-1.wasabisys.com") ||
+         hostname.endsWith("supabase.co") ||
+         hostname === "placehold.co" ||
+         hostname === "radioculturaguaira.com.br" ||
+         hostname === "www.radioculturaguaira.com.br";
 }
 
 const withPWA = withPWAInit({
@@ -58,6 +53,7 @@ const nextConfig: NextConfig = {
       { protocol: "https" as const, hostname: "*.fbcdn.net", port: "", pathname: "" },
       { protocol: "https" as const, hostname: "s3.us-east-1.wasabisys.com", port: "", pathname: "" },
       { protocol: "https" as const, hostname: "placehold.co", port: "", pathname: "" },
+      { protocol: "https" as const, hostname: "*.supabase.co", port: "", pathname: "/storage/v1/object/public/**" },
     ] as const).filter((pattern) => isDomainAllowed(pattern.hostname)),
   },
   headers: async () => [
@@ -66,7 +62,7 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: "Content-Security-Policy",
-          value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gsi.opensource.tw; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://radioculturaguaira.com.br; frame-ancestors 'none';",
+          value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gsi.opensource.tw; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://radioculturaguaira.com.br https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none';",
         },
         {
           key: "Referrer-Policy",

@@ -1,0 +1,22 @@
+name: Manter Supabase ativo
+
+on:
+  schedule:
+    # Segunda e quinta às 9h UTC — intervalo máximo de 4 dias, dentro do limite de 7 dias de inatividade do plano free
+    - cron: "0 9 * * 1,4"
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checar saúde do Auth (não depende de schema/tabelas)
+        run: |
+          curl -fsS "${{ secrets.SUPABASE_URL }}/auth/v1/health"
+
+      - name: Fazer uma leitura simples via REST (gera atividade no banco)
+        continue-on-error: true
+        run: |
+          curl -fsS "${{ secrets.SUPABASE_URL }}/rest/v1/profiles?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
