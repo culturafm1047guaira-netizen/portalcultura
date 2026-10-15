@@ -41,9 +41,9 @@ export default async function Home() {
       <Header activeCategory="regional" />
       <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
 
-      {/* Signature Hero Wave */}
+      {/* Faixa de frequência 104.7 */}
       <section className="bg-papel-jornal border-b border-frequencia-100">
-        <div className="container py-8 md:py-12">
+        <div className="container py-3">
           <HeroWave />
         </div>
       </section>
