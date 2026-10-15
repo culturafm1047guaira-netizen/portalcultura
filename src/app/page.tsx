@@ -6,7 +6,6 @@ import Ticker from "@/components/Ticker";
 
 import Player from "@/components/Player";
 import HeroWave from "@/components/HeroWave";
-import CategoryNav from "@/components/CategoryNav";
 import BannerAniversario from "@/components/BannerAniversario";
 import Hero from "@/components/Hero";
 import NewsCard from "@/components/NewsCard";
@@ -39,7 +38,7 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen bg-white dark:bg-slate-900">
       <TopBar />
       <Player />
-      <Header />
+      <Header activeCategory="regional" />
       <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
 
       {/* Signature Hero Wave */}
@@ -49,13 +48,22 @@ export default async function Home() {
         </div>
       </section>
 
-      <CategoryNav active="regional" />
-
       <main className="container py-8 flex-1">
-        {/* Top Section: Featured news article */}
-        <div className="w-full mb-12 border-b border-border pb-12">
-          {heroNews && <Hero news={heroNews} />}
-          {heroNews && <NewsArticleSchema news={heroNews} />}
+        {/* Manchete principal + chamadas secundárias, estilo G1 */}
+        <div className="w-full mb-12 border-b border-border pb-12 grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 items-start">
+          <div>
+            {heroNews && <Hero news={heroNews} />}
+            {heroNews && <NewsArticleSchema news={heroNews} />}
+          </div>
+          <div className="flex flex-col divide-y divide-border lg:border-l lg:border-border lg:pl-6">
+            {allNews
+              .filter(n => n !== heroNews)
+              .slice(0, 4)
+              .map((news) => (
+                <NewsCard key={`chamada-${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
+              ))
+            }
+          </div>
         </div>
 
         {/* Banner 70 Anos */}
@@ -82,16 +90,23 @@ export default async function Home() {
                     Ver todas →
                   </a>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                  {allNews
-                    .filter(n => n.category === "Regional" && n !== heroNews)
-                    .slice(0, 3)
-                    .map((news) => (
-                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
-                    ))
-                  }
+                <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
+                  {(() => {
+                    const items = allNews.filter(n => n.category === "Regional" && n !== heroNews).slice(0, 4);
+                    const [destaque, ...resto] = items;
+                    return (
+                      <>
+                        {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
+                        <div className="flex flex-col divide-y divide-border">
+                          {resto.map((news) => (
+                            <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
+                          ))}
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
-                {allNews.filter(n => n.category === "Regional" && n !== heroNews).slice(0, 3).map(n => (
+                {allNews.filter(n => n.category === "Regional" && n !== heroNews).slice(0, 4).map(n => (
                   <NewsArticleSchema key={`schema-${n.source}-${n.pubDate}-${n.title}`} news={n} />
                 ))}
               </div>
@@ -110,16 +125,23 @@ export default async function Home() {
                     Ver todas →
                   </a>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                  {allNews
-                    .filter(n => n.category === "Brasil" && n !== heroNews)
-                    .slice(0, 3)
-                    .map((news) => (
-                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
-                    ))
-                  }
+                <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
+                  {(() => {
+                    const items = allNews.filter(n => n.category === "Brasil" && n !== heroNews).slice(0, 4);
+                    const [destaque, ...resto] = items;
+                    return (
+                      <>
+                        {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
+                        <div className="flex flex-col divide-y divide-border">
+                          {resto.map((news) => (
+                            <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
+                          ))}
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
-                {allNews.filter(n => n.category === "Brasil" && n !== heroNews).slice(0, 3).map(n => (
+                {allNews.filter(n => n.category === "Brasil" && n !== heroNews).slice(0, 4).map(n => (
                   <NewsArticleSchema key={`schema-${n.source}-${n.pubDate}-${n.title}`} news={n} />
                 ))}
               </div>
@@ -137,14 +159,21 @@ export default async function Home() {
                     Ver todas →
                   </a>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                  {allNews
-                    .filter(n => n.category === "Esportes" && n !== heroNews)
-                    .slice(0, 3)
-                    .map((news) => (
-                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
-                    ))
-                  }
+                <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
+                  {(() => {
+                    const items = allNews.filter(n => n.category === "Esportes" && n !== heroNews).slice(0, 4);
+                    const [destaque, ...resto] = items;
+                    return (
+                      <>
+                        {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
+                        <div className="flex flex-col divide-y divide-border">
+                          {resto.map((news) => (
+                            <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
+                          ))}
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
 
@@ -159,14 +188,21 @@ export default async function Home() {
                   <div className="flex-1 border-b border-border" />
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                  {allNews
-                    .filter(n => n !== heroNews && !categories.some(c => n.category === c.id))
-                    .slice(0, 3)
-                    .map((news) => (
-                      <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} />
-                    ))
-                  }
+                <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
+                  {(() => {
+                    const items = allNews.filter(n => n !== heroNews && !categories.some(c => n.category === c.id)).slice(0, 4);
+                    const [destaque, ...resto] = items;
+                    return (
+                      <>
+                        {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
+                        <div className="flex flex-col divide-y divide-border">
+                          {resto.map((news) => (
+                            <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
+                          ))}
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
 
@@ -177,7 +213,7 @@ export default async function Home() {
           {/* Sidebar fixa à direita: 320px no desktop */}
           <aside className="w-full md:w-[320px] shrink-0">
             <div className="sticky top-24 flex flex-col gap-8">
-              <Sidebar />
+              <Sidebar topNews={allNews.slice(0, 5).map(n => ({ title: n.title, link: n.link }))} />
             </div>
           </aside>
 

@@ -9,9 +9,10 @@
   --color-primary-light: #1771a6;
   --color-primary-soft: #edf5ff;
 
-  --color-sintonia-azul: #0B4F7A;       /* Azul institucional premium -- usado em chamadas de acao primarias, headers */
-  --color-cerrado-verde: #2D6A4F;       /* Verde do cerrado, representa agricultura regional de Guaíra */
-  --color-entardecer-laranja: #E88D2A;  /* Laranja do ferndacer do interior paulista, usado em priorizadores */
+  --color-sintonia-azul: #0B4F7A;       /* Azul institucional da marca, usado em chamadas de acao primarias, headers */
+  --color-vermelho-vivo: #E4002B;       /* Vermelho vivo do logo oficial, usado em destaques e categoria Brasil */
+  --color-amarelo-ouro: #FFC72C;        /* Amarelo/dourado do logo oficial, usado em acentos e selos */
+  --color-entardecer-laranja: #E88D2A;  /* Laranja do entardecer do interior paulista, usado em priorizadores */
   --color-vinil-preto: #1A1A1A;         /* Texto principal, cor da base para textos em contraste */
   --color-papel-jornal: #F5F0E8;        /* Fundo de página, simula papel de jornal */
   --color-estatica-branco: #FFFFFF;     /* Cards elevados, fondos bright */
@@ -33,8 +34,8 @@
 
   /* Cores específicas para as tags das categorias editoriais */
   --color-cat-regional: #0066cc;
-  --color-cat-brasil: #008000;
-  --color-cat-esportes: #00a000;
+  --color-cat-brasil: #E4002B;
+  --color-cat-esportes: #B8860B;
   --color-cat-educacao: #e67300;
   --color-cat-saude: #cc0066;
   --color-cat-justica: #6600cc;
@@ -215,15 +216,18 @@
   color: var(--color-sintonia-azul);
 }
 
-.nav-link[data-category="local"] { color: var(--color-cerrado-verde); }
+.nav-link[data-category="local"] { color: var(--color-vermelho-vivo); }
 .nav-link[data-category="regional"] { color: var(--color-sintonia-azul); }
 .nav-link[data-category="brasil"] { color: var(--color-frequencia-600); }
 .nav-link[data-category="agro"] { color: var(--color-entardecer-laranja); }
+.nav-link[data-category="esportes"] { color: var(--color-amarelo-ouro); filter: brightness(0.75); }
 
 .nav-link[data-category="local"]:hover,
-.nav-link[data-category="local"][aria-current="page"] { color: var(--color-cerrado-verde); }
+.nav-link[data-category="local"][aria-current="page"] { color: var(--color-vermelho-vivo); }
 .nav-link[data-category="agro"]:hover,
 .nav-link[data-category="agro"][aria-current="page"] { color: var(--color-entardecer-laranja); }
+.nav-link[data-category="esportes"]:hover,
+.nav-link[data-category="esportes"][aria-current="page"] { color: var(--color-amarelo-ouro); filter: brightness(0.75); }
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {

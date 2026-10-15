@@ -5,8 +5,8 @@ import React from "react";
 /**
  * CategoryNav — Navegação de categorias com codificação de cor semântica.
  *
- * - Cor por categoria: Local (cerrado-verde), Regional (sintonia-azul),
- *   Brasil (cinza/agregado), Agro (entardecer-laranja).
+ * - Cor por categoria: Local (vermelho-vivo), Regional (sintonia-azul),
+ *   Brasil (cinza/agregado), Agro (entardecer-laranja), Esportes (amarelo-ouro).
  * - Underline animado no item ativo/hover.
  * - Acessível: nav semântica, aria-current na categoria ativa.
  */

@@ -3,8 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import CategoryNav, { type CategoryKey } from "./CategoryNav";
 
-const Header = () => {
+interface HeaderProps {
+  activeCategory?: CategoryKey;
+}
+
+const Header = ({ activeCategory }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const headerRef = React.useRef<HTMLElement>(null);
 
@@ -107,6 +112,7 @@ const Header = () => {
           </div>
         </div>
       </div>
+      <CategoryNav active={activeCategory} />
     </header>
   );
 };

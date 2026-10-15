@@ -7,7 +7,11 @@ import { getApod } from "@/lib/nasa";
 import { getJoke } from "@/lib/joke";
 import Image from "next/image";
 
-const Sidebar = async () => {
+interface SidebarProps {
+  topNews?: { title: string; link: string }[];
+}
+
+const Sidebar = async ({ topNews = [] }: SidebarProps) => {
   const [weather, quotes, brasileirao, crypto, apod, joke] = await Promise.allSettled([
     getWeatherData(),
     getQuotesData(),
@@ -30,6 +34,29 @@ const Sidebar = async () => {
 
   return (
     <aside className="flex flex-col gap-8 w-full">
+      {/* Mais Lidas: ranking numerado estilo G1 */}
+      {topNews.length > 0 && (
+        <div className="flex flex-col">
+          <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 pb-1 inline-block w-fit" style={{ borderColor: "var(--color-vermelho-vivo)" }}>
+            Mais Lidas
+          </h3>
+          <ol className="flex flex-col divide-y divide-border">
+            {topNews.map((n, i) => (
+              <li key={`${n.link}-${i}`}>
+                <a href={n.link} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-3 py-3">
+                  <span className="font-montserrat text-2xl font-black leading-none shrink-0" style={{ color: "var(--color-vermelho-vivo)" }}>
+                    {i + 1}
+                  </span>
+                  <span className="text-[13px] font-bold leading-snug text-text group-hover:text-primary transition-colors line-clamp-3">
+                    {n.title}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
       {/* Weather Widget */}
       <div className="flex flex-col">
         <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 border-primary pb-1 inline-block w-fit">
