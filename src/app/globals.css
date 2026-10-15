@@ -106,6 +106,13 @@
   .animate-flash-red {
     animation: flash-red 0.8s infinite;
   }
+
+  /* Cabeçalho de seção com sublinhado curto, só sob o texto (padrão G1) */
+  .section-heading {
+    display: inline-block;
+    padding-bottom: 0.4rem;
+    border-bottom: 3px solid currentColor;
+  }
 }
 
 @keyframes flash-red {

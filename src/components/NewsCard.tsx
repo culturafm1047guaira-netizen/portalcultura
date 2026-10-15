@@ -44,25 +44,22 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
       <a href={link} target="_blank" rel="noopener noreferrer" className="group flex gap-4 py-4 border-editorial">
         <div className="relative w-24 h-24 shrink-0 overflow-hidden bg-gray-100 dark:bg-slate-700 rounded-sm">
           {image && !imgError ? (
-            <Image 
-              src={image} 
-              alt={title} 
-              fill 
-              style={{ objectFit: "cover" }} 
-              className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110" 
+            <Image
+              src={image}
+              alt={title}
+              fill
+              style={{ objectFit: "cover" }}
+              className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110"
               onError={() => setImgError(true)}
             />
           ) : imgPlaceholder}
         </div>
         <div className="flex flex-col flex-1">
-          <span className="text-[10px] font-extrabold uppercase tracking-widest mb-1" style={{ color: catColor }}>
-            {category}
-          </span>
-          <h3 className="font-montserrat text-[14px] font-bold leading-snug text-text group-hover:text-primary transition-colors line-clamp-3">
+          <h3 className="font-montserrat text-[14px] font-extrabold leading-snug transition-colors line-clamp-3" style={{ color: catColor }}>
             {title}
           </h3>
           <div className="flex items-center gap-3 mt-auto pt-2">
-            <span className="text-[10px] text-gray-400 dark:text-slate-500 font-medium whitespace-nowrap">Há {formattedDate} • {source}</span>
+            <span className="text-[10px] text-gray-400 dark:text-slate-500 font-medium whitespace-nowrap uppercase tracking-wide">{category} • Há {formattedDate} • {source}</span>
             <ShareButtons title={title} link={link} />
           </div>
         </div>
@@ -71,30 +68,32 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, comp
   }
 
   return (
-    <a href={link} target="_blank" rel="noopener noreferrer" className="group flex h-full flex-col rounded-[24px] border border-border/70 bg-white p-3 shadow-[0_16px_50px_-30px_rgba(2,6,23,0.6)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-[0_24px_60px_-30px_rgba(11,79,122,0.7)] dark:border-slate-700/50 dark:bg-slate-800">
-      <div className="relative aspect-video w-full overflow-hidden rounded-[18px] bg-gray-100 dark:bg-slate-700">
+    <a href={link} target="_blank" rel="noopener noreferrer" className="group flex h-full flex-col">
+      <div className="relative aspect-video w-full overflow-hidden bg-gray-100 dark:bg-slate-700">
         {image && !imgError ? (
-          <Image 
-            src={image} 
-            alt={title} 
-            fill 
-            style={{ objectFit: "cover" }} 
-            className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105" 
+          <Image
+            src={image}
+            alt={title}
+            fill
+            style={{ objectFit: "cover" }}
+            className="transition-transform duration-[700ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
             onError={() => setImgError(true)}
           />
         ) : imgPlaceholder}
+        <div className="absolute inset-x-0 bottom-0 px-3 py-2.5" style={{ backgroundColor: catColor }}>
+          <span className="block text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/80 mb-0.5">
+            {category}
+          </span>
+          <h3 className="font-montserrat text-[0.95rem] font-extrabold leading-tight text-white line-clamp-2">
+            {title}
+          </h3>
+        </div>
       </div>
-      <div className="flex flex-1 flex-col px-1 pb-1 pt-4">
-        <span className="mb-2 inline-flex w-fit rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.28em]" style={{ color: catColor, backgroundColor: 'color-mix(in srgb, currentColor 14%, transparent)' }}>
-          {category}
-        </span>
-        <h3 className="font-montserrat text-[1.02rem] font-extrabold leading-tight text-text transition-colors duration-300 group-hover:text-primary line-clamp-3">
-          {title}
-        </h3>
-        <p className="mt-2 text-[13px] text-text-muted line-clamp-2 leading-relaxed">
+      <div className="flex flex-1 flex-col pt-3">
+        <p className="text-[13px] text-text-muted line-clamp-2 leading-relaxed">
           {excerpt}
         </p>
-        <div className="mt-auto flex items-center gap-3 border-t border-gray-100 pt-4 dark:border-slate-700">
+        <div className="mt-auto flex items-center gap-3 pt-3">
           <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400">{source}</span>
           <ShareButtons title={title} link={link} className="ml-auto flex items-center gap-3" iconClassName="w-4 h-4 fill-current" />
         </div>

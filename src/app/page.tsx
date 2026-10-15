@@ -81,11 +81,10 @@ export default async function Home() {
             <div className="flex flex-col gap-16">
               {/* Regional */}
               <div key="Regional">
-                <div className="flex items-center gap-4 mb-6">
-                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-regional)" }}>
+                <div className="flex items-end justify-between gap-4 mb-6">
+                  <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-regional)" }}>
                     Regional
                   </h2>
-                  <div className="flex-1 border-b border-border" />
                   <a href="/busca?q=Regional" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-regional)" }}>
                     Ver todas →
                   </a>
@@ -116,11 +115,10 @@ export default async function Home() {
 
               {/* Brasil */}
               <div key="Brasil">
-                <div className="flex items-center gap-4 mb-6">
-                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-brasil)" }}>
+                <div className="flex items-end justify-between gap-4 mb-6">
+                  <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-brasil)" }}>
                     Brasil
                   </h2>
-                  <div className="flex-1 border-b border-border" />
                   <a href="/busca?q=Brasil" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-brasil)" }}>
                     Ver todas →
                   </a>
@@ -150,11 +148,10 @@ export default async function Home() {
 
               {/* Esportes */}
               <div key="Esportes">
-                <div className="flex items-center gap-4 mb-6">
-                  <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-esportes)" }}>
+                <div className="flex items-end justify-between gap-4 mb-6">
+                  <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-esportes)" }}>
                     Esportes
                   </h2>
-                  <div className="flex-1 border-b border-border" />
                   <a href="/busca?q=Esportes" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-esportes)" }}>
                     Ver todas →
                   </a>
@@ -182,10 +179,9 @@ export default async function Home() {
               {/* Mais Notícias */}
               <div>
                 <div className="flex items-center gap-4 mb-6">
-                  <h2 className="font-montserrat text-2xl font-black text-dark-bg uppercase tracking-tight">
+                  <h2 className="section-heading font-montserrat text-2xl font-black text-dark-bg uppercase tracking-tight" style={{ color: "var(--color-sintonia-azul)" }}>
                     Mais Notícias
                   </h2>
-                  <div className="flex-1 border-b border-border" />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
