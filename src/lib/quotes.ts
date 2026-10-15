@@ -163,7 +163,65 @@ async function fetchCommoditiesFrom(url: string, signal?: AbortSignal): Promise<
   }
 }
 
-async function fetchCommodities(): Promise<CommoditiesData> {
+/**
+ * Fonte principal: indicadores diários CEPEA/ESALQ (referência oficial do
+ * mercado físico agro brasileiro), redistribuídos em JSON aberto pela
+ * Cultivee (CC BY-NC 4.0, requer atribuição à CEPEA/ESALQ).
+ * Atualiza uma vez por dia (fechamento do indicador), então var_pct/data_ref
+ * só mudam quando o CEPEA publica um novo valor de referência.
+ */
+const CULTIVEE_LABELS: Record<string, string> = {
+  'soja': 'Soja',
+  'milho': 'Milho',
+  'boi-gordo': 'Boi Gordo',
+  'cafe-arabica': 'Café Arábica',
+  'cafe-robusta': 'Café Robusta',
+  'trigo': 'Trigo',
+  'leite': 'Leite',
+}
+const CULTIVEE_ORDER = ['soja', 'milho', 'boi-gordo', 'cafe-arabica', 'cafe-robusta', 'trigo', 'leite']
+
+function parseCultivee(data: any): CommoditiesData {
+  if (!data || !Array.isArray(data.itens)) return { items: [], updatedAt: null }
+  const byKey = new Map<string, any>(data.itens.map((it: any) => [it.key, it]))
+  const items: QuoteItem[] = []
+  let updatedAt: string | null = null
+  for (const key of CULTIVEE_ORDER) {
+    const item = byKey.get(key)
+    if (!item || typeof item.valor !== 'number' || item.valor <= 0) continue
+    items.push({
+      label: CULTIVEE_LABELS[key],
+      val: formatBRL(item.valor),
+      trend: fmtTrend(item.var_pct),
+      change: fmtChange(item.var_pct),
+      unit: item.unidade || undefined,
+    })
+    if (!updatedAt && item.data_ref) updatedAt = `${item.data_ref} (CEPEA/ESALQ)`
+  }
+  return { items, updatedAt }
+}
+
+async function fetchCultivee(): Promise<CommoditiesData | null> {
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
+    const res = await fetch('https://cultivee.com.br/dados/cotacoes/ultimo.json', {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      next: { revalidate: 1800 },
+    })
+    clearTimeout(timeout)
+    if (!res.ok) return null
+    const data = await res.json()
+    const parsed = parseCultivee(data)
+    return parsed.items.length > 0 ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+/** Fonte secundária, usada apenas se a Cultivee estiver indisponível. */
+async function fetchCommoditiesFallback(): Promise<CommoditiesData> {
   const PRIMARY = 'https://www.redacaoagro.com.br/api/cotacoes.php'
   const FALLBACK = 'https://www.redacaoagro.com.br/api/cotacoes.php?_='
 
@@ -191,6 +249,12 @@ async function fetchCommodities(): Promise<CommoditiesData> {
     clearTimeout(timeout)
     return { items: [], updatedAt: null }
   }
+}
+
+async function fetchCommodities(): Promise<CommoditiesData> {
+  const cultivee = await fetchCultivee()
+  if (cultivee) return cultivee
+  return fetchCommoditiesFallback()
 }
 
 export async function getQuotesData() {

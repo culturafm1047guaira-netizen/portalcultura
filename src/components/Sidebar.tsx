@@ -201,6 +201,9 @@ const Sidebar = async ({ topNews = [] }: SidebarProps) => {
             <span className="text-[12px] text-amber-600/50">Indisponível</span>
           )}
         </div>
+        <span className="text-[9px] text-amber-600/40 font-medium mt-1">
+          Fonte: CEPEA/ESALQ
+        </span>
       </div>
       
       {/* Brasileirão Standings */}
