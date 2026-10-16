@@ -74,7 +74,7 @@ export default async function Home() {
 
 
         {/* Layout: News (Left) + Sidebar (Right) */}
-        <div className="flex flex-col md:flex-row gap-8 xl:gap-12 items-start">
+        <div className="flex flex-col md:flex-row gap-8 xl:gap-12 md:items-start">
           
           {/* Coluna Principal: Categorias em 3 colunas */}
           <div className="flex-1 min-w-0">
