@@ -1,30 +1,24 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import ShareButtons from "./ShareButtons";
+import { categoryColor } from "@/lib/categories";
+import type { NewsItem } from "@/lib/news";
 
 interface HeroProps {
-  news: {
-    title: string;
-    excerpt: string;
-    image?: string | null;
-    link: string;
-    source: string;
-    category: string;
-    pubDate: string;
-  };
+  news: Pick<NewsItem, "title" | "excerpt" | "image" | "link" | "source" | "category" | "pubDate" | "slug" | "isOwn" | "isBreaking">;
 }
 
 const Hero = ({ news }: HeroProps) => {
-  const lowerCat = news.category.toLowerCase();
-  let catColor = "var(--color-sintonia-azul)";
-  if (lowerCat.includes("brasil")) catColor = "var(--color-cat-brasil)";
-  if (lowerCat.includes("esporte")) catColor = "var(--color-cat-esportes)";
-  if (lowerCat.includes("regi")) catColor = "var(--color-cat-regional)";
+  const catColor = categoryColor(news.category);
+  // Matéria própria abre na própria página (/noticia/[slug]); agregado RSS abre na fonte original
+  const href = news.isOwn && news.slug ? `/noticia/${news.slug}` : news.link;
+  const linkProps = news.isOwn && news.slug ? {} : { target: "_blank" as const, rel: "noopener noreferrer" };
 
   return (
     <article className="group mb-8">
-      <a href={news.link} target="_blank" rel="noopener noreferrer" className="block">
+      <Link href={href} {...linkProps} className="block">
         <div className="relative aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden bg-gray-100 dark:bg-slate-800">
           {news.image ? (
             <Image
@@ -44,8 +38,13 @@ const Hero = ({ news }: HeroProps) => {
             </div>
           )}
           <div className="absolute inset-x-0 bottom-0 px-4 py-3 sm:px-6 sm:py-4" style={{ backgroundColor: catColor }}>
-            <span className="block text-[11px] font-extrabold uppercase tracking-[0.25em] text-white/80 mb-1">
+            <span className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.25em] text-white/80 mb-1">
               {news.category}
+              {news.isBreaking && (
+                <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-white bg-[var(--color-vermelho-vivo)] px-1.5 py-0.5 rounded-sm shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> Urgente
+                </span>
+              )}
             </span>
             <h1 className="font-montserrat text-[clamp(22px,3.6vw,34px)] font-black text-white leading-[1.1] tracking-[-0.02em] line-clamp-2">
               {news.title}
@@ -77,7 +76,7 @@ const Hero = ({ news }: HeroProps) => {
             />
           </div>
         </div>
-      </a>
+      </Link>
     </article>
   );
 };

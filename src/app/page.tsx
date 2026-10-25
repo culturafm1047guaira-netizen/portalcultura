@@ -13,33 +13,39 @@ import Sidebar from "@/components/Sidebar";
 import VideoGallery from "@/components/VideoGallery";
 import DeezerSection from "@/components/DeezerSection";
 import EspnSection from "@/components/EspnSection";
+import EditoriaSection from "@/components/EditoriaSection";
 
 import HoroscopoCarousel from "@/components/HoroscopoSection";
 import EnqueteSection from "@/components/EnqueteSection";
 import { NewsArticleSchema } from "@/components/JsonLd";
 import { getNews } from "@/lib/news";
 import { getAllHoroscopos } from "@/lib/horoscopo";
+import { getCategoryByKey } from "@/lib/categories";
 
 export const revalidate = 600;
+
+// Editorias exibidas na home, em ordem. As demais categorias (Economia, Educação,
+// Saúde, Justiça) aparecem em "Mais Notícias" e nas respectivas /categoria/[slug].
+const HOME_CATEGORY_KEYS = ["regional", "brasil", "esportes"] as const;
 
 export default async function Home() {
   const [allNews, horoscopos] = await Promise.all([getNews(), getAllHoroscopos()]);
 
-  // Hero = primeira notícia Regional (rádio regional)
-  const heroNews = allNews.find(n => n.category === "Regional") || allNews[0];
+  // Hero: prioriza matéria própria marcada como urgente ("AO VIVO"); senão a
+  // primeira notícia Regional (rádio regional); senão a mais recente de todas.
+  const heroNews =
+    allNews.find(n => n.isOwn && n.isBreaking) ||
+    allNews.find(n => n.category === "Regional") ||
+    allNews[0];
 
-  const categories = [
-    { id: "Regional", label: "Regional", color: "var(--color-cat-regional)" },
-    { id: "Brasil", label: "Brasil", color: "var(--color-cat-brasil)" },
-    { id: "Esportes", label: "Esportes", color: "var(--color-cat-esportes)" },
-  ];
+  const homeCategories = HOME_CATEGORY_KEYS.map(getCategoryByKey).filter((c): c is NonNullable<typeof c> => !!c);
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-slate-900">
       <TopBar />
       <Player />
       <Header activeCategory="regional" />
-      <Ticker newsTitles={allNews.slice(0, 10).map(n => n.title)} />
+      <Ticker news={allNews.slice(0, 10)} />
 
       {/* Faixa de frequência 104.7 */}
       <section className="bg-papel-jornal border-b border-frequencia-100">
@@ -80,127 +86,43 @@ export default async function Home() {
           <div className="flex-1 min-w-0">
             <div className="flex flex-col gap-16">
               {/* Regional */}
-              <div key="Regional">
-                <div className="flex items-end justify-between gap-4 mb-6">
-                  <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-regional)" }}>
-                    Regional
-                  </h2>
-                  <a href="/busca?q=Regional" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-regional)" }}>
-                    Ver todas →
-                  </a>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
-                  {(() => {
-                    const items = allNews.filter(n => n.category === "Regional" && n !== heroNews).slice(0, 4);
-                    const [destaque, ...resto] = items;
-                    return (
-                      <>
-                        {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
-                        <div className="flex flex-col divide-y divide-border">
-                          {resto.map((news) => (
-                            <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
-                          ))}
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
-                {allNews.filter(n => n.category === "Regional" && n !== heroNews).slice(0, 4).map(n => (
-                  <NewsArticleSchema key={`schema-${n.source}-${n.pubDate}-${n.title}`} news={n} />
-                ))}
-              </div>
+              <EditoriaSection
+                title="Regional"
+                color="var(--color-cat-regional)"
+                href="/categoria/regional"
+                items={allNews.filter(n => n.category === "Regional" && n !== heroNews)}
+              />
 
               {/* Horóscopo */}
               <HoroscopoCarousel signos={horoscopos} />
 
               {/* Brasil */}
-              <div key="Brasil">
-                <div className="flex items-end justify-between gap-4 mb-6">
-                  <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-brasil)" }}>
-                    Brasil
-                  </h2>
-                  <a href="/busca?q=Brasil" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-brasil)" }}>
-                    Ver todas →
-                  </a>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
-                  {(() => {
-                    const items = allNews.filter(n => n.category === "Brasil" && n !== heroNews).slice(0, 4);
-                    const [destaque, ...resto] = items;
-                    return (
-                      <>
-                        {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
-                        <div className="flex flex-col divide-y divide-border">
-                          {resto.map((news) => (
-                            <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
-                          ))}
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
-                {allNews.filter(n => n.category === "Brasil" && n !== heroNews).slice(0, 4).map(n => (
-                  <NewsArticleSchema key={`schema-${n.source}-${n.pubDate}-${n.title}`} news={n} />
-                ))}
-              </div>
+              <EditoriaSection
+                title="Brasil"
+                color="var(--color-cat-brasil)"
+                href="/categoria/brasil"
+                items={allNews.filter(n => n.category === "Brasil" && n !== heroNews)}
+              />
 
               <EspnSection />
 
               {/* Esportes */}
-              <div key="Esportes">
-                <div className="flex items-end justify-between gap-4 mb-6">
-                  <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-esportes)" }}>
-                    Esportes
-                  </h2>
-                  <a href="/busca?q=Esportes" className="text-[11px] font-bold tracking-wider hover:opacity-70 transition-all uppercase whitespace-nowrap" style={{ color: "var(--color-cat-esportes)" }}>
-                    Ver todas →
-                  </a>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
-                  {(() => {
-                    const items = allNews.filter(n => n.category === "Esportes" && n !== heroNews).slice(0, 4);
-                    const [destaque, ...resto] = items;
-                    return (
-                      <>
-                        {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
-                        <div className="flex flex-col divide-y divide-border">
-                          {resto.map((news) => (
-                            <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
-                          ))}
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
-              </div>
+              <EditoriaSection
+                title="Esportes"
+                color="var(--color-cat-esportes)"
+                href="/categoria/esportes"
+                items={allNews.filter(n => n.category === "Esportes" && n !== heroNews)}
+              />
 
               <DeezerSection />
 
-              {/* Mais Notícias */}
-              <div>
-                <div className="flex items-center gap-4 mb-6">
-                  <h2 className="section-heading font-montserrat text-2xl font-black text-dark-bg uppercase tracking-tight" style={{ color: "var(--color-sintonia-azul)" }}>
-                    Mais Notícias
-                  </h2>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
-                  {(() => {
-                    const items = allNews.filter(n => n !== heroNews && !categories.some(c => n.category === c.id)).slice(0, 4);
-                    const [destaque, ...resto] = items;
-                    return (
-                      <>
-                        {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
-                        <div className="flex flex-col divide-y divide-border">
-                          {resto.map((news) => (
-                            <NewsCard key={`${news.source}-${news.pubDate}-${news.title}`} {...news} compact />
-                          ))}
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
-              </div>
+              {/* Mais Notícias: categorias não destacadas acima (Economia, Educação, Saúde, Justiça, agregados) */}
+              <EditoriaSection
+                title="Mais Notícias"
+                color="var(--color-sintonia-azul)"
+                href="/busca"
+                items={allNews.filter(n => n !== heroNews && !homeCategories.some(c => n.category === c.newsCategory))}
+              />
 
               <EnqueteSection />
             </div>

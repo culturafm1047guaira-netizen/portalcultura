@@ -1,5 +1,6 @@
 import Parser from "rss-parser";
 import { getNewsAPIData } from "./newsapi";
+import { createAdminClient } from "./supabase/admin";
 
 export type NewsItem = {
   title: string;
@@ -221,9 +222,72 @@ async function fetchFacebookGraphAPI(): Promise<NewsItem[]> {
   }
 }
 
+type ArticleProfileRow = { full_name?: string | null } | { full_name?: string | null }[] | null;
+
+type ArticleRow = {
+  id: string;
+  title: string | null;
+  slug: string;
+  summary: string | null;
+  cover_image_url: string | null;
+  category: string | null;
+  published_at: string | null;
+  views_count: number | null;
+  is_breaking: boolean | null;
+  profiles: ArticleProfileRow;
+};
+
+/**
+ * Busca matérias próprias publicadas em public.articles (Supabase) para serem
+ * priorizadas no feed da home, antes dos RSS agregados.
+ * Usa o client admin (service_role) para não depender de cookies/sessão e não
+ * forçar renderização dinâmica na home (que usa `revalidate`).
+ * Resiliente: se a tabela/colunas ainda não existirem (migration 0002 não
+ * aplicada) ou a query falhar por qualquer motivo, retorna lista vazia.
+ */
+export async function getOwnArticles(): Promise<NewsItem[]> {
+  try {
+    const supabase = createAdminClient();
+    const nowIso = new Date().toISOString();
+
+    const { data, error } = await supabase
+      .from("articles")
+      .select(
+        "id, title, slug, summary, cover_image_url, category, published_at, views_count, is_breaking, profiles(full_name)"
+      )
+      .eq("status", "published")
+      .lte("published_at", nowIso)
+      .order("published_at", { ascending: false })
+      .limit(30);
+
+    if (error || !data) return [];
+
+    return (data as ArticleRow[]).map((article): NewsItem => {
+      const authorProfile = Array.isArray(article.profiles) ? article.profiles[0] : article.profiles;
+      return {
+        title: article.title || "",
+        link: `/noticia/${article.slug}`,
+        image: article.cover_image_url || "https://placehold.co/800x450/003366/ffffff?text=R%C3%A1dio+Cultura",
+        excerpt: article.summary || "",
+        pubDate: article.published_at ? new Date(article.published_at).toISOString() : new Date().toISOString(),
+        source: "Rádio Cultura",
+        category: article.category || "Regional",
+        slug: article.slug,
+        isOwn: true,
+        isBreaking: !!article.is_breaking,
+        viewsCount: article.views_count ?? 0,
+        author: authorProfile?.full_name ?? undefined,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
 export async function getNews(): Promise<NewsItem[]> {
-  const results = await Promise.allSettled(
-    FEEDS.map(async (feed) => {
+  const [results, ownArticles] = await Promise.all([
+    Promise.allSettled(
+      FEEDS.map(async (feed) => {
       try {
         const data = await parser.parseURL(feed.url);
         const items = (data.items || []).slice(0, 10).map(item => {
@@ -261,7 +325,9 @@ export async function getNews(): Promise<NewsItem[]> {
         return [];
       }
     })
-  );
+    ),
+    getOwnArticles(),
+  ]);
 
   let allNews: NewsItem[] = [];
   results.forEach(r => {
@@ -309,6 +375,11 @@ export async function getNews(): Promise<NewsItem[]> {
     // Se conseguiu ler do Facebook via API Oficial, substitui eventuais posts do RSS (se houver) e insere no topo
     finalNewsList = finalNewsList.filter(n => n.category !== 'Facebook');
     finalNewsList = [...facebookPosts, ...finalNewsList];
+  }
+
+  // Matérias próprias têm prioridade máxima: sempre no topo do feed final.
+  if (ownArticles.length > 0) {
+    finalNewsList = [...ownArticles, ...finalNewsList];
   }
 
   return finalNewsList;
