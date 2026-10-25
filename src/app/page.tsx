@@ -5,7 +5,6 @@ import TopBar from "@/components/TopBar";
 import Ticker from "@/components/Ticker";
 
 import Player from "@/components/Player";
-import HeroWave from "@/components/HeroWave";
 import BannerAniversario from "@/components/BannerAniversario";
 import Hero from "@/components/Hero";
 import NewsCard from "@/components/NewsCard";
@@ -46,13 +45,6 @@ export default async function Home() {
       <Player />
       <Header activeCategory="regional" />
       <Ticker news={allNews.slice(0, 10)} />
-
-      {/* Faixa de frequência 104.7 */}
-      <section className="bg-papel-jornal border-b border-frequencia-100">
-        <div className="container py-3">
-          <HeroWave />
-        </div>
-      </section>
 
       <main className="container py-8 flex-1">
         {/* Manchete principal + chamadas secundárias, estilo G1 */}
