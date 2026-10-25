@@ -352,12 +352,13 @@ Resumo do estado atual do repositório após revisão completa:
 | `Player` (autoplay) | ✅ O player agora tenta iniciar o streaming automaticamente ao carregar a página. Navegadores (principalmente em celular) costumam bloquear áudio com som sem interação prévia do usuário — nesse caso o botão de play continua disponível para iniciar manualmente, com o texto "Toque no play para ouvir". |
 | CSP duplicada (`vercel.json` + `next.config.ts`) | ✅ Causa raiz de o streaming não tocar nem manual nem automático: existiam DUAS políticas `Content-Security-Policy` (uma em cada arquivo). O navegador aplica a interseção de todas as CSPs presentes — a de `next.config.ts` (antes da correção anterior) não permitia `media-src` externo, então bloqueava mesmo com a de `vercel.json` permitindo. Consolidado em uma única CSP (em `next.config.ts`, união dos dois conjuntos de regras, incluindo `frame-src` para o YouTube) e removida a CSP duplicada de `vercel.json`. |
 
+| `public/img/icon-192.png` e `icon-512.png` | ✅ Eram um ícone genérico (onda de rádio azul), substituídos pela logo oficial (`public/img/logo_oficial.png`), gerados via `sharp` a partir dela. De quebra, ficaram bem mais leves (481 KB → ~58 KB somados). |
+
 ### Pendências futuras
 
 | Item | Situação |
 |------|----------|
 | `tests/COVERAGE.md` | Referencia arquivos `js/` e `api/*.js` da versão antiga |
-| Assets em `public/img/` | Ícones PWA precisam ser otimizados (481 KB atuais) |
 | Testes | Jest/Playwright precisam ser atualizados para a estrutura `src/` |
 | Sitemap | Substituir `sitemap.xml` estático por geração dinâmica (`sitemap.ts`)
 
