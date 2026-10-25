@@ -69,7 +69,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, slug
 
   return (
     <Link href={href} {...linkProps} className="group flex h-full flex-col min-w-0">
-      <div className="relative aspect-video w-full overflow-hidden bg-gray-100 dark:bg-slate-700">
+      <div className="relative flex-1 min-h-[180px] w-full overflow-hidden bg-gray-100 dark:bg-slate-700">
         {image && !imgError ? (
           <Image
             src={image}
@@ -90,7 +90,7 @@ const NewsCard = ({ title, excerpt, image, link, source, category, pubDate, slug
           </h3>
         </div>
       </div>
-      <div className="flex flex-1 flex-col pt-3 min-w-0">
+      <div className="flex shrink-0 flex-col pt-3 min-w-0">
         <p className="text-[13px] text-text-muted line-clamp-2 leading-relaxed">
           {excerpt}
         </p>

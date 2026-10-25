@@ -32,7 +32,7 @@ export default function EditoriaSection({ title, color, href, items, limit = 3 }
           Ver todas →
         </a>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-x-6 gap-y-6">
         {destaque && <NewsCard key={`${destaque.source}-${destaque.pubDate}-${destaque.title}`} {...destaque} />}
         <div className="flex flex-col divide-y divide-border min-w-0">
           {resto.map((news) => (
