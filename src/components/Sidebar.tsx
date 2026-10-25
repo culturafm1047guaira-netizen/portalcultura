@@ -418,16 +418,6 @@ const Sidebar = async ({ topNews = [] }: SidebarProps) => {
         </div>
       )}
 
-      {/* Ad Banner */}
-      <div className="w-full h-[200px] bg-gradient-to-br from-primary to-primary-dark border border-border flex flex-col items-center justify-center gap-2 rounded-lg shadow-sm">
-        <span className="text-white text-lg font-black uppercase tracking-[0.2em]">
-          ANUNCIE AQUI
-        </span>
-        <span className="text-white/80 text-sm font-bold tracking-wider">
-          (17) 3331-1177
-        </span>
-      </div>
-
       {/* Piada do Dia */}
       {resolved.joke && (
         <div className="flex flex-col">
@@ -499,16 +489,6 @@ const Sidebar = async ({ topNews = [] }: SidebarProps) => {
           </div>
         </div>
       )}
-
-      {/* Ad Banner placeholder */}
-      <div className="w-full h-[250px] bg-gradient-to-br from-primary to-primary-dark border border-border flex flex-col items-center justify-center gap-2 rounded-lg shadow-sm">
-        <span className="text-white text-lg font-black uppercase tracking-[0.2em]">
-          ANUNCIE AQUI
-        </span>
-        <span className="text-white/80 text-sm font-bold tracking-wider">
-          (17) 3331-1177
-        </span>
-      </div>
     </aside>
   );
 };
