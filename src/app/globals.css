@@ -39,6 +39,7 @@
   --color-cat-educacao: #e67300;
   --color-cat-saude: #cc0066;
   --color-cat-justica: #6600cc;
+  --color-cat-economia: #E88D2A;
 }
 
 @layer base {
@@ -46,6 +47,17 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+  }
+
+  html, body {
+    /* Rede de segurança contra blowup horizontal no mobile (causa raiz real
+       deve ser corrigida em cada componente com min-w-0/max-w-full) */
+    overflow-x: hidden;
+  }
+
+  img, video, svg {
+    max-width: 100%;
+    height: auto;
   }
 
   body {

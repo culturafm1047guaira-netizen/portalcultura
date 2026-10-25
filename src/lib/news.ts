@@ -9,6 +9,12 @@ export type NewsItem = {
   pubDate: string;
   source: string;
   category: string;
+  /** Preenchido só para matérias próprias (tabela articles do Supabase) */
+  slug?: string;
+  isOwn?: boolean;
+  isBreaking?: boolean;
+  viewsCount?: number;
+  author?: string;
 };
 
 // Domain allowlist for SSRF protection - only allow fetching images from these domains
