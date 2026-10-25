@@ -198,17 +198,16 @@ export default function HoroscopoCarousel({ signos }: { signos: SignoWithData[] 
   const items = [...signos, ...signos, ...signos];
 
   return (
-    <section className="w-full">
+    <section className="w-full min-w-0">
       {/* Cabeçalho */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-end justify-between gap-4 mb-6 min-w-0">
         <h2
-          className="font-montserrat text-2xl font-black uppercase tracking-tight"
-          style={{ color: "var(--color-primary, #D94B4B)" }}
+          className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight"
+          style={{ color: "var(--color-primary)" }}
         >
           ✨ Horóscopo
         </h2>
-        <div className="flex-1 border-b border-border" />
-        <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase whitespace-nowrap">
+        <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase whitespace-nowrap shrink-0">
           {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
         </span>
       </div>

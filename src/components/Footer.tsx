@@ -1,12 +1,13 @@
 import React from "react";
 import Link from "next/link";
+import { CATEGORIES } from "@/lib/categories";
 
 const Footer = () => {
   return (
-    <footer className="bg-dark-bg pt-9 mt-2">
+    <footer className="bg-dark-bg pt-9 mt-2 overflow-x-hidden">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-7">
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 min-w-0">
             <h3 className="font-montserrat text-[17px] font-extrabold text-white uppercase tracking-wider">
               Rádio Cultura FM 104.7
             </h3>
@@ -26,14 +27,20 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 min-w-0">
             <h4 className="text-[10px] font-bold tracking-[0.14em] uppercase text-white">
               Páginas
             </h4>
             <div className="flex flex-col gap-1.5">
               <Link href="/" className="text-[13px] text-white hover:text-white transition-colors">Início</Link>
+              <Link href="/busca" className="text-[13px] text-white hover:text-white transition-colors">Buscar notícias</Link>
+              {CATEGORIES.map((cat) => (
+                <Link key={cat.key} href={cat.href} className="text-[13px] text-white hover:text-white transition-colors">
+                  {cat.label}
+                </Link>
+              ))}
               <Link href="/programacao" className="text-[13px] text-white hover:text-white transition-colors">Programação</Link>
-              <Link href="/economia" className="text-[13px] text-white hover:text-white transition-colors">Economia</Link>
+              <Link href="/servicos-publicos" className="text-[13px] text-white hover:text-white transition-colors">Serviços Públicos</Link>
               <Link href="/sobre" className="text-[13px] text-white hover:text-white transition-colors">Sobre</Link>
               <Link href="/contato" className="text-[13px] text-white hover:text-white transition-colors">Contato</Link>
               <Link href="/termos" className="text-[13px] text-white hover:text-white transition-colors">Termos de Uso</Link>
@@ -42,7 +49,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 min-w-0">
             <h4 className="text-[10px] font-bold tracking-[0.14em] uppercase text-white">
               Contato
             </h4>
@@ -52,15 +59,15 @@ const Footer = () => {
               </a>
               <a href="tel:+551733311177" className="text-[13px] text-white hover:text-white transition-colors">(17) 3331-1177</a>
               <a href="tel:+551733311155" className="text-[13px] text-white hover:text-white transition-colors">(17) 3331-1155</a>
-              <a href="mailto:radioculturadeguaira@gmail.com" className="text-[13px] text-white hover:text-white transition-colors">radioculturadeguaira@gmail.com</a>
+              <a href="mailto:radioculturadeguaira@gmail.com" className="text-[13px] text-white hover:text-white transition-colors break-all">radioculturadeguaira@gmail.com</a>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 min-w-0">
             <h4 className="text-[10px] font-bold tracking-[0.14em] uppercase text-white">
               Redes Sociais
             </h4>
-            <div className="flex gap-4 mt-1">
+            <div className="flex gap-4 mt-1 flex-wrap">
               <a href="https://www.facebook.com/radioculturadeguaira/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#1877F2] text-white transition-all group" title="Facebook">
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
               </a>
@@ -77,7 +84,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-white/10 py-4 flex flex-col sm:flex-row justify-between gap-4 text-[11px] text-white">
+        <div className="border-t border-white/10 py-4 flex flex-col sm:flex-row justify-between gap-4 text-[11px] text-white min-w-0">
           <span>© 2026 Rádio Cultura FM 104.7 — Guaíra, SP. Todos os direitos reservados.</span>
           <span className="sm:text-right max-w-md">
             As notícias são obtidas automaticamente de fontes públicas e são de responsabilidade dos respectivos veículos.

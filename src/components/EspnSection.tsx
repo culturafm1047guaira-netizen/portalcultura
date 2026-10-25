@@ -20,12 +20,11 @@ const EspnSection = async () => {
   if (matches.length === 0) return null;
 
   return (
-    <div className="pt-12 border-t border-border">
-      <div className="flex items-center gap-4 mb-8">
-        <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight text-dark-bg">
+    <div className="pt-12 border-t border-border min-w-0">
+      <div className="flex items-end justify-between gap-4 mb-6">
+        <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "var(--color-cat-esportes)" }}>
           ⚽ Jogos do Brasileirão
         </h2>
-        <div className="flex-1 border-b border-border" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -37,7 +36,7 @@ const EspnSection = async () => {
           return (
             <div
               key={match.id}
-              className="bg-white dark:bg-slate-800 border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow p-4"
+              className="bg-white dark:bg-slate-800 border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 min-w-0"
             >
               <div className="flex items-center justify-between mb-3">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">

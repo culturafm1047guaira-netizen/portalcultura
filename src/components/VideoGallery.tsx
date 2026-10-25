@@ -5,17 +5,16 @@ const VideoGallery = async () => {
   const videos = await getLatestVideos();
 
   return (
-    <div className="w-full mb-16">
-      <div className="flex items-center gap-4 mb-8">
-        <h2 className="font-montserrat text-2xl font-black text-primary uppercase tracking-tight">
+    <div className="w-full mb-16 min-w-0">
+      <div className="flex items-end justify-between gap-4 mb-6">
+        <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight text-primary">
           Vídeos da Rádio
         </h2>
-        <div className="flex-1 border-b border-border" />
-        <a 
-          href="https://youtube.com/@culturafmguaira-sp" 
-          target="_blank" 
+        <a
+          href="https://youtube.com/@culturafmguaira-sp"
+          target="_blank"
           rel="noopener noreferrer"
-          className="text-[11px] font-bold text-red-600 hover:text-red-700 transition-all uppercase tracking-wider"
+          className="text-[11px] font-bold text-red-600 hover:text-red-700 transition-all uppercase tracking-wider whitespace-nowrap"
         >
           Ver canal no YouTube →
         </a>
@@ -23,7 +22,7 @@ const VideoGallery = async () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {videos.map((video) => (
-          <div key={video.id} className="group flex flex-col gap-3">
+          <div key={video.id} className="group flex flex-col gap-3 min-w-0">
             <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-border shadow-sm group-hover:shadow-md transition-all duration-300">
               <iframe
                 width="100%"

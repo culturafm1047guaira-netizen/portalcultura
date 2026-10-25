@@ -7,17 +7,16 @@ const DeezerSection = async () => {
   if (artists.length === 0) return null;
 
   return (
-    <div className="pt-12 border-t border-border">
-      <div className="flex items-center gap-4 mb-8">
-        <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight text-dark-bg">
-          🎵 Top Músicas do Momento (Deezer)
+    <div className="pt-12 border-t border-border min-w-0">
+      <div className="flex items-end justify-between gap-4 mb-6">
+        <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight text-dark-bg">
+          🎵 Top Músicas do Momento
         </h2>
-        <div className="flex-1 border-b border-border" />
         <a
           href="https://www.deezer.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[10px] font-bold uppercase tracking-widest text-primary hover:opacity-70 transition-opacity shrink-0"
+          className="text-[11px] font-bold uppercase tracking-wider text-primary hover:opacity-70 transition-opacity shrink-0 whitespace-nowrap"
         >
           Deezer →
         </a>
@@ -28,7 +27,7 @@ const DeezerSection = async () => {
           {artists.slice(0, 5).map((artist) => (
             <div
               key={artist.id}
-              className="flex flex-col items-center gap-2 p-4 bg-white dark:bg-slate-800 border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col items-center gap-2 p-4 bg-white dark:bg-slate-800 border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow min-w-0"
             >
               <div className="aspect-square w-full overflow-hidden rounded-lg">
                 <img
