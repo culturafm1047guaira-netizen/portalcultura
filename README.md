@@ -350,6 +350,7 @@ Resumo do estado atual do repositório após revisão completa:
 | `HeroWave` / `Player` | ✅ Removida a faixa "104.7 — A voz que une Guaíra ao mundo" (duplicava o player). Player (barra "AO VIVO · CULTURA FM") ganhou mais destaque: maior, gradiente, botão de play maior com anel pulsante ao tocar. |
 | CSP (`next.config.ts`) | ✅ Streaming de áudio não tocava: faltava `media-src` liberando `ice.fabricahost.com.br` (caía no `default-src 'self'` e o navegador bloqueava). Adicionado `media-src`/`connect-src` para o domínio do streaming. |
 | `Player` (autoplay) | ✅ O player agora tenta iniciar o streaming automaticamente ao carregar a página. Navegadores (principalmente em celular) costumam bloquear áudio com som sem interação prévia do usuário — nesse caso o botão de play continua disponível para iniciar manualmente, com o texto "Toque no play para ouvir". |
+| CSP duplicada (`vercel.json` + `next.config.ts`) | ✅ Causa raiz de o streaming não tocar nem manual nem automático: existiam DUAS políticas `Content-Security-Policy` (uma em cada arquivo). O navegador aplica a interseção de todas as CSPs presentes — a de `next.config.ts` (antes da correção anterior) não permitia `media-src` externo, então bloqueava mesmo com a de `vercel.json` permitindo. Consolidado em uma única CSP (em `next.config.ts`, união dos dois conjuntos de regras, incluindo `frame-src` para o YouTube) e removida a CSP duplicada de `vercel.json`. |
 
 ### Pendências futuras
 

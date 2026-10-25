@@ -12,6 +12,11 @@ const Player = () => {
   // com som sem interação prévia do usuário — nesse caso o play() é
   // rejeitado e o usuário precisa tocar no botão manualmente.
   useEffect(() => {
+    if (audioRef.current) {
+      // Evita que a requisição do streaming envie o Referer deste site,
+      // já que alguns provedores de streaming bloqueiam por referer/hotlink.
+      (audioRef.current as HTMLAudioElement & { referrerPolicy: string }).referrerPolicy = "no-referrer";
+    }
     audioRef.current?.play().catch(() => setAutoplayBlocked(true));
   }, []);
 
