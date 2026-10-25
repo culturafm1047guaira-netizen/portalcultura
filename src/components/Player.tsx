@@ -1,10 +1,19 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Tenta iniciar o streaming automaticamente ao carregar a página. A
+  // maioria dos navegadores (principalmente em celular) bloqueia áudio
+  // com som sem interação prévia do usuário — nesse caso o play() é
+  // rejeitado e o usuário precisa tocar no botão manualmente.
+  useEffect(() => {
+    audioRef.current?.play().catch(() => setAutoplayBlocked(true));
+  }, []);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -13,7 +22,6 @@ const Player = () => {
       } else {
         audioRef.current.play().catch(e => console.error("Play failed", e));
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -47,7 +55,11 @@ const Player = () => {
               </strong>
             </div>
             <span className="text-xs sm:text-sm font-semibold text-white/80">
-              {isPlaying ? "Sintonizado em Guaíra, SP" : "Clique no play para ouvir"}
+              {isPlaying
+                ? "Sintonizado em Guaíra, SP"
+                : autoplayBlocked
+                  ? "Toque no play para ouvir"
+                  : "Sintonizando..."}
             </span>
           </div>
         </div>
@@ -71,7 +83,7 @@ const Player = () => {
       <audio
         ref={audioRef}
         src="https://ice.fabricahost.com.br/radioculturaguaira"
-        preload="none"
+        preload="auto"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
       />

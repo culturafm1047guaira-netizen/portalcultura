@@ -62,7 +62,7 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: "Content-Security-Policy",
-          value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gsi.opensource.tw; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://radioculturaguaira.com.br https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none';",
+          value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gsi.opensource.tw; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; media-src 'self' https://ice.fabricahost.com.br; connect-src 'self' https://radioculturaguaira.com.br https://ice.fabricahost.com.br https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none';",
         },
         {
           key: "Referrer-Policy",

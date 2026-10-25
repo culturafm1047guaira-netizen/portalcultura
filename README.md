@@ -348,6 +348,8 @@ Resumo do estado atual do repositório após revisão completa:
 | `getBrasileiraoScores` (`src/lib/espn.ts`) | ✅ Bloco "Jogos do Brasileirão" mostrava poucos jogos (ou nenhum) em produção: a API da ESPN, sem parâmetro de data, retorna só os jogos "de hoje" — variável conforme o dia da rodada. Uma primeira tentativa com `dates=YYYYMMDD-YYYYMMDD` (range) fez o bloco sumir de vez em produção. Corrigido para buscar dia a dia (±3 dias, formato de data única, bem suportado pela API) com fallback para o comportamento original caso a API não retorne nada. |
 | `Sidebar` (banners de publicidade) | ✅ Removidos os 2 últimos banners "ANUNCIE AQUI" (ficam 2, após Clima e após Financeiro) para reduzir a diferença de altura entre a coluna principal e a sidebar, que deixava um vão em branco antes do rodapé. |
 | `HeroWave` / `Player` | ✅ Removida a faixa "104.7 — A voz que une Guaíra ao mundo" (duplicava o player). Player (barra "AO VIVO · CULTURA FM") ganhou mais destaque: maior, gradiente, botão de play maior com anel pulsante ao tocar. |
+| CSP (`next.config.ts`) | ✅ Streaming de áudio não tocava: faltava `media-src` liberando `ice.fabricahost.com.br` (caía no `default-src 'self'` e o navegador bloqueava). Adicionado `media-src`/`connect-src` para o domínio do streaming. |
+| `Player` (autoplay) | ✅ O player agora tenta iniciar o streaming automaticamente ao carregar a página. Navegadores (principalmente em celular) costumam bloquear áudio com som sem interação prévia do usuário — nesse caso o botão de play continua disponível para iniciar manualmente, com o texto "Toque no play para ouvir". |
 
 ### Pendências futuras
 
