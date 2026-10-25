@@ -107,20 +107,19 @@ export default function EnqueteSection() {
   const maxResult = results.length > 0 ? Math.max(...results, 1) : 1;
 
   return (
-    <section className="w-full">
+    <section className="w-full min-w-0">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
-        <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white text-xs shadow-sm">
+      <div className="flex items-end justify-between gap-4 mb-6 min-w-0">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white text-xs shadow-sm shrink-0">
             📊
           </span>
-          <h2 className="font-montserrat text-2xl font-black uppercase tracking-tight bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+          <h2 className="section-heading font-montserrat text-2xl font-black uppercase tracking-tight" style={{ color: "#6366f1" }}>
             Enquete da Semana
           </h2>
         </div>
-        <div className="flex-1 border-b border-border" />
         {timeLeft && (
-          <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase whitespace-nowrap flex items-center gap-1.5">
+          <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase whitespace-nowrap flex items-center gap-1.5 shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             {timeLeft}
           </span>
