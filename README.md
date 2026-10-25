@@ -13,13 +13,21 @@ O portal foi reescrito em **Next.js 15 (App Router)** com React 19 e TypeScript.
 
 ### O que o portal oferece
 
+> Em out/2026 o front-end foi reconstruído em estilo editorial G1 (globo.com):
+> mega-menu por editoria, matérias próprias da redação com CMS, "Mais Lidas"
+> real e newsletter. Ver seção [Rebuild G1 (out/2026)](#rebuild-g1-out2026)
+> para detalhes e o passo de migração de banco pendente.
+
 | Área | Descrição |
 |------|-----------|
-| **Homepage** | Hero assinatura com frequência animada (HeroWave), navegação por categorias (CategoryNav), destaque editorial, ticker de manchetes, sidebar com widgets |
+| **Homepage** | Hero com frequência animada (HeroWave), mega-menu de editorias no Header, destaque editorial priorizando matérias próprias, ticker de manchetes (com faixa "AO VIVO" para matérias urgentes), sidebar com widgets |
 | **Player ao vivo** | Stream `ice.fabricahost.com.br/radioculturaguaira` |
-| **Notícias** | Agregação de 12+ feeds RSS (G1, Agência Brasil, ACidade ON, Guaira News, etc.) |
+| **Notícias** | Matérias próprias da redação (CMS interno) + agregação de 12+ feeds RSS (G1, Agência Brasil, ACidade ON, Guaira News, etc.), com prioridade para conteúdo próprio |
+| **Matéria própria** | Página de leitura em `/noticia/[slug]`, com contador de visualizações |
+| **Editorias** | Páginas `/categoria/[slug]` (Regional, Brasil, Esportes, Educação, Saúde, Justiça) |
+| **CMS da redação** | Painel em `/admin/materias` — criar/editar matérias, upload de capa, agendamento, marcação "Urgente" |
 | **Economia** | Indicadores do Banco Central (dólar, Selic, inflação, PIX, crédito) |
-| **Widgets** | Clima (Open-Meteo), cotações agro, cripto (CoinGecko), Brasileirão, NASA APOD, horóscopo, enquetes |
+| **Widgets** | Clima (Open-Meteo), cotações agro, cripto (CoinGecko), Brasileirão, NASA APOD, horóscopo, enquetes, "Mais Lidas" (por visualizações reais), newsletter |
 | **Mídia** | Galeria de vídeos YouTube, charts Deezer, seção ESPN |
 | **Institucional** | Programação, Sobre, Contato, Termos, Privacidade, Transparência, Serviços Públicos |
 | **Busca** | Filtro por título, resumo ou categoria em `/busca?q=` |
@@ -35,6 +43,7 @@ O portal foi reescrito em **Next.js 15 (App Router)** com React 19 e TypeScript.
 | Estilo | Tailwind CSS 4, tokens CSS customizados, `next-themes` |
 | Fontes | Bebas Neue + IBM Plex Sans (Google Fonts) |
 | Dados | RSS (`rss-parser`), APIs REST públicas e opcionais via env |
+| Backend / CMS | Supabase (Postgres + Auth + Storage) — matérias próprias, perfis de redator, newsletter |
 | PWA | `@ducanh2912/next-pwa` |
 | Testes | Jest (unit/integration), Playwright (E2E) |
 | CI/CD | GitHub Actions → Vercel |
@@ -55,7 +64,12 @@ O portal foi reescrito em **Next.js 15 (App Router)** com React 19 e TypeScript.
 │   │   │   ├── economia/       # Indicadores financeiros BCB
 │   │   │   ├── horoscopo/      # Horóscopo por signo
 │   │   │   ├── nowplaying/     # Metadados do stream
+│   │   │   ├── newsletter/     # POST — inscrição na newsletter
+│   │   │   ├── articles/[slug]/view/  # POST — incrementa views_count
 │   │   │   └── revalidate/     # Revalidação ISR (POST autenticado)
+│   │   ├── noticia/[slug]/     # Página de leitura de matéria própria
+│   │   ├── categoria/[slug]/   # Páginas por editoria (Regional, Brasil, Esportes...)
+│   │   ├── admin/              # Login + CMS protegido (materias: listar/criar/editar)
 │   │   ├── busca/              # Busca de notícias
 │   │   ├── economia/           # Página de indicadores
 │   │   ├── programacao/        # Grade de programação
@@ -64,15 +78,21 @@ O portal foi reescrito em **Next.js 15 (App Router)** com React 19 e TypeScript.
 │   │   ├── contato/            # Contato
 │   │   ├── termos/             # Termos de uso
 │   │   └── transparencia/      # Transparência
-│   ├── components/             # UI (Header, HeroWave, CategoryNav, Hero, Player, Sidebar, etc.)
+│   ├── components/             # UI (Header com mega-menu, EditoriaSection, NewsCard, HeroWave, Hero, Player, Sidebar, Newsletter, etc.)
 │   └── lib/                    # Integrações e lógica de negócio
-│       ├── news.ts             # Agregador RSS principal
+│       ├── categories.ts       # Fonte única de editorias/cores/slugs
+│       ├── news.ts             # Agregador RSS + matérias próprias (getOwnArticles)
+│       ├── supabase/           # Clients Supabase (browser, server, admin/service-role)
 │       ├── dados-financeiros.ts
 │       ├── weather.ts / openmeteo.ts
 │       ├── quotes.ts, coingecko.ts, brasileirao.ts
 │       ├── youtube.ts, deezer.ts, espn.ts
 │       ├── horoscopo.ts, enquetes.ts
 │       └── ...
+├── supabase/
+│   ├── schema.sql              # Schema base (profiles, articles, storage)
+│   └── migrations/
+│       └── 0002_rebuild_additions.sql  # views_count, is_breaking, newsletter_subscribers
 ├── public/
 │   ├── manifest.json           # PWA
 │   └── img/                    # Logos, ícones, banners
@@ -127,8 +147,11 @@ cp .env.example .env.local
 | `REVALIDATION_TOKEN` | Produção | Secret para `POST /api/revalidate` |
 | `WEATHER_LOCATION` | Opcional | Local do clima (padrão: `Guaíra,SP`) |
 | `CACHE_DURATION_MINUTES` | Opcional | Duração de cache (padrão: 30) |
+| `NEXT_PUBLIC_SUPABASE_URL` | **Obrigatória** | URL do projeto Supabase (CMS, auth, newsletter) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | **Obrigatória** | Chave pública (anon) do Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Obrigatória** | Chave service-role (admin), usada só no servidor para incrementar views e no CMS |
 
-> Sem chaves opcionais, o portal continua funcionando — widgets dependentes de API simplesmente ficam vazios ou usam fallbacks.
+> Sem chaves opcionais, o portal continua funcionando — widgets dependentes de API simplesmente ficam vazios ou usam fallbacks. Sem as chaves do Supabase, o CMS, as matérias próprias, "Mais Lidas" real e a newsletter não funcionam (o resto do site continua de pé).
 
 ---
 
@@ -211,6 +234,8 @@ curl -X POST https://radioculturaguaira.com.br/api/revalidate \
 | `/api/economia` | GET | Indicadores BCB |
 | `/api/horoscopo?signo=aries` | GET | Texto do horóscopo |
 | `/api/nowplaying` | GET | Metadados do stream ao vivo |
+| `/api/newsletter` | POST | Inscreve e-mail em `newsletter_subscribers` |
+| `/api/articles/[slug]/view` | POST | Incrementa `views_count` de uma matéria própria |
 | `/api/revalidate` | POST | Revalida a homepage (Bearer token) |
 
 ---
@@ -233,6 +258,48 @@ curl -X POST https://radioculturaguaira.com.br/api/revalidate \
 | FabricaHost | Stream de áudio ao vivo |
 
 ---
+
+## Rebuild G1 (out/2026)
+
+Em outubro/2026 o front-end público foi reconstruído do zero (páginas e
+componentes; backend/Supabase preservados) para alcançar paridade de
+funcionalidades com o G1 (globo.com), levantadas por inspeção direta do site
+público. Resumo das mudanças estruturais:
+
+- **`src/lib/categories.ts`** passou a ser a fonte única de editorias/cores,
+  substituindo listas duplicadas que existiam em `page.tsx`, no antigo
+  `CategoryNav.tsx` (removido, incorporado ao mega-menu do `Header`) e em
+  `globals.css`.
+- **Matérias próprias** (tabela `public.articles`, já existente com CMS
+  autenticado) agora aparecem de fato no site: no feed da home (com
+  prioridade sobre o agregado RSS), em páginas dedicadas `/noticia/[slug]`,
+  e têm um CMS funcional em `/admin/materias` (antes só existia a
+  autenticação, sem formulário de criação).
+- **`EditoriaSection`** (`src/components/EditoriaSection.tsx`) substitui os
+  blocos de JSX duplicados que existiam para cada categoria na home.
+- **"Mais Lidas"** na sidebar passou a ordenar por `views_count` real das
+  matérias próprias (antes era só "mais recentes").
+- **Newsletter** (`/api/newsletter` + tabela `newsletter_subscribers`) e
+  **páginas de editoria** `/categoria/[slug]` (antes linkadas no menu mas
+  inexistentes — davam 404) são novas.
+- Correções defensivas de overflow horizontal no mobile (`img`/`video` com
+  `max-width: 100%`, `overflow-x: hidden` no body, `min-w-0` em containers
+  flex/grid) — causa raiz dos bugs de layout dos commits anteriores a este
+  rebuild.
+
+### ⚠️ Passo manual pendente — rodar a migration no Supabase
+
+O código já assume as colunas/tabela abaixo (com fallback defensivo se ainda
+não existirem, mas **"Mais Lidas" real e newsletter só funcionam depois
+desse passo**):
+
+1. Abra o **SQL Editor** do projeto Supabase.
+2. Cole e rode o conteúdo de `supabase/migrations/0002_rebuild_additions.sql`
+   (adiciona `articles.views_count`, `articles.is_breaking` e a tabela
+   `newsletter_subscribers`, sem alterar nada existente).
+
+Um backup do estado anterior ao rebuild foi salvo na tag git
+`backup/pre-g1-rebuild-2026-10-24` (também enviada ao `origin`).
 
 ## Documentação complementar
 
