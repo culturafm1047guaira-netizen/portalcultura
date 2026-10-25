@@ -340,6 +340,12 @@ Resumo do estado atual do repositório após revisão completa:
 | `scripts/notify.js` | ✅ Token Telegram movido para variáveis de ambiente |
 | `.env.example` | ✅ Renomeado `REVALIDATION_SECRET` → `REVALIDATION_TOKEN` |
 
+### Itens corrigidos (out/2026)
+
+| Item | Situação |
+|------|----------|
+| `EditoriaSection` (grid destaque + lista compacta) | ✅ Corrigido buraco no layout: card em destaque era esticado (`align-items: stretch` padrão do grid) até a altura da coluna de notícias compactas, deixando um vão em branco quando o excerpt era curto/vazio. Adicionado `items-start` ao grid para cada coluna manter sua altura natural. |
+
 ### Pendências futuras
 
 | Item | Situação |
