@@ -345,7 +345,7 @@ Resumo do estado atual do repositório após revisão completa:
 | Item | Situação |
 |------|----------|
 | `NewsCard` (card em destaque) | ✅ Corrigido buraco no layout: a imagem tinha altura fixa (`aspect-video`) e o card era esticado (`align-items: stretch` padrão do grid) até a altura da coluna de notícias compactas ao lado, deixando um vão em branco abaixo da imagem. Agora a imagem é flexível (`flex-1`) e preenche toda a altura disponível, igualando visualmente as duas colunas. |
-| `getBrasileiraoScores` (`src/lib/espn.ts`) | ✅ Bloco "Jogos do Brasileirão" mostrava poucos jogos em produção: a API da ESPN, sem parâmetro de data, retorna só os jogos "de hoje" — variável conforme o dia da rodada. Agora a busca usa uma janela de ±4 dias para sempre trazer a rodada completa. |
+| `getBrasileiraoScores` (`src/lib/espn.ts`) | ✅ Bloco "Jogos do Brasileirão" mostrava poucos jogos (ou nenhum) em produção: a API da ESPN, sem parâmetro de data, retorna só os jogos "de hoje" — variável conforme o dia da rodada. Uma primeira tentativa com `dates=YYYYMMDD-YYYYMMDD` (range) fez o bloco sumir de vez em produção. Corrigido para buscar dia a dia (±3 dias, formato de data única, bem suportado pela API) com fallback para o comportamento original caso a API não retorne nada. |
 
 ### Pendências futuras
 
