@@ -5,20 +5,77 @@ import { getBrasileiraoData } from "@/lib/brasileirao";
 import { getCryptoData } from "@/lib/coingecko";
 import { getApod } from "@/lib/nasa";
 import { getJoke } from "@/lib/joke";
+import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
+import Link from "next/link";
+import Newsletter from "./Newsletter";
 
 interface SidebarProps {
   topNews?: { title: string; link: string }[];
 }
 
+interface MaisLidaItem {
+  title: string;
+  link: string;
+  isOwn: boolean;
+}
+
+/**
+ * Busca matérias próprias publicadas ordenadas por views_count.
+ * A coluna views_count vem da migration 0002 — se ainda não tiver sido
+ * rodada no banco, cai no fallback ordenado por published_at.
+ */
+async function getTopOwnArticles(limit = 8): Promise<MaisLidaItem[]> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("articles")
+      .select("title, slug, views_count, published_at")
+      .eq("status", "published")
+      .order("views_count", { ascending: false })
+      .order("published_at", { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+
+    return (data ?? []).map((a) => ({
+      title: a.title as string,
+      link: `/noticia/${a.slug}`,
+      isOwn: true,
+    }));
+  } catch {
+    // views_count provavelmente ainda não existe nesse banco; usa fallback por data
+    try {
+      const supabase = await createClient();
+      const { data, error } = await supabase
+        .from("articles")
+        .select("title, slug, published_at")
+        .eq("status", "published")
+        .order("published_at", { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+
+      return (data ?? []).map((a) => ({
+        title: a.title as string,
+        link: `/noticia/${a.slug}`,
+        isOwn: true,
+      }));
+    } catch {
+      return [];
+    }
+  }
+}
+
 const Sidebar = async ({ topNews = [] }: SidebarProps) => {
-  const [weather, quotes, brasileirao, crypto, apod, joke] = await Promise.allSettled([
+  const [weather, quotes, brasileirao, crypto, apod, joke, ownTop] = await Promise.allSettled([
     getWeatherData(),
     getQuotesData(),
     getBrasileiraoData(),
     getCryptoData(),
     getApod(),
     getJoke(),
+    getTopOwnArticles(8),
   ]);
 
   const resolved = {
@@ -28,34 +85,63 @@ const Sidebar = async ({ topNews = [] }: SidebarProps) => {
     crypto: crypto.status === 'fulfilled' ? crypto.value : null,
     apod: apod.status === 'fulfilled' ? apod.value : null,
     joke: joke.status === 'fulfilled' ? joke.value : null,
+    ownTop: ownTop.status === 'fulfilled' ? ownTop.value : [],
   };
 
   if (!resolved.weather) return null;
 
+  // "Mais Lidas": prioriza views reais de matérias próprias; completa com as
+  // mais recentes agregadas (topNews) só quando não há views próprias suficientes.
+  const ownItems = resolved.ownTop.slice(0, 8);
+  const maisLidas: MaisLidaItem[] =
+    ownItems.length >= 5
+      ? ownItems
+      : [
+          ...ownItems,
+          ...topNews
+            .filter((n) => !ownItems.some((o) => o.title === n.title))
+            .slice(0, 8 - ownItems.length)
+            .map((n) => ({ title: n.title, link: n.link, isOwn: false })),
+        ];
+
   return (
     <aside className="flex flex-col gap-8 w-full">
       {/* Mais Lidas: ranking numerado estilo G1 */}
-      {topNews.length > 0 && (
+      {maisLidas.length > 0 && (
         <div className="flex flex-col">
           <h3 className="font-montserrat font-black text-sm uppercase tracking-widest text-text mb-3 border-b-2 pb-1 inline-block w-fit" style={{ borderColor: "var(--color-vermelho-vivo)" }}>
             Mais Lidas
           </h3>
           <ol className="flex flex-col divide-y divide-border">
-            {topNews.map((n, i) => (
+            {maisLidas.map((n, i) => (
               <li key={`${n.link}-${i}`}>
-                <a href={n.link} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-3 py-3">
-                  <span className="font-montserrat text-2xl font-black leading-none shrink-0" style={{ color: "var(--color-vermelho-vivo)" }}>
-                    {i + 1}
-                  </span>
-                  <span className="text-[13px] font-bold leading-snug text-text group-hover:text-primary transition-colors line-clamp-3">
-                    {n.title}
-                  </span>
-                </a>
+                {n.isOwn ? (
+                  <Link href={n.link} className="group flex items-start gap-3 py-3">
+                    <span className="font-montserrat text-2xl font-black leading-none shrink-0" style={{ color: "var(--color-vermelho-vivo)" }}>
+                      {i + 1}
+                    </span>
+                    <span className="text-[13px] font-bold leading-snug text-text group-hover:text-primary transition-colors line-clamp-3">
+                      {n.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <a href={n.link} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-3 py-3">
+                    <span className="font-montserrat text-2xl font-black leading-none shrink-0" style={{ color: "var(--color-vermelho-vivo)" }}>
+                      {i + 1}
+                    </span>
+                    <span className="text-[13px] font-bold leading-snug text-text group-hover:text-primary transition-colors line-clamp-3">
+                      {n.title}
+                    </span>
+                  </a>
+                )}
               </li>
             ))}
           </ol>
         </div>
       )}
+
+      {/* Newsletter */}
+      <Newsletter />
 
       {/* Weather Widget */}
       <div className="flex flex-col">
