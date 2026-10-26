@@ -355,6 +355,16 @@ Resumo do estado atual do repositório após revisão completa:
 
 | `public/img/icon-192.png` e `icon-512.png` | ✅ Eram um ícone genérico (onda de rádio azul), substituídos pela logo oficial (`public/img/logo_oficial.png`), gerados via `sharp` a partir dela. De quebra, ficaram bem mais leves (481 KB → ~58 KB somados). |
 
+### Itens corrigidos (out/2026, análise de CTO)
+
+| Item | Situação |
+|------|----------|
+| `robots.txt` / `sitemap.xml` não eram servidos | ✅ Estavam na raiz do repo — Next.js só serve estáticos de `public/`, então davam 404 em produção. Substituídos por `src/app/robots.ts` e `src/app/sitemap.ts` (dinâmicos: sitemap inclui categorias e matérias próprias publicadas direto do Supabase; robots também bloqueia `/admin/`). |
+| `lucide-react` no `package.json` | ✅ Dependência instalada sem nenhum uso no código — removida (`npm uninstall`). |
+| `src/components/HeroWave.tsx` | ✅ Arquivo órfão desde que a seção foi removida da home — apagado. |
+| Enquete travava sempre na última pergunta | ✅ `getActivePoll()` dependia de uma lista de datas fixas que esgotava (última em 06/10/2026, caindo sempre na mesma pergunta depois disso). Agora a pergunta é escolhida pelo número da semana do ano (`getWeekNumber(now) % POLLS.length`), ciclando pela lista inteira indefinidamente — sugestão do cliente. |
+| Sem página de erro de runtime | ✅ Adicionado `src/app/error.tsx` (só existia tratamento de 404, não de erro inesperado). |
+
 ### Pendências futuras
 
 | Item | Situação |
