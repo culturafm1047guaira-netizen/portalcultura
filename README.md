@@ -234,7 +234,8 @@ curl -X POST https://radioculturaguaira.com.br/api/revalidate \
 | `/api/economia` | GET | Indicadores BCB |
 | `/api/horoscopo?signo=aries` | GET | Texto do horóscopo |
 | `/api/nowplaying` | GET | Metadados do stream ao vivo |
-| `/api/newsletter` | POST | Inscreve e-mail em `newsletter_subscribers` |
+| `/api/newsletter` | POST | Inscreve e-mail em `newsletter_subscribers` e dispara e-mail de boas-vindas (Resend) |
+| `/api/admin/newsletter/send` | POST | (admin/editor) Envia resumo das últimas matérias pra todos os inscritos |
 | `/api/articles/[slug]/view` | POST | Incrementa `views_count` de uma matéria própria |
 | `/api/revalidate` | POST | Revalida a homepage (Bearer token) |
 
@@ -301,6 +302,28 @@ desse passo**):
    (cria a função `increment_article_views`, que torna a contagem de views
    atômica — sem ela, duas visitas simultâneas podem perder contagem; o
    código já tem fallback pro comportamento antigo até esse passo ser feito).
+
+### ⚠️ Passo manual pendente — configurar o Resend (newsletter)
+
+A inscrição na newsletter já funciona (grava no banco) mesmo sem isso, mas
+**nenhum e-mail é enviado** até esse passo ser feito:
+
+1. Crie uma conta grátis em [resend.com](https://resend.com).
+2. Em **API Keys**, gere uma chave e coloque em `RESEND_API_KEY` nas
+   variáveis de ambiente da Vercel.
+3. Em **Domains**, adicione e verifique `radioculturaguaira.com.br` (ou um
+   subdomínio, ex. `mail.radioculturaguaira.com.br`) seguindo os registros
+   DNS que o Resend pedir. Depois, configure `RESEND_FROM_EMAIL` com um
+   e-mail nesse domínio (ex. `newsletter@radioculturaguaira.com.br`).
+   Sem domínio verificado, o envio cai no modo de teste do Resend
+   (`onboarding@resend.dev`), que só manda e-mail pro endereço da própria
+   conta Resend — não funciona pros inscritos reais.
+4. Redeploy o site (ou aguarde o próximo deploy) pra pegar as novas
+   variáveis de ambiente.
+
+Depois disso: toda inscrição dispara um e-mail de boas-vindas automático, e
+em `/admin/newsletter` tem um botão pra enviar manualmente um resumo das
+últimas matérias publicadas pra todos os inscritos.
 
 Um backup do estado anterior ao rebuild foi salvo na tag git
 `backup/pre-g1-rebuild-2026-10-24` (também enviada ao `origin`).
@@ -372,6 +395,7 @@ Resumo do estado atual do repositório após revisão completa:
 | Admin sem paginação | ✅ `materias/page.tsx` listava todas as matérias de uma vez (sem `.range()`); agora pagina de 20 em 20 (`?page=N`). |
 | Slug duplicado dava erro cru do Postgres | ✅ `ArticleForm` agora checa duplicidade antes de salvar e mostra mensagem amigável; erro de unique constraint (`23505`) também é traduzido como rede de segurança. |
 | Contagem de views com race condition | ✅ Era select+update (não atômico) — perde contagem em acesso concorrente. Preparada a migration `0003_atomic_view_count.sql` (função Postgres `increment_article_views`, **precisa rodar manualmente**, ver seção abaixo) com fallback pro código antigo até lá. Também adicionado dedup simples por aba (`sessionStorage`) em `ArticleViewTracker` — F5 na mesma visita não soma view de novo. |
+| Newsletter não enviava e-mail nenhum | ✅ Integrado o Resend (`src/lib/resend.ts`): e-mail de boas-vindas automático na inscrição, e botão em `/admin/newsletter` pra enviar manualmente um resumo das últimas matérias pra todos os inscritos. **Precisa configurar `RESEND_API_KEY`/`RESEND_FROM_EMAIL` e verificar o domínio**, ver seção abaixo — até lá a inscrição funciona normalmente, só não dispara e-mail. |
 
 ### Pendências futuras
 

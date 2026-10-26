@@ -29,12 +29,20 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      <Link
-        href="/admin/materias"
-        className="inline-block bg-primary hover:bg-primary-dark text-white font-semibold rounded-md px-5 py-2.5 text-sm transition-colors"
-      >
-        Gerenciar matérias
-      </Link>
+      <div className="flex gap-3">
+        <Link
+          href="/admin/materias"
+          className="inline-block bg-primary hover:bg-primary-dark text-white font-semibold rounded-md px-5 py-2.5 text-sm transition-colors"
+        >
+          Gerenciar matérias
+        </Link>
+        <Link
+          href="/admin/newsletter"
+          className="inline-block border border-primary text-primary hover:bg-primary hover:text-white font-semibold rounded-md px-5 py-2.5 text-sm transition-colors"
+        >
+          Newsletter
+        </Link>
+      </div>
     </div>
   );
 }

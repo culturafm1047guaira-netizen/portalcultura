@@ -1,5 +1,31 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getResendClient, RESEND_FROM_EMAIL } from "@/lib/resend";
+
+async function sendWelcomeEmail(email: string) {
+  const resend = getResendClient();
+  if (!resend) return; // RESEND_API_KEY não configurada ainda — segue sem enviar
+
+  try {
+    await resend.emails.send({
+      from: `Rádio Cultura FM 104.7 <${RESEND_FROM_EMAIL}>`,
+      to: email,
+      subject: "Inscrição confirmada — Rádio Cultura FM 104.7",
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+          <h1 style="color: #003366;">104.7</h1>
+          <p>Você está inscrito para receber as principais notícias de Guaíra e região direto no seu e-mail.</p>
+          <p>Enquanto isso, ouça a Cultura FM ao vivo em
+            <a href="https://radioculturaguaira.com.br">radioculturaguaira.com.br</a>.
+          </p>
+        </div>
+      `,
+    });
+  } catch (err) {
+    // Não bloqueia a inscrição se o envio falhar — o e-mail já está salvo.
+    console.error("[api/newsletter] falha ao enviar e-mail de boas-vindas:", err);
+  }
+}
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -33,6 +59,8 @@ export async function POST(request: Request) {
       }
       throw error;
     }
+
+    await sendWelcomeEmail(email);
 
     return NextResponse.json({ ok: true });
   } catch (err) {
