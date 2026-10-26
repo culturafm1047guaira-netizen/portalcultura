@@ -6,9 +6,6 @@ type PollOption = {
 export type Poll = {
   question: string;
   options: PollOption[];
-  startDay: number;
-  startMonth: number;
-  startYear: number;
 };
 
 const POLLS: Poll[] = [
@@ -20,9 +17,6 @@ const POLLS: Poll[] = [
       { label: "Pescar no Rio Grande", emoji: "🎣" },
       { label: "Jogar um futebol com os amigos", emoji: "⚽" },
     ],
-    startDay: 26,
-    startMonth: 5,
-    startYear: 2026,
   },
   {
     question: "Qual o melhor lugar para tomar um café em Guaíra?",
@@ -32,9 +26,6 @@ const POLLS: Poll[] = [
       { label: "Lanchonete Beira-Rio", emoji: "🌅" },
       { label: "Em casa, com a família", emoji: "🏠" },
     ],
-    startDay: 2,
-    startMonth: 6,
-    startYear: 2026,
   },
   {
     question: "Qual destas festas você mais curte na região?",
@@ -44,9 +35,6 @@ const POLLS: Poll[] = [
       { label: "Festa Junina", emoji: "🌽" },
       { label: "Réveillon na Praia", emoji: "🎆" },
     ],
-    startDay: 9,
-    startMonth: 6,
-    startYear: 2026,
   },
   {
     question: "Se pudesse viajar agora, qual destino escolheria?",
@@ -56,9 +44,6 @@ const POLLS: Poll[] = [
       { label: "Cachoeira — natureza pura", emoji: "🌿" },
       { label: "Cidade grande — agito total", emoji: "🌆" },
     ],
-    startDay: 16,
-    startMonth: 6,
-    startYear: 2026,
   },
   {
     question: "Qual time você torce no Brasileirão?",
@@ -69,9 +54,6 @@ const POLLS: Poll[] = [
       { label: "Santos", emoji: "🐟" },
       { label: "Outro / Não torço", emoji: "🤷" },
     ],
-    startDay: 23,
-    startMonth: 6,
-    startYear: 2026,
   },
   {
     question: "O que é essencial levar num churrasco de domingo?",
@@ -81,9 +63,6 @@ const POLLS: Poll[] = [
       { label: "Violão e moda de viola", emoji: "🎸" },
       { label: "Amigos e bom papo", emoji: "🤝" },
     ],
-    startDay: 30,
-    startMonth: 6,
-    startYear: 2026,
   },
   {
     question: "Qual seu esporte favorito para praticar?",
@@ -93,9 +72,6 @@ const POLLS: Poll[] = [
       { label: "Corrida / Caminhada", emoji: "🏃" },
       { label: "Academia / Musculação", emoji: "💪" },
     ],
-    startDay: 7,
-    startMonth: 7,
-    startYear: 2026,
   },
   {
     question: "O que não pode faltar no seu chimarrão?",
@@ -105,9 +81,6 @@ const POLLS: Poll[] = [
       { label: "Cuião novo", emoji: "🪵" },
       { label: "Bom papo junto", emoji: "🗣️" },
     ],
-    startDay: 14,
-    startMonth: 7,
-    startYear: 2026,
   },
   {
     question: "Qual aplicativo você mais usa no dia a dia?",
@@ -117,9 +90,6 @@ const POLLS: Poll[] = [
       { label: "YouTube", emoji: "▶️" },
       { label: "TikTok", emoji: "🎵" },
     ],
-    startDay: 21,
-    startMonth: 7,
-    startYear: 2026,
   },
   {
     question: "Qual destes pratos típicos você mais gosta?",
@@ -129,9 +99,6 @@ const POLLS: Poll[] = [
       { label: "Peixe frito", emoji: "🐟" },
       { label: "Churrasco", emoji: "🥩" },
     ],
-    startDay: 28,
-    startMonth: 7,
-    startYear: 2026,
   },
   {
     question: "O que você faz para relaxar depois do trabalho?",
@@ -141,9 +108,6 @@ const POLLS: Poll[] = [
       { label: "Tomar uma gelada com os amigos", emoji: "🍻" },
       { label: "Descanso em casa com a família", emoji: "🏡" },
     ],
-    startDay: 4,
-    startMonth: 8,
-    startYear: 2026,
   },
   {
     question: "Qual a melhor época do ano em Guaíra?",
@@ -153,9 +117,6 @@ const POLLS: Poll[] = [
       { label: "Inverno — friozinho gostoso", emoji: "❄️" },
       { label: "Primavera — flores e cores", emoji: "🌸" },
     ],
-    startDay: 11,
-    startMonth: 8,
-    startYear: 2026,
   },
   {
     question: "Qual destas bandas você pagaria pra ver ao vivo?",
@@ -165,9 +126,6 @@ const POLLS: Poll[] = [
       { label: "Jorge & Mateus", emoji: "🎧" },
       { label: "Turma do Pagode", emoji: "🥁" },
     ],
-    startDay: 18,
-    startMonth: 8,
-    startYear: 2026,
   },
   {
     question: "Qual destas notícias você mais se interessa?",
@@ -177,9 +135,6 @@ const POLLS: Poll[] = [
       { label: "Saúde e bem-estar", emoji: "💚" },
       { label: "Cultura e eventos", emoji: "🎭" },
     ],
-    startDay: 25,
-    startMonth: 8,
-    startYear: 2026,
   },
   {
     question: "Se você ganhasse uma pizza gigante agora, qual sabor escolheria?",
@@ -189,9 +144,6 @@ const POLLS: Poll[] = [
       { label: "Portuguesa — recheada", emoji: "🥚" },
       { label: "Frango com catupiry", emoji: "🐔" },
     ],
-    startDay: 1,
-    startMonth: 9,
-    startYear: 2026,
   },
   {
     question: "Qual destes lugares você levaria um visitante em Guaíra?",
@@ -201,9 +153,6 @@ const POLLS: Poll[] = [
       { label: "Orla do Rio Grande", emoji: "🌊" },
       { label: "Balneário Municipal", emoji: "🏊" },
     ],
-    startDay: 8,
-    startMonth: 9,
-    startYear: 2026,
   },
   {
     question: "Qual seu estilo de roupa favorito no dia a dia?",
@@ -213,9 +162,6 @@ const POLLS: Poll[] = [
       { label: "Social — mais arrumado", emoji: "👔" },
       { label: "Moletom — conforto primeiro", emoji: "🧥" },
     ],
-    startDay: 15,
-    startMonth: 9,
-    startYear: 2026,
   },
   {
     question: "Qual desses hobbies você curte no tempo livre?",
@@ -225,9 +171,6 @@ const POLLS: Poll[] = [
       { label: "Jogar videogame", emoji: "🎮" },
       { label: "Fazer artesanato", emoji: "🎨" },
     ],
-    startDay: 22,
-    startMonth: 9,
-    startYear: 2026,
   },
   {
     question: "Qual dessas sobremesas ganha seu coração?",
@@ -237,9 +180,6 @@ const POLLS: Poll[] = [
       { label: "Sorvete", emoji: "🍦" },
       { label: "Bolo de cenoura com calda", emoji: "🍰" },
     ],
-    startDay: 29,
-    startMonth: 9,
-    startYear: 2026,
   },
   {
     question: "Que tipo de filme você mais gosta de assistir?",
@@ -249,20 +189,20 @@ const POLLS: Poll[] = [
       { label: "Drama — história profunda", emoji: "🎭" },
       { label: "Terror — medo gostoso", emoji: "👻" },
     ],
-    startDay: 6,
-    startMonth: 10,
-    startYear: 2026,
   },
 ];
 
 let pollCache: Poll | null = null;
 let pollWeekKey = "";
 
-function getWeekKey(d: Date): string {
+function getWeekNumber(d: Date): number {
   const yearStart = new Date(d.getFullYear(), 0, 1);
   const diff = d.getTime() - yearStart.getTime();
-  const weekNum = Math.ceil((diff / 86400000 + yearStart.getDay() + 1) / 7);
-  return `${d.getFullYear()}-W${String(weekNum).padStart(2, "0")}`;
+  return Math.ceil((diff / 86400000 + yearStart.getDay() + 1) / 7);
+}
+
+function getWeekKey(d: Date): string {
+  return `${d.getFullYear()}-W${String(getWeekNumber(d)).padStart(2, "0")}`;
 }
 
 export function getActivePoll(): Poll | null {
@@ -288,22 +228,10 @@ export function getActivePoll(): Poll | null {
     return null;
   }
 
-  const sorted = [...POLLS].sort((a, b) => {
-    const aDate = new Date(a.startYear, a.startMonth - 1, a.startDay);
-    const bDate = new Date(b.startYear, b.startMonth - 1, b.startDay);
-    return bDate.getTime() - aDate.getTime();
-  });
-
-  for (const poll of sorted) {
-    const pollStart = new Date(poll.startYear, poll.startMonth - 1, poll.startDay);
-    if (now >= pollStart) {
-      pollCache = poll;
-      pollWeekKey = weekKey;
-      return poll;
-    }
-  }
-
-  pollCache = sorted[sorted.length - 1] ?? null;
+  // Enquete escolhida pela semana do ano (cicla pela lista inteira todo ano,
+  // em vez de uma data fixa de início que esgota a lista com o tempo).
+  const index = getWeekNumber(now) % POLLS.length;
+  pollCache = POLLS[index] ?? null;
   pollWeekKey = weekKey;
   return pollCache;
 }
