@@ -364,6 +364,9 @@ Resumo do estado atual do repositório após revisão completa:
 | `src/components/HeroWave.tsx` | ✅ Arquivo órfão desde que a seção foi removida da home — apagado. |
 | Enquete travava sempre na última pergunta | ✅ `getActivePoll()` dependia de uma lista de datas fixas que esgotava (última em 06/10/2026, caindo sempre na mesma pergunta depois disso). Agora a pergunta é escolhida pelo número da semana do ano (`getWeekNumber(now) % POLLS.length`), ciclando pela lista inteira indefinidamente — sugestão do cliente. |
 | Sem página de erro de runtime | ✅ Adicionado `src/app/error.tsx` (só existia tratamento de 404, não de erro inesperado). |
+| Admin sem excluir matéria | ✅ Adicionado `DeleteArticleButton` (com confirmação) na listagem — antes só dava pra criar/editar. |
+| Admin sem paginação | ✅ `materias/page.tsx` listava todas as matérias de uma vez (sem `.range()`); agora pagina de 20 em 20 (`?page=N`). |
+| Slug duplicado dava erro cru do Postgres | ✅ `ArticleForm` agora checa duplicidade antes de salvar e mostra mensagem amigável; erro de unique constraint (`23505`) também é traduzido como rede de segurança. |
 
 ### Pendências futuras
 

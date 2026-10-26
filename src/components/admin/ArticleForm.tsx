@@ -8,6 +8,14 @@ import { CATEGORIES } from "@/lib/categories";
 
 export type ArticleStatus = "draft" | "scheduled" | "published";
 
+/** Troca o erro cru do Postgres por uma mensagem que faz sentido pro editor. */
+function friendlyDbError(err: { code?: string; message: string }): string {
+  if (err.code === "23505") {
+    return "Já existe uma matéria com esse slug. Escolha outro.";
+  }
+  return err.message;
+}
+
 export interface ArticleFormInitialData {
   id: string;
   title: string;
@@ -124,6 +132,22 @@ export default function ArticleForm({ initialData }: { initialData?: ArticleForm
         return;
       }
 
+      // Checa slug duplicado antes de salvar (só quando é novo ou o slug mudou),
+      // pra dar um erro claro em vez do erro cru de unique constraint do Postgres.
+      if (!isEdit || slug.trim() !== initialData?.slug) {
+        const { data: existing } = await supabase
+          .from("articles")
+          .select("id")
+          .eq("slug", slug.trim())
+          .maybeSingle();
+
+        if (existing) {
+          setError(`Já existe uma matéria com o slug "${slug.trim()}". Escolha outro.`);
+          setSaving(false);
+          return;
+        }
+      }
+
       let publishedAt = initialData?.published_at ?? null;
       let scheduledForIso: string | null = null;
 
@@ -156,7 +180,7 @@ export default function ArticleForm({ initialData }: { initialData?: ArticleForm
           .eq("id", initialData.id);
 
         if (updateError) {
-          setError(`Falha ao salvar: ${updateError.message}`);
+          setError(`Falha ao salvar: ${friendlyDbError(updateError)}`);
           setSaving(false);
           return;
         }
@@ -166,7 +190,7 @@ export default function ArticleForm({ initialData }: { initialData?: ArticleForm
           .insert({ ...payload, author_id: user.id });
 
         if (insertError) {
-          setError(`Falha ao criar matéria: ${insertError.message}`);
+          setError(`Falha ao criar matéria: ${friendlyDbError(insertError)}`);
           setSaving(false);
           return;
         }

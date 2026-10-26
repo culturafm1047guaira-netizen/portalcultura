@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import DeleteArticleButton from "@/components/admin/DeleteArticleButton";
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "Rascunho",
@@ -13,14 +14,28 @@ const STATUS_COLOR: Record<string, string> = {
   published: "bg-emerald-100 text-emerald-700",
 };
 
-export default async function MateriasPage() {
+const PAGE_SIZE = 20;
+
+export default async function MateriasPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
   const supabase = await createClient();
 
   // RLS já cuida do filtro: autor vê só as próprias, admin/editor veem todas.
-  const { data: articles, error } = await supabase
+  const { data: articles, error, count } = await supabase
     .from("articles")
-    .select("id, title, status, category, created_at, published_at, scheduled_for")
-    .order("created_at", { ascending: false });
+    .select("id, title, status, category, created_at, published_at, scheduled_for", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  const totalPages = count ? Math.max(1, Math.ceil(count / PAGE_SIZE)) : 1;
 
   return (
     <div>
@@ -75,19 +90,43 @@ export default async function MateriasPage() {
                     <td className="px-4 py-3 text-text-muted">
                       {date ? new Date(date).toLocaleDateString("pt-BR") : "—"}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right whitespace-nowrap">
                       <Link
                         href={`/admin/materias/${article.id}/editar`}
                         className="text-primary hover:underline font-semibold"
                       >
                         Editar
                       </Link>
+                      <span className="text-border mx-2">|</span>
+                      <DeleteArticleButton id={article.id} title={article.title} />
                     </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-4 text-sm">
+          <Link
+            href={`/admin/materias?page=${page - 1}`}
+            aria-disabled={page <= 1}
+            className={`font-semibold ${page <= 1 ? "pointer-events-none text-text-muted/40" : "text-primary hover:underline"}`}
+          >
+            ← Anterior
+          </Link>
+          <span className="text-text-muted">
+            Página {page} de {totalPages}
+          </span>
+          <Link
+            href={`/admin/materias?page=${page + 1}`}
+            aria-disabled={page >= totalPages}
+            className={`font-semibold ${page >= totalPages ? "pointer-events-none text-text-muted/40" : "text-primary hover:underline"}`}
+          >
+            Próxima →
+          </Link>
         </div>
       )}
     </div>
