@@ -32,12 +32,21 @@ export async function POST(
       return NextResponse.json({ ok: false }, { status: 404 });
     }
 
-    const currentViews = typeof article.views_count === "number" ? article.views_count : 0;
+    // Incremento atômico via função do Postgres (migration 0003) — evita
+    // perder contagem sob acesso concorrente. Se a migration ainda não foi
+    // rodada nesse banco, cai no select+update antigo (não atômico, mas
+    // mantém a contagem funcionando até a migration ser aplicada).
+    const { error: rpcError } = await supabase.rpc("increment_article_views", {
+      article_id: article.id,
+    });
 
-    await supabase
-      .from("articles")
-      .update({ views_count: currentViews + 1 })
-      .eq("id", article.id);
+    if (rpcError) {
+      const currentViews = typeof article.views_count === "number" ? article.views_count : 0;
+      await supabase
+        .from("articles")
+        .update({ views_count: currentViews + 1 })
+        .eq("id", article.id);
+    }
 
     return NextResponse.json({ ok: true });
   } catch {

@@ -297,6 +297,10 @@ desse passo**):
 2. Cole e rode o conteúdo de `supabase/migrations/0002_rebuild_additions.sql`
    (adiciona `articles.views_count`, `articles.is_breaking` e a tabela
    `newsletter_subscribers`, sem alterar nada existente).
+3. Cole e rode o conteúdo de `supabase/migrations/0003_atomic_view_count.sql`
+   (cria a função `increment_article_views`, que torna a contagem de views
+   atômica — sem ela, duas visitas simultâneas podem perder contagem; o
+   código já tem fallback pro comportamento antigo até esse passo ser feito).
 
 Um backup do estado anterior ao rebuild foi salvo na tag git
 `backup/pre-g1-rebuild-2026-10-24` (também enviada ao `origin`).
@@ -367,6 +371,7 @@ Resumo do estado atual do repositório após revisão completa:
 | Admin sem excluir matéria | ✅ Adicionado `DeleteArticleButton` (com confirmação) na listagem — antes só dava pra criar/editar. |
 | Admin sem paginação | ✅ `materias/page.tsx` listava todas as matérias de uma vez (sem `.range()`); agora pagina de 20 em 20 (`?page=N`). |
 | Slug duplicado dava erro cru do Postgres | ✅ `ArticleForm` agora checa duplicidade antes de salvar e mostra mensagem amigável; erro de unique constraint (`23505`) também é traduzido como rede de segurança. |
+| Contagem de views com race condition | ✅ Era select+update (não atômico) — perde contagem em acesso concorrente. Preparada a migration `0003_atomic_view_count.sql` (função Postgres `increment_article_views`, **precisa rodar manualmente**, ver seção abaixo) com fallback pro código antigo até lá. Também adicionado dedup simples por aba (`sessionStorage`) em `ArticleViewTracker` — F5 na mesma visita não soma view de novo. |
 
 ### Pendências futuras
 
